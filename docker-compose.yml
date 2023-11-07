@@ -1,0 +1,16 @@
+version: '0.1.0'
+services:
+  backend:
+    build: backend/.
+    restart: always
+    container_name: backend-bibliophilia
+    ports:
+      - "8000:8000"
+
+  elasticsearch:
+    image: elasticsearch:8.10.4
+    container_name: elasticsearch-bibliophilia
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
