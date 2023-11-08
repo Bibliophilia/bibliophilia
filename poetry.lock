@@ -18,6 +18,17 @@ typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
+name = "certifi"
+version = "2023.7.22"
+description = "Python package for providing Mozilla's CA Bundle."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "certifi-2023.7.22-py3-none-any.whl", hash = "sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9"},
+    {file = "certifi-2023.7.22.tar.gz", hash = "sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082"},
+]
+
+[[package]]
 name = "django"
 version = "4.2.7"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -36,6 +47,42 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "elastic-transport"
+version = "8.10.0"
+description = "Transport classes and utilities shared among Python Elastic client libraries"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "elastic-transport-8.10.0.tar.gz", hash = "sha256:ca51d08a4d16611701a57fb70592dbc7cb68c40fef4ac1becfe4aea100fe82ef"},
+    {file = "elastic_transport-8.10.0-py3-none-any.whl", hash = "sha256:e73ac3c7ad4e9209436207143d797d3f6b62a399a34d2729e069e44c9ea2cadc"},
+]
+
+[package.dependencies]
+certifi = "*"
+urllib3 = ">=1.26.2,<3"
+
+[package.extras]
+develop = ["aiohttp", "furo", "mock", "pytest", "pytest-asyncio", "pytest-cov", "pytest-httpserver", "pytest-mock", "requests", "sphinx (>2)", "sphinx-autodoc-typehints", "trustme"]
+
+[[package]]
+name = "elasticsearch"
+version = "8.10.1"
+description = "Python client for Elasticsearch"
+optional = false
+python-versions = ">=3.6, <4"
+files = [
+    {file = "elasticsearch-8.10.1-py3-none-any.whl", hash = "sha256:68141d42d10c7f67ac466ca00496830d3b81a7e9476c3baa5585060832c60c69"},
+    {file = "elasticsearch-8.10.1.tar.gz", hash = "sha256:2cb56b433daa2d3ef1aaa2e5a5eacd36ba1d66884722f3d7759a4f9d16190059"},
+]
+
+[package.dependencies]
+elastic-transport = ">=8,<9"
+
+[package.extras]
+async = ["aiohttp (>=3,<4)"]
+requests = ["requests (>=2.4.0,<3.0.0)"]
 
 [[package]]
 name = "sqlparse"
@@ -75,7 +122,24 @@ files = [
     {file = "tzdata-2023.3.tar.gz", hash = "sha256:11ef1e08e54acb0d4f95bdb1be05da659673de4acbd21bf9c69e94cc5e907a3a"},
 ]
 
+[[package]]
+name = "urllib3"
+version = "2.0.7"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
+    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
+]
+
+[package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
+secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
+zstd = ["zstandard (>=0.18.0)"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "48172ad1c5ab1e20416602cc4a31421f939594b97e660763304d51bd76dfb3f4"
+content-hash = "84af022385d9d45f7071b4512774c7696502748553438e62a8cebb1f184616d3"
