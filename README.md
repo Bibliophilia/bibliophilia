@@ -1,2 +1,3 @@
 # Bibliophilia
-![logo_bib white](https://github.com/Bibliophilia/bibliophilia/assets/69720999/c1324979-e105-4124-8a2a-029c2aa6c1e9)
+
+![logo_bib 2](https://github.com/Bibliophilia/bibliophilia/assets/69720999/f6046a52-3eee-4939-a5a8-bab604ba8d25)
