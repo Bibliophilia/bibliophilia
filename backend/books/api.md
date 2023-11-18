@@ -4,17 +4,28 @@
 
 ### Add a Book
 
-POST /books/add/
+POST add/
 
 Adds a new book to the library.
 
-#### Request
-
+#### `Request`
 ```json
 {
   "title": "Book Title",
   "author": "Book Author",
-  "description": "Book Description"
+  "description": "Book Description",
+  "image": "book_image.jpg",
+  "files": [
+    {
+      "file": "book_file.pdf",
+      "file_format": "PDF"
+    },
+    {
+      "file": "another_book_file.txt",
+      "file_format": "TXT"
+    }
+  ],
+  "links": "Some Link"
 }
 ```
 
@@ -24,12 +35,11 @@ Adds a new book to the library.
 - Status: `4xx` or `5xx` if an error occurs
 
 ---
-
 ### Search Books
 
-GET /books/search/?q=query
+GET search?q={text-search}
 
-Searches for books based on the `query`.
+Searches for books.
 
 #### Request
 
@@ -43,13 +53,15 @@ Send a GET request with the `q` parameter containing the query text.
     "id": 1,
     "title": "Book Title",
     "author": "Book Author",
-    "description": "Book Description"
+    "description": "Book Description",
+    "image_url": "http://bibliophilia.com/images/some_image.jpg"
   },
   {
     "id": 2,
     "title": "Another Book",
     "author": "Another Author",
-    "description": "Description of another book"
+    "description": "Description of another book",
+    "image_url": "http://bibliophilia.com/images/some_image.jpg"
   }
 ]
 ```
@@ -72,7 +84,9 @@ Fetches details of a book by its `id`.
   "id": 1,
   "title": "Book Title",
   "author": "Book Author",
-  "description": "Book Description"
+  "description": "Book Description",
+  "image_url": "http://bibliophilia.com/images/some_image.jpg",
+  "links": "Some Link"
 }
 ```
 
