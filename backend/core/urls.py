@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.urls import path
+from backend.books.views import BookCreateView, BookSearchView, BookDetailView
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('upload-books/', BookCreateView.as_view(), name='book-add'),
+    path('', BookSearchView.as_view(), name='book-search'),
+    path('<int:pk>/', BookDetailView.as_view(), name='book-detail'),
 ]
