@@ -16,6 +16,8 @@ class BookSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         query = self.request.query_params.get('q', '')  # Получаем запрос из параметров запроса
+        page_number = self.request.query_params.get('page', '')
+        # TODO: передавать нужное число книг
         return Book.objects.filter(title__icontains=query)  # Фильтруем книги по названию
 
 

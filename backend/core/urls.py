@@ -21,7 +21,7 @@ from django.urls import path
 from backend.books.views import BookCreateView, BookSearchView, BookDetailView
 
 urlpatterns = [
-    path('upload-books/', BookCreateView.as_view(), name='book-add'),
-    path('', BookSearchView.as_view(), name='book-search'),
-    path('<int:pk>/', BookDetailView.as_view(), name='book-detail'),
+    path('upload/', BookCreateView.as_view(), name='book-add'),
+    path('search', BookSearchView.as_view(), name='book-search'),
+    path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
 ]

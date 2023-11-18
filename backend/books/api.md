@@ -4,7 +4,7 @@
 
 ### Add a Book
 
-POST add/
+POST upload/
 
 Adds a new book to the library.
 
@@ -37,7 +37,7 @@ Adds a new book to the library.
 ---
 ### Search Books
 
-GET search?q={text-search}
+GET search?q={text-search}&page={page-number}
 
 Searches for books.
 
