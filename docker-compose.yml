@@ -34,11 +34,15 @@ services:
     build:
       context: ./backend
     container_name: backend
+    volumes:
+      - shared_volume:/app
     depends_on:
       - elasticsearch
     environment:
       - ELASTICSEARCH_HOST=elasticsearch
       - ELASTICSEARCH_PORT=9200
+    ports:
+      - "8000:8000"
     networks:
       - mynetwork
 
@@ -46,13 +50,19 @@ services:
     build:
       context: ./frontend
     container_name: frontend
+    volumes:
+      - shared_volume:/app/public
     depends_on:
       - backend
     ports:
-      - "8000:3000"
+      - "3000:3000"
     networks:
       - mynetwork
 
 networks:
   mynetwork:
     driver: bridge
+
+volumes:
+  shared_volume:
+    driver: local

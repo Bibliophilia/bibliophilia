@@ -53,14 +53,12 @@ Send a GET request with the `q` parameter containing the query text.
     "id": 1,
     "title": "Book Title",
     "author": "Book Author",
-    "description": "Book Description",
     "image_url": "http://bibliophilia.com/images/some_image.jpg"
   },
   {
     "id": 2,
     "title": "Another Book",
     "author": "Another Author",
-    "description": "Description of another book",
     "image_url": "http://bibliophilia.com/images/some_image.jpg"
   }
 ]
@@ -71,9 +69,9 @@ Send a GET request with the `q` parameter containing the query text.
 
 ---
 
-### Get Book Details
+### Get Book Info
 
-GET /books/{id}/
+GET /books/{id}
 
 Fetches details of a book by its `id`.
 
@@ -81,11 +79,11 @@ Fetches details of a book by its `id`.
 
 ```json
 {
-  "id": 1,
   "title": "Book Title",
   "author": "Book Author",
   "description": "Book Description",
   "image_url": "http://bibliophilia.com/images/some_image.jpg",
+  "format": ["pdf","txt","epub","doc"],
   "links": "Some Link"
 }
 ```

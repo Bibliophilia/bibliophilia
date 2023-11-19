@@ -2,16 +2,21 @@ from django.db import models
 
 
 # Метод для определения пути загрузки файлов
-def upload_to(instance, filename):
-    # Формируем путь сохранения файла вида 'books/<book_id>/<filename>'
-    return f'books/{instance.book.id}/{filename}'
+def upload_image_to(instance, filename):
+    filename = f"{instance.book.id}.{filename.split('.')[-1]}"
+    return f'public/book-images/{instance.book.id}/{filename}'
+
+
+def upload_file_to(instance, filename):
+    filename = f"{instance.book.id}.{filename.split('.')[-1]}"
+    return f'private/book-files/{instance.book.id}/{filename}'
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    description = models.TextField()
-    image = models.ImageField(upload_to='book_images/', null=True, blank=True)
+    title = models.CharField(max_length=255, blank=False)
+    author = models.CharField(max_length=255, blank=False)
+    description = models.TextField(blank=False)
+    image = models.ImageField(upload_to=upload_image_to)
     files = models.ManyToManyField('BookFile')
 
     def __str__(self):
@@ -27,7 +32,7 @@ class BookFile(models.Model):
         # Добавьте другие форматы файлов по мере необходимости
     )
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=upload_to)
+    file = models.FileField(upload_to=upload_file_to)
     file_format = models.CharField(max_length=4, choices=FILE_CHOICES)
 
     def __str__(self):
