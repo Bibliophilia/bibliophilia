@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-family: 'Poppins', sans-serif;
 }
 
 .Upper-Part {
@@ -25,10 +24,15 @@
   font-style: normal;
   font-weight: 700;
   line-height: 160%; 
+  font-family: "adobe-caslon-pro",serif;
 }
 
 .subtitle {
   color: white;
+  font-family: 'Futura PT', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: -10px;
 
 }
 
@@ -37,6 +41,7 @@
   display: flex;
   align-items: center;
   margin-top: -17px;
+  font-family: poppins;
 }
 
 .CategoryButton {
@@ -94,32 +99,37 @@
   margin-left: 10px; 
 }
 
-.upload-title{
+.upload-area {
+  text-align: center;
+}
+
+.upload-title {
   width: 797px;
   height: 40px;
   flex-shrink: 0;
   color: #687983;
-  font-family: Poppins;
+  font-family: 'Futura PT', sans-serif;
   font-size: 30px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 160%; /* 57.6px */
   margin-top: 150px;
+  margin-bottom: 20px; /* Adjust as needed */
 }
 
-.upload-subtitle{
+.upload-subtitle {
   width: 362px;
   height: 40px;
-  margin-left: 90.7px;
-  margin-top: -23px;
-  flex-shrink: 0;
   color: #000;
-  font-family: Poppins;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 160%; /* 24px */
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+  margin-top: -8px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 .Upload-button{
   width: 233px;

@@ -1,70 +1,130 @@
 import React, { useState } from 'react';
+import './ComponentStyles/UploadBook.css';
 
 const UploadBooks = () => {
-  const [bookTitle, setBookTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [description, setDescription] = useState('');
-  const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState({
+    bookTitle: '',
+    author: '',
+    genre: '',
+    description: '',
+    bookFile: null,
+    coverPhoto: null,
+  });
 
-  const handleTitleChange = (e) => {
-    setBookTitle(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleAuthorChange = (e) => {
-    setAuthor(e.target.value);
-  };
+  const handleFileChange = (e, fileType) => {
+    const file = e.target.files[0];
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handleFileChange = (e) => {
-    // Assuming you want to handle file uploads, save the file in state
-    setFile(e.target.files[0]);
+    setFormData((prevData) => ({
+      ...prevData,
+      [fileType]: file,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Perform the book upload logic here, for example, making a request to the backend
-
-    console.log('Book Title:', bookTitle);
-    console.log('Author:', author);
-    console.log('Description:', description);
-    console.log('File:', file);
+    console.log('Book Title:', formData.bookTitle);
+    console.log('Author:', formData.author);
+    console.log('Genre:', formData.genre);
+    console.log('Description:', formData.description);
+    console.log('Book File:', formData.bookFile);
+    console.log('Cover Photo:', formData.coverPhoto);
 
     // Clear form fields after submission
-    setBookTitle('');
-    setAuthor('');
-    setDescription('');
-    setFile(null);
+    setFormData({
+      bookTitle: '',
+      author: '',
+      genre: '',
+      description: '',
+      bookFile: null,
+      coverPhoto: null,
+    });
   };
 
   return (
-    <div>
-      <h2>Upload Books</h2>
+    <div className="upload-books-page">
+      <div className='Up-bar-for-title'>
+        <h1 className='page-title'>Bibliophilia</h1>
+      </div>
+
+      <h2 className='Header'>Upload your Books!</h2>
+
       <form onSubmit={handleSubmit}>
-        <label>
-          Book Title:
-          <input type="text" value={bookTitle} onChange={handleTitleChange} />
-        </label>
+        <div className='book-details-part'>
+          <label className='book-title'>
+            Book Title:
+            <input
+              type="text"
+              name="bookTitle"
+              value={formData.bookTitle}
+              onChange={handleChange}
+            />
+          </label>
+          <br />
+          <label className='author'>
+            Author:
+            <input
+              type="text"
+              name="author"
+              value={formData.author}
+              onChange={handleChange}
+            />
+          </label>
+          <br />
+          <label className='genre'>
+            Genre:
+            <input
+              type="text"
+              name="genre"
+              value={formData.genre}
+              onChange={handleChange}
+            />
+          </label>
+          <br />
+          <label className='description'>
+            Description:
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+
+        <div className='file-uploading-part'>
+          {/* to Display the uploaded cover image */}
+          {formData.coverPhoto && (
+            <img
+              src={URL.createObjectURL(formData.coverPhoto)}
+              alt="Cover Preview"
+              className="cover-preview"
+            />
+          )}
+
+          <label className='choose-cover-photo'>
+            Choose a cover photo:
+            <input type="file" onChange={(e) => handleFileChange(e, 'coverPhoto')} />
+          </label>
+
+          <br />
+
+          <label className='choose-book-file'>
+            Choose a book file:
+            <input type="file" onChange={(e) => handleFileChange(e, 'bookFile')} />
+          </label>
+        </div>
+
         <br />
-        <label>
-          Author:
-          <input type="text" value={author} onChange={handleAuthorChange} />
-        </label>
-        <br />
-        <label>
-          Description:
-          <textarea value={description} onChange={handleDescriptionChange} />
-        </label>
-        <br />
-        <label>
-          Choose a file:
-          <input type="file" onChange={handleFileChange} />
-        </label>
-        <br />
-        <button type="submit">Upload</button>
+        <button className='submit-books' type="submit">Upload</button>
       </form>
     </div>
   );
