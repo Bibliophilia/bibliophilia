@@ -1,6 +1,6 @@
 import json
 
-from backend.books.services import ElasticsearchService
+from books.services import ElasticsearchService
 
 
 def perform_search(query):

@@ -4,7 +4,7 @@
 
 ### Add a Book
 
-POST upload/
+POST books/
 
 Adds a new book to the library.
 

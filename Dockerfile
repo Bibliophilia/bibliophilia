@@ -1,13 +1,11 @@
 FROM python:3.11
 
-RUN mkdir /app
-COPY /. /app
-COPY pyproject.toml /app
-WORKDIR /app
 ENV PYTHONPATH=${PYTHONPATH}:${PWD}
 RUN pip3 install poetry
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev
+COPY ./backend ./backend
+WORKDIR /backend
+RUN poetry install
 EXPOSE 8000
-CMD [ "poetry", "run", "python" ,"manage.py", "runserver"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
 # poetry run python manage.py runserver

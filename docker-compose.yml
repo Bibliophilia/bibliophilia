@@ -32,7 +32,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
     container_name: backend
     volumes:
       - shared_volume:/app

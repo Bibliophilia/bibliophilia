@@ -18,6 +18,16 @@ typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
+name = "books"
+version = "0.1.2"
+description = "A book management app"
+optional = false
+python-versions = "*"
+files = [
+    {file = "books-0.1.2.tar.gz", hash = "sha256:f2ef44d5cdcaaf5578569881d5ccdadc7378ffed76be102be722e585f1391fd9"},
+]
+
+[[package]]
 name = "certifi"
 version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -168,4 +178,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1f3f94b9c771cfce8cbd649bd82638f48d92943001cba8711df2739a05eab51b"
+content-hash = "24fb0fe6912a2ac3577f3871c922cf3e2dcd1a5e5055e064a4c5cfacbc2d5143"
