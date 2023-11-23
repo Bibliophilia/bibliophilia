@@ -51,81 +51,93 @@ const UploadBooks = () => {
   };
 
   return (
+  
     <div className="upload-books-page">
       <div className='Up-bar-for-title'>
         <h1 className='page-title'>Bibliophilia</h1>
       </div>
 
+    
       <h2 className='Header'>Upload your Books!</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div className='book-details-part'>
-          <label className='book-title'>
-            Book Title:
-            <input
-              type="text"
-              name="bookTitle"
-              value={formData.bookTitle}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <label className='author'>
-            Author:
-            <input
-              type="text"
-              name="author"
-              value={formData.author}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <label className='genre'>
-            Genre:
-            <input
-              type="text"
-              name="genre"
-              value={formData.genre}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <label className='description'>
-            Description:
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+      <div className='Upload-book-container'>
 
-        <div className='file-uploading-part'>
-          {/* to Display the uploaded cover image */}
-          {formData.coverPhoto && (
-            <img
-              src={URL.createObjectURL(formData.coverPhoto)}
-              alt="Cover Preview"
-              className="cover-preview"
-            />
-          )}
 
-          <label className='choose-cover-photo'>
-            Choose a cover photo:
-            <input type="file" onChange={(e) => handleFileChange(e, 'coverPhoto')} />
-          </label>
 
-          <br />
+<form onSubmit={handleSubmit}>
 
-          <label className='choose-book-file'>
-            Choose a book file:
-            <input type="file" onChange={(e) => handleFileChange(e, 'bookFile')} />
-          </label>
-        </div>
+  <div className='book-details-part'>
+    <div className='book-details-right'>
+      <label className='book-title'>
+        Book Title:
+        <input
+          type="text"
+          name="bookTitle"
+          value={formData.bookTitle}
+          onChange={handleChange}
+        />
+      </label>
 
-        <br />
-        <button className='submit-books' type="submit">Upload</button>
-      </form>
+      <label className='author'>
+        Author:
+        <input
+          type="text"
+          name="author"
+          value={formData.author}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label className='genre'>
+        Genre:
+        <input
+          type="text"
+          name="genre"
+          value={formData.genre}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label className='description'>
+        Description:
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+      </label>
+    </div>
+  </div>
+
+  <div className='file-uploading-part'>
+    <div className='file-uploading-left'>
+      {/* Display the uploaded cover image */}
+      {formData.coverPhoto && (
+        <img
+          src={URL.createObjectURL(formData.coverPhoto)}
+          alt="Cover Preview"
+          className="cover-preview"
+        />
+      )}
+
+      <label className='choose-cover-photo'>
+        Choose a cover photo:
+        <input type="file" onChange={(e) => handleFileChange(e, 'coverPhoto')} />
+      </label>
+
+      <br />
+
+      <label className='choose-book-file'>
+        Choose a book file:
+        <input type="file" onChange={(e) => handleFileChange(e, 'bookFile')} />
+      </label>
+    </div>
+  </div>
+
+</form>
+</div>
+<button className='submit-books' type="submit">Upload</button>
+
     </div>
   );
 };
