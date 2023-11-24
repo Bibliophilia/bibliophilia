@@ -41,7 +41,7 @@ const HomePage = () => {
       alt="Search"Upload Button
       onClick={() => alert("Search clicked")}
     />
-    <input type="text" placeholder="Search for books, articles, documents..." />
+    <input className='' type="text" placeholder="Search for books, articles, documents..." />
   </div>
 </div>
 

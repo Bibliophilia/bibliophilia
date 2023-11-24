@@ -45,14 +45,22 @@
 }
 
 .CategoryButton {
-  background: none;
-  border: none;
-  color: #007DD8;
-  font-family: Poppins;
+  padding: 0; 
+  background: none !important; 
+  border: none; 
+  font-family: 'Poppins', sans-serif;
   font-size: 15px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 160%;
+  color: #007DD8;
+  cursor: pointer;
+  transition: color 0.3s ease; 
+  margin-top: 2px;
+  margin-left: 2.5px;
+}
+
+.CategoryButton:hover{
+  color:#F05223;
+  background-color: none;
 }
 
 
@@ -80,6 +88,12 @@
 .SearchBar:hover{
   border: 3px solid #145f91;
 
+}
+
+.text-in-search-bar{
+  margin-top: 15px;
+  margin-left: 15px;
+  color: #000;
 }
 
 .SearchBar input {
