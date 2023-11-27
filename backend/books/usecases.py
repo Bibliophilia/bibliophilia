@@ -1,6 +1,6 @@
 import json
 
-from books.services import ElasticsearchService
+from .services import ElasticsearchService
 
 
 def perform_search(query):
@@ -8,10 +8,7 @@ def perform_search(query):
 
 
 def perform_base_search(query):
-    elasticsearch_response = ElasticsearchService().query("match", query)
-    data = json.loads(elasticsearch_response)
-    books_info = [{"id": hit["_id"], "title": hit["_source"]["title"], "author": hit["_source"]["author"]}
-                  for hit in data["hits"]["hits"]]
+    books_info = ElasticsearchService().search_book(query)
     return books_info
 
 

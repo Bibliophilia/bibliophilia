@@ -36,8 +36,8 @@ class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-    def get(self, request, pk):
-        id = request.GET.get(pk=pk)
+    def get(self, request, *args, **kwargs):
+        id = request.GET.get(pk=args)
         result = get_book_info(id)
         return Response(result, status=status.HTTP_200_OK)
 

@@ -2,7 +2,7 @@
 FROM node:latest
 
 # Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /app
+WORKDIR /app/public
 
 # Копируем файлы package.json и package-lock.json
 COPY package*.json ./
