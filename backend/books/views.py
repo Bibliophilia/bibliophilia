@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
@@ -46,3 +46,12 @@ class HomeView(generics.RetrieveAPIView):
 
     def index(self):
         return HttpResponse("Weclome")
+
+
+class DownloadBook(generics.RetrieveAPIView):
+
+    def get(self, request, *args, **kwargs):
+        id = request.GET.get(pk=args)
+        result = get_book_info(id)
+        file_path = result['hits']['hits'][0]['_source']['file_path']
+        return FileResponse(open(file_path, 'rb'))
