@@ -1,0 +1,45 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch
+    ports:
+      - ${ES_PORT}:9200
+    environment:
+      - node.name=elasticseacrh
+      - cluster.name=${CLUSTER_NAME}
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+    env_file:
+      - .env
+
+  kibana:
+    image: kibana:${STACK_VERSION}
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+    env_file:
+      - .env
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT=9200
+
+networks:
+  mynetwork:
+    driver: bridge
