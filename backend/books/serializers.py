@@ -9,8 +9,6 @@ class BookFileSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
-    files = BookFileSerializer(many=True, read_only=True)
-
     class Meta:
         model = Book
-        read_only_fields = ('id', 'title', 'author', 'description', 'image', 'files')
+        fields = '__all__'

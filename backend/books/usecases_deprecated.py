@@ -1,14 +1,22 @@
 import json
 
-from .services import ElasticsearchService
+from elasticsearch_dsl import Q
+
+from .services_deprecated import ElasticsearchService
 
 
 def perform_search(query):
     return perform_base_search(query)
 
 
-def perform_base_search(query):
-    books_info = ElasticsearchService().search_book(query)
+def perform_base_search(text):
+    query = Q('bool', should=[
+        Q('match', title=text),
+        Q('match', author=text)
+    ])
+    books_info = ElasticsearchService().apply_search(query)
+
+    print(books_info)
     return books_info
 
 

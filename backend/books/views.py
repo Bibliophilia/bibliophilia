@@ -1,48 +1,47 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-from rest_framework import generics
+from django.core.management import call_command
+from django.http import HttpResponse, JsonResponse
+from haystack.management.commands import update_index, rebuild_index
+from haystack.query import SearchQuerySet
+from rest_framework import generics, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
-from .usecases import save_book, perform_search, get_book_info
 
 
-class BookCreateView(generics.CreateAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = BookSerializer(data=request.data)
-        if serializer.is_valid():
-            serialized_data = serializer.validated_data
-            result = save_book(serialized_data)
-            return Response(result, status=status.HTTP_201_CREATED)
-        else:
-            data = {"result": "Invalid data"}
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def add_book(request):
+    serializer = BookSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        rebuild_index.Command().handle(interactive=False, remove=True, verbosity=2)
+        return Response("Book added and indexed successfully!", status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class BookSearchView(generics.ListAPIView):
-    serializer_class = BookSerializer
+@api_view(['GET'])
+def search_book(request):
+    query = request.GET.get('q', '')
+    search_results = perform_base_search(query)
+    if query:
+        serialized_results = [
+            {
+                'title': result.title,
+                'author': result.author,
+                'description': result.description,
+                'image_url': result.image_url,
+            }
+            for result in search_results
+        ]
+        return JsonResponse({'results': serialized_results})
+    else:
+        return JsonResponse({'message': 'No search query provided'}, status=400)
 
-    def get(self, request, *args, **kwargs):
-        query = request.GET.get('q')
-        result = perform_search(query=query)
-        return Response(result, status=status.HTTP_200_OK)
 
-
-class BookDetailView(generics.RetrieveAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-    def get(self, request, *args, **kwargs):
-        id = request.GET.get(pk=args)
-        result = get_book_info(id)
-        return Response(result, status=status.HTTP_200_OK)
+def perform_base_search(query):
+    return SearchQuerySet().filter(text=query)
 
 
 class HomeView(generics.RetrieveAPIView):
-
     def index(self):
         return HttpResponse("Weclome")

@@ -17,15 +17,11 @@ class ElasticsearchService:
         res = self.es.index(index='books', id=book_id, document=book_data)
         return res['result']
 
-    def search_book(self, text, size=10):
-        query = Q('bool', should=[
-            Q('match', title=text),
-            Q('match', author=text)
-        ])
-        search = Search(using=self.es, index="books").query(query)
-        response = search.execute()
-        serialized_results = [hit.to_dict() for hit in response.hits]
-        return serialized_results
-
     def get_book(self, book_id):
         return self.es.search(index='books', id=book_id)
+
+    def apply_search(self, query):
+        search = Search(using=self.es, index="books").query(query)
+        response = search.execute()
+        serialized_results = [(hit.meta.id, hit.to_dict()) for hit in response.hits]
+        return serialized_results

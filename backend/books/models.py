@@ -3,19 +3,20 @@ from django.db import models
 
 # Метод для определения пути загрузки файлов
 def upload_image_to(instance, filename):
-    filename = f"{instance.book.id}.{filename.split('.')[-1]}"
-    return f'public/book-images/{instance.book.id}/{filename}'
+    filename = f"{instance.id}.{filename.split('.')[-1]}"
+    return f'public/book-images/{instance.id}/{filename}'
 
 
 def upload_file_to(instance, filename):
-    filename = f"{instance.book.id}.{filename.split('.')[-1]}"
-    return f'private/book-files/{instance.book.id}/{filename}'
+    filename = f"{instance.id}.{filename.split('.')[-1]}"
+    return f'private/files/books/{instance.id}/{filename}'
 
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
+        managed = False
         app_label = 'books'
 
 
@@ -31,21 +32,23 @@ class BookFile(models.Model):
     file_format = models.CharField(max_length=4, choices=FILE_CHOICES)
 
     class Meta:
-        app_label = 'books'
-
-    def __str__(self):
-        return f"{self.book.title} - {self.file_format}"
+        managed = False
 
 
 class Book(models.Model):
     title = models.CharField(max_length=255, blank=False)
-    author = models.ForeignKey(Author, blank=False, related_name='books', on_delete=models.CASCADE)
+    author = models.CharField(max_length=255, blank=False)
     description = models.TextField(blank=False)
-    file = models.OneToOneField(BookFile, related_name='book', on_delete=models.CASCADE)
-    # file = models.ManyToManyField('BookFile', related_name='books')
+    image = models.FileField(upload_to=upload_image_to)
 
-    def __str__(self):
-        return self.title
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        return None
 
     class Meta:
-        app_label = 'books'
+        db_table = 'books'
+
+    def __unicode__(self):
+        return "{}:{}".format(self.title, self.author)
+    # files = models.ManyToManyField(BookFile, related_name='book', on_delete=models.CASCADE)

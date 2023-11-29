@@ -50,7 +50,6 @@ files = [
 ]
 
 [package.dependencies]
-elasticsearch-dsl = ">=8.9.0,<9.0.0"
 asgiref = ">=3.6.0,<4"
 sqlparse = ">=0.3.1"
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
@@ -58,6 +57,22 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-haystack"
+version = "3.2.1"
+description = "Pluggable search for Django."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-haystack-3.2.1.tar.gz", hash = "sha256:97e3197aefc225fe405b6f17600a2534bf827cb4d6743130c20bc1a06f7293a4"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+
+[package.extras]
+elasticsearch = ["elasticsearch (>=5,<8)"]
 
 [[package]]
 name = "djangorestframework"
@@ -179,4 +194,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "24fb0fe6912a2ac3577f3871c922cf3e2dcd1a5e5055e064a4c5cfacbc2d5143"
+content-hash = "9fd2b67703b3a6ec4f144a8c7e1cb749729030818c28651ffea43f18a09e849c"

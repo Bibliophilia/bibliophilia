@@ -67,6 +67,22 @@ six = "*"
 celery = ["celery (>=4.1.0)"]
 
 [[package]]
+name = "django-haystack"
+version = "3.2.1"
+description = "Pluggable search for Django."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-haystack-3.2.1.tar.gz", hash = "sha256:97e3197aefc225fe405b6f17600a2534bf827cb4d6743130c20bc1a06f7293a4"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+
+[package.extras]
+elasticsearch = ["elasticsearch (>=5,<8)"]
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -326,4 +342,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "511d2e642a4465fa77522a7a06bc621d2346e5f7306784768092ba1908bb2368"
+content-hash = "d7cccbe17ba626ad8fa8d1907e15aad43e7e3254ec457487ae0a187e23232e7f"
