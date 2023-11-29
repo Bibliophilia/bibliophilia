@@ -14,6 +14,8 @@ services:
       - xpack.security.enabled=false
     env_file:
       - .env
+    networks:
+      - bibliopilia_network
 
   kibana:
     image: kibana:${STACK_VERSION}
@@ -29,13 +31,17 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
     env_file:
       - .env
+    networks:
+      - bibliopilia_network
 
   backend:
     build:
       context: .
     container_name: backend
+    restart: always
     volumes:
-      - shared_volume:/app
+      - images_volume:/app/public/images
+      - files_volume:/app/private/files
     depends_on:
       - elasticsearch
     environment:
@@ -44,25 +50,24 @@ services:
     ports:
       - "8000:8000"
     networks:
-      - mynetwork
+      - bibliopilia_network
 
   frontend:
     build:
       context: ./frontend
     container_name: frontend
     volumes:
-      - shared_volume:/app/public
+      - images_volume:/app/public/images
     depends_on:
       - backend
     ports:
       - "3000:3000"
     networks:
-      - mynetwork
+      - bibliopilia_network
 
 networks:
-  mynetwork:
-    driver: bridge
+  bibliopilia_network:
 
 volumes:
-  shared_volume:
-    driver: local
+  images_volume:
+  files_volume:
