@@ -1,4 +1,0 @@
-{{object.title}}
-{{object.author}}
-{{object.description}}
-{{object.image_url}}

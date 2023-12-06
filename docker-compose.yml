@@ -1,5 +1,20 @@
 version: '3'
 services:
+  postgres:
+    image: postgres:13.3
+    container_name: postgres
+    environment:
+      POSTGRES_DB: bibliophiliadb
+      POSTGRES_USER: bibliophilia
+      POSTGRES_PASSWORD: bibliophilia
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bibliopilia_network
+
+
   elasticsearch:
     image: elasticsearch:${STACK_VERSION}
     container_name: elasticsearch
@@ -43,6 +58,7 @@ services:
       - images_volume:/app/public/images
       - files_volume:/app/private/files
     depends_on:
+      - postgres
       - elasticsearch
     environment:
       - ELASTICSEARCH_HOST=elasticsearch
@@ -69,5 +85,6 @@ networks:
   bibliopilia_network:
 
 volumes:
+  db_volume:
   images_volume:
   files_volume:
