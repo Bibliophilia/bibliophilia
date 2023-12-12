@@ -11,10 +11,17 @@ class BibilophiliaDB(SQLModel):
 
 
 class FileFormat(Enum):
-    PDF = auto()
-    TXT = auto()
-    EPUB = auto()
-    DOC = auto()
+    PDF = "pdf"
+    TXT = "txt"
+    EPUB = "epub"
+    DOC = "doc"
+
+    @staticmethod
+    def get_by_name(name: str):
+        for item in FileFormat:
+            if item.value == name:
+                return item
+        raise ValueError("No such FileFormat")
 
 
 # ==================== Book ====================
@@ -35,14 +42,13 @@ class Book(BookBase, table=True):
 
     @property
     def formats(self) -> list[str]:
-        unique_formats = set(file.file_format.name for file in self.files)
+        unique_formats = set(file.format.value for file in self.files)
         return list(unique_formats)
 
 
 class BookCreate(BookBase):
-    pass
-    # image: Optional[UploadFile] = None
-    # files: Optional[list[UploadFile]] = []
+    image_file: Optional[UploadFile]
+    files: list[UploadFile]
 
 
 class BookES(BookBase):
@@ -54,6 +60,7 @@ class BookCard(BibilophiliaDB):
     author: str
     image_url: str
 
+
 class BookInfo(BookBase):
     image_url: str
 
@@ -61,8 +68,8 @@ class BookInfo(BookBase):
 # ==================== BookFile ====================
 class BookFile(BibilophiliaDB, table=True):
     __tablename__ = "files"
-    file_path: str = Field(primary_key=True)
-    file_format: FileFormat
+    path: str = Field(primary_key=True)
+    format: FileFormat
     book_idx: int = Field(foreign_key="books.idx")
 
     book: Book = Relationship(back_populates="files")

@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
 
 
-bibliophilia_app = FastAPI(title="Bibliophila API", version="1.0.0", lifespan=lifespan)
+bibliophilia_app = FastAPI(title="Bibliophilia API", version="1.0.0", lifespan=lifespan)
 bibliophilia_app.include_router(books.router,
                                 prefix="/books",
                                 tags=["books"],
