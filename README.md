@@ -1,4 +1,4 @@
 # Bibliophilia
 
+![image](https://github.com/Bibliophilia/bibliophilia/assets/69720999/bdf89b04-9c16-4c7d-b534-fa2abdea00d5)
 
-![Athena](https://github.com/Bibliophilia/bibliophilia/assets/69720999/b9ddef33-c9d0-4326-b05e-a991f11e936c)
