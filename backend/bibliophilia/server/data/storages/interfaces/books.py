@@ -46,7 +46,7 @@ class DBBookStorage(ABC):
         pass
 
     @abstractmethod
-    def read_bookfile(self, book_idx: int, file_format: FileFormat) -> Optional[BookFile]:
+    def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         pass
 
     @abstractmethod
@@ -64,7 +64,6 @@ class DBBookStorage(ABC):
     @abstractmethod
     def read_books(self, idxs: list[int]) -> list[Book]:
         pass
-
 
 class SearchBookStorage(ABC):
     @abstractmethod

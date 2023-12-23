@@ -92,6 +92,8 @@ class BookRepositoryImpl(BookRepository):
     def read_books(self, idxs: list[int]) -> list[Book]:
         return self.db_storage.read_books(idxs)
 
+    def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
+        return self.db_storage.read_bookfile(idx=idx, file_format=file_format)
 
 class SearchRepositoryImpl(SearchRepository):
     def __init__(self, search_storage: SearchStorage):

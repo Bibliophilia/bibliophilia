@@ -100,10 +100,10 @@ class DBBookStorageImpl(DBBookStorage):
             logging.info("Refreshed")
             return db_bookfile
 
-    def read_bookfile(self, book_idx: int, file_format: FileFormat) -> Optional[BookFile]:
+    def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         with Session(self.engine) as session:
             return session.exec(select(BookFile)
-                                .where(BookFile.book_idx == book_idx)
+                                .where(BookFile.book_idx == idx)
                                 .where(BookFile.format == file_format)).one_or_none()
 
     def get_all_formats(self, book_idx: int) -> set[FileFormat]:

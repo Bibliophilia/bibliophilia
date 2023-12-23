@@ -3,7 +3,7 @@ from typing import Optional
 
 from bibliophilia.server.domain.models.basic.books import FileFormat
 from bibliophilia.server.domain.models.input.books import BookCreate
-from bibliophilia.server.domain.models.schemas.books import Book
+from bibliophilia.server.domain.models.schemas.books import Book, BookFile
 
 
 class BookRepository(ABC):
@@ -24,7 +24,9 @@ class BookRepository(ABC):
     def read_books(self, ids: list[int]) -> list[Book]:
         pass
 
-
+    @abstractmethod
+    def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
+        pass
 class SearchRepository(ABC):
     @abstractmethod
     def base_search(self, query: str) -> [int]:
