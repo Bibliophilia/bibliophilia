@@ -5,9 +5,14 @@ import PyPDF2
 from ebooklib import epub
 import ebooklib
 from bs4 import BeautifulSoup
+from collections import Counter
 
 
-class BookParser:
+class Parser:
+
+    def __init__(self):
+        self.nlp = spacy.load("en_core_web_sm")
+
 
     def book_to_tokens(self, book: Book):
         text = None
@@ -26,16 +31,23 @@ class BookParser:
         else:
             raise Exception("The book doesn't have the right format!")
 
-        nlp = spacy.load("en_core_web_sm")
-        doc = nlp(text)
+        return self.text_to_tokens(text)
+
+
+    def text_to_tokens(self, text):
+        doc = self.nlp(text)
         tokens = [entity.label_ for entity in doc.ents]
-        return list(tokens)
+        counter = Counter(tokens)
+        top_100_tokens = [item[0] for item in counter.most_common(100)]
+        return list(top_100_tokens)
+
 
     def _file_TXT_to_text(self, book_file: BookFile):
         path = book_file.file_path
         with open(path, 'r') as file:
             text = file.read()
         return text
+
 
     def _file_DOC_to_text(self, book_file: BookFile):
         path = book_file.file_path
@@ -46,6 +58,7 @@ class BookParser:
 
         return text
 
+
     def _file_PDF_to_text(self, book_file: BookFile):
         path = book_file.file_path
         text = ""
@@ -55,6 +68,7 @@ class BookParser:
                 page = pdf_reader.getPage(page_num)
                 text += page.extractText()
         return text
+
 
     def _file_EPUB_to_text(self, book_file: BookFile):
         path = book_file.file_path

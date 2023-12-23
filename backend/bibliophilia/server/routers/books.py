@@ -9,6 +9,8 @@ from bibliophilia.server.dependencies import es, engine, BOOKS_IN_PAGE
 from typing import Optional, Annotated
 from fastapi import UploadFile, File
 
+from bibliophilia.server.utils import Parser
+
 router = APIRouter()
 
 
@@ -70,7 +72,9 @@ def create_book(book: BookCreate) -> (Book, status):
         if book.files:
             db_book.files = save_files(db_book.idx, book.files, session)
         session.commit()
-        es_book = BookES(title=db_book.title, author=db_book.author, description=db_book.description, tokens=[])
+        book_parser = Parser()
+        tokens = book_parser.book_to_tokens(db_book)
+        es_book = BookES(title=db_book.title, author=db_book.author, description=db_book.description, tokens=tokens)
         es.index(index=db_book.__tablename__, id=db_book.idx, document=es_book.dict())
         return db_book, status.HTTP_201_CREATED
 
@@ -100,3 +104,32 @@ def base_search(text: str) -> list[int]:
     search = Search(using=es, index=Book.__tablename__).query(query)
     response = search.execute()
     return [hit.meta.id for hit in response]
+
+def semantic_search(text: str):
+    request_parser = Parser()
+    request_tokens = request_parser.text_to_tokens(text)
+
+    query = Q('bool', should=[Q('terms', **{BookES.tokens: item}) for item in request_tokens])
+    search = Search(using=es, index=Book.__tablename__).query(query)
+    response = search.execute()
+
+    ids = [hit.meta.id for hit in response]
+    with Session(engine) as session:
+        books = session.query(Book).filter(Book.idx.in_(ids)).all()
+    books_priority = []
+    for book in books:
+        tokens = book.BookES.tokens
+        priority = 0
+        for request_token in request_tokens:
+            for i, token in enumerate(tokens):
+                if token == request_token:
+                    priority += i
+                    break
+        books_priority.append((book, priority))
+
+    books = books_priority.sort(key=lambda x: x[1])[0]
+    return [BookCard(title=book.title,
+                     author=book.author,
+                     image_url=book.image_url) for book in books]
+
+

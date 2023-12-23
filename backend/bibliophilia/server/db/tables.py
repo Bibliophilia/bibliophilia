@@ -45,14 +45,17 @@ class Book(BookBase, table=True):
         unique_formats = set(file.format.value for file in self.files)
         return list(unique_formats)
 
+    class BookES(BookBase):
+        tokens: list[str]
+
 
 class BookCreate(BookBase):
     image_file: Optional[UploadFile]
     files: list[UploadFile]
 
 
-class BookES(BookBase):
-    tokens: list[str]
+# class BookES(BookBase):
+#    tokens: list[str]
 
 
 class BookCard(BibilophiliaDB):
