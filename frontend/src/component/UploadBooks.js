@@ -8,8 +8,10 @@ const UploadBooks = () => {
     description: '',
     bookFiles: [],
     coverPhoto: null,
-    coverPhotoURL: '', // To store the cover photo URL
+    coverPhotoURL: '',
   });
+
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +21,7 @@ const UploadBooks = () => {
     }));
   };
 
-  const handleFileChange = (e, fileType) => {
+  const handleFileChange = async (e, fileType) => {
     const files = e.target.files;
 
     setFormData((prevData) => ({
@@ -35,7 +37,11 @@ const UploadBooks = () => {
           coverPhotoURL: reader.result,
         }));
       };
-      reader.readAsDataURL(files[0]);
+
+      await new Promise((resolve) => {
+        reader.readAsDataURL(files[0]);
+        reader.onloadend = resolve;
+      });
     }
   };
 
@@ -44,23 +50,23 @@ const UploadBooks = () => {
 
     try {
       const requestData = new FormData();
-      requestData.append('title', formData.bookTitle);
-      requestData.append('author', formData.author);
-      requestData.append('description', formData.description);
       requestData.append('image_file', formData.coverPhoto);
 
+      // Correct handling of book files as an array with unique names
       for (let i = 0; i < formData.bookFiles.length; i++) {
-        requestData.append('files', formData.bookFiles[i]);
+        requestData.append(`file_${i}`, formData.bookFiles[i]);
       }
 
-      const response = await fetch('http://localhost:8000/books/upload', {
+      const queryParams = `?title=${encodeURIComponent(formData.bookTitle)}&author=${encodeURIComponent(formData.author)}&description=${encodeURIComponent(formData.description)}`;
+      const url = `http://localhost:8000/books/upload${queryParams}`;
+
+      const response = await fetch(url, {
         method: 'POST',
         body: requestData,
       });
 
       if (response.ok) {
         console.log('Books uploaded successfully');
-        // Reset form data after successful upload
         setFormData({
           bookTitle: '',
           author: '',
@@ -70,20 +76,18 @@ const UploadBooks = () => {
           coverPhotoURL: '',
         });
       } else {
-        console.error('Failed to upload books. Server returned:', response.status);
-
         const responseText = await response.text();
-        console.error('Server response:', responseText);
-
         try {
           const responseData = JSON.parse(responseText);
-          console.error('Validation errors:', responseData.detail);
+          setError(responseData.detail);
         } catch (parseError) {
           console.error('Failed to parse response JSON:', parseError);
+          setError('An error occurred while processing your request.');
         }
       }
     } catch (error) {
       console.error('An error occurred:', error);
+      setError('An error occurred while processing your request.');
     }
   };
 
