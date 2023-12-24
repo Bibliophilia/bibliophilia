@@ -5,7 +5,6 @@ const UploadBooks = () => {
   const [formData, setFormData] = useState({
     bookTitle: '',
     author: '',
-  //  genre: '',  // Added genre state
     description: '',
     bookFiles: [],
     coverPhoto: null,
@@ -29,7 +28,6 @@ const UploadBooks = () => {
     }));
 
     if (fileType === 'coverPhoto' && files.length > 0) {
-      // Read the cover photo and set its data URL directly
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((prevData) => ({
@@ -45,42 +43,50 @@ const UploadBooks = () => {
     e.preventDefault();
 
     try {
-      const formDataForApi = new FormData();
-      formDataForApi.append('title', formData.bookTitle);
-      formDataForApi.append('author', formData.author);
-     // formDataForApi.append('genre', formData.genre);  // Append genre to the form data
-      formDataForApi.append('description', formData.description);
-      formDataForApi.append('image_file', formData.coverPhoto);
+      const requestData = new FormData();
+      requestData.append('title', formData.bookTitle);
+      requestData.append('author', formData.author);
+      requestData.append('description', formData.description);
+      requestData.append('image_file', formData.coverPhoto);
 
       for (let i = 0; i < formData.bookFiles.length; i++) {
-        formDataForApi.append('files', formData.bookFiles[i]);
+        requestData.append('files', formData.bookFiles[i]);
       }
 
-      const response = await fetch('http://localhost:8000/books', {
+      const response = await fetch('http://localhost:8000/books/upload', {
         method: 'POST',
-        body: formDataForApi,
-        redirect: 'manual',
+        body: requestData,
       });
 
-      if (response.redirected) {
-        console.log('Redirected to:', response.url);
+      if (response.ok) {
+        console.log('Books uploaded successfully');
+        // Reset form data after successful upload
+        setFormData({
+          bookTitle: '',
+          author: '',
+          description: '',
+          bookFiles: [],
+          coverPhoto: null,
+          coverPhotoURL: '',
+        });
+      } else {
+        console.error('Failed to upload books. Server returned:', response.status);
+
+        const responseText = await response.text();
+        console.error('Server response:', responseText);
+
+        try {
+          const responseData = JSON.parse(responseText);
+          console.error('Validation errors:', responseData.detail);
+        } catch (parseError) {
+          console.error('Failed to parse response JSON:', parseError);
+        }
       }
-
-      console.log('Books uploaded successfully');
-
-      setFormData({
-        bookTitle: '',
-        author: '',
-      //  genre: '',  // Reset genre
-        description: '',
-        bookFiles: [],
-        coverPhoto: null,
-        coverPhotoURL: '',
-      });
     } catch (error) {
       console.error('An error occurred:', error);
     }
   };
+
 
   return (
       <div className="upload-books-page">
