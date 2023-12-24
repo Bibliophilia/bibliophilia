@@ -50,20 +50,28 @@ const UploadBooks = () => {
 
     try {
       const requestData = new FormData();
-      requestData.append('image_file', formData.coverPhoto);
 
-      // Correct handling of book files as an array with unique names
+      // Create a File object for image_file
+      const coverPhotoFile = new File([formData.coverPhoto], formData.coverPhoto.name);
+      requestData.append('image_file', coverPhotoFile);
+
+      // Append only image_file and files to FormData
       for (let i = 0; i < formData.bookFiles.length; i++) {
-        requestData.append(`file_${i}`, formData.bookFiles[i]);
+        requestData.append(`files`, formData.bookFiles[i]);
       }
 
       const queryParams = `?title=${encodeURIComponent(formData.bookTitle)}&author=${encodeURIComponent(formData.author)}&description=${encodeURIComponent(formData.description)}`;
       const url = `http://localhost:8000/books/upload${queryParams}`;
 
+      console.log('Request URL:', url);
+      console.log('Request FormData:', requestData);
+
       const response = await fetch(url, {
         method: 'POST',
         body: requestData,
       });
+
+      console.log('Response:', response);
 
       if (response.ok) {
         console.log('Books uploaded successfully');
@@ -77,20 +85,14 @@ const UploadBooks = () => {
         });
       } else {
         const responseText = await response.text();
-        try {
-          const responseData = JSON.parse(responseText);
-          setError(responseData.detail);
-        } catch (parseError) {
-          console.error('Failed to parse response JSON:', parseError);
-          setError('An error occurred while processing your request.');
-        }
+        console.error('Error response:', responseText);
+        setError('An error occurred while processing your request.');
       }
     } catch (error) {
       console.error('An error occurred:', error);
       setError('An error occurred while processing your request.');
     }
   };
-
 
   return (
       <div className="upload-books-page">
