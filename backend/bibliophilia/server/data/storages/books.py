@@ -12,6 +12,8 @@ from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Q, Search
 
+from backend.bibliophilia.server.utils.parser import Parser
+
 
 class FSBookStorageImpl(FSBookStorage):
 
@@ -150,3 +152,12 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         search = Search(using=self.es, index=Book.__tablename__).query(query)
         response = search.execute()
         return [hit.meta.id for hit in response]
+
+    def semantic_search(self, query: str):
+        request_parser = Parser()
+        request_tokens = request_parser.text_to_tokens(query)
+
+        query = Q('bool', should=[Q('terms', **{BookSearch.tokens: request_token}) for request_token in request_tokens])
+        search = Search(using=self.es, index=Book.__tablename__).query(query)
+        response = search.execute()
+        return [hit.meta.id for hit in response], request_tokens
