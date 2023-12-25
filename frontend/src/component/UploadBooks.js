@@ -12,6 +12,7 @@ const UploadBooks = () => {
   });
 
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,18 +64,15 @@ const UploadBooks = () => {
       const queryParams = `?title=${encodeURIComponent(formData.bookTitle)}&author=${encodeURIComponent(formData.author)}&description=${encodeURIComponent(formData.description)}`;
       const url = `http://localhost:8000/books/upload${queryParams}`;
 
-      console.log('Request URL:', url);
-      console.log('Request FormData:', requestData);
-
       const response = await fetch(url, {
         method: 'POST',
         body: requestData,
       });
 
-      console.log('Response:', response);
-
       if (response.ok) {
         console.log('Books uploaded successfully');
+        setSuccess(true);
+        // Clear form data after successful upload
         setFormData({
           bookTitle: '',
           author: '',
@@ -103,6 +101,12 @@ const UploadBooks = () => {
         <h2 className='Header'>Upload your Books!</h2>
 
         <div className='Upload-book-container'>
+          {success && (
+              <div className="success-message">
+                Book uploaded successfully!
+              </div>
+          )}
+
           <form onSubmit={handleSubmit}>
             <div className='book-details-part'>
               <div className='book-details-right'>
@@ -126,19 +130,6 @@ const UploadBooks = () => {
                   />
                 </label>
 
-                {/*
-
-                <label className='genre'>
-                  Genre:
-                  <input
-                      type="text"
-                      name="genre"
-                      value={formData.genre}
-                      onChange={handleChange}
-                  />
-                </label>
-                 */}
-
                 <label className='description'>
                   Description:
                   <textarea
@@ -153,11 +144,14 @@ const UploadBooks = () => {
             <div className='file-uploading-part'>
               <div className='file-uploading-left'>
                 {formData.coverPhotoURL && (
-                    <img
-                        src={formData.coverPhotoURL}
-                        alt="Cover Preview"
-                        className="cover-preview"
-                    />
+                    <div>
+                      <img
+                          src={formData.coverPhotoURL}
+                          alt="Cover Preview"
+                          className="cover-preview"
+                      />
+                      <br />
+                    </div>
                 )}
 
                 <label className='choose-cover-photo'>
