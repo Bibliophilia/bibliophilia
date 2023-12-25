@@ -4,6 +4,8 @@ import './Style/App.css';
 import HomePage from './component/HomePage';
 import CategoryWindow from './component/CategoryWindow';
 import UploadBooks from './component/UploadBooks';
+import SearchResultsPage from './component/SearchResultsPage';
+import BookInfoPage from "./component/BookInfoPage";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/category" element={<CategoryWindow />} />
           <Route path="/upload-books" element={<UploadBooks />} />
+          <Route path="/search-results" element={<SearchResultsPage />} />
+          <Route path="/books/:idx" element={<BookInfoPage />} />
         </Routes>
       </div>
     </Router>

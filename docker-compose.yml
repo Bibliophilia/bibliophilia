@@ -1,12 +1,27 @@
 version: '3'
 services:
+  postgres:
+    image: postgres:13.3
+    container_name: postgres
+    environment:
+      POSTGRES_DB: bibliophiliadb
+      POSTGRES_USER: bibliophilia
+      POSTGRES_PASSWORD: bibliophilia
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bibliopilia_network
+
+
   elasticsearch:
     image: elasticsearch:${STACK_VERSION}
     container_name: elasticsearch
     ports:
-      - ${ES_PORT}:9200
+      - "${ES_PORT}:9200"
     environment:
-      - node.name=elasticseacrh
+      - node.name=elasticsearch
       - cluster.name=${CLUSTER_NAME}
       - discovery.type=single-node
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
@@ -14,6 +29,8 @@ services:
       - xpack.security.enabled=false
     env_file:
       - .env
+    networks:
+      - bibliopilia_network
 
   kibana:
     image: kibana:${STACK_VERSION}
@@ -21,7 +38,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - ${KIBANA_PORT}:5601
+      - "${KIBANA_PORT}:5601"
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
@@ -29,17 +46,44 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
     env_file:
       - .env
+    networks:
+      - bibliopilia_network
 
   backend:
     build:
-      context: ./backend
+      context: .
     container_name: backend
+    volumes:
+      - images_volume:/app/public/images
+      - files_volume:/app/private/files
     depends_on:
+      - postgres
       - elasticsearch
     environment:
       - ELASTICSEARCH_HOST=elasticsearch
       - ELASTICSEARCH_PORT=9200
+    ports:
+      - "8000:8000"
+    networks:
+      - bibliopilia_network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - images_volume:/app/public/public/images
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - bibliopilia_network
 
 networks:
-  mynetwork:
-    driver: bridge
+  bibliopilia_network:
+
+volumes:
+  db_volume:
+  images_volume:
+  files_volume:
