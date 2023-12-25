@@ -1,0 +1,60 @@
+.Book-info-page-container{
+    font-family: "Google Sans","sans-serif";
+    position: absolute;
+    width: 100%;
+}
+
+.book-title-bookinfo{
+    top:250px;
+    position: absolute;
+    left: 650px;
+    font-size: 40px;
+
+}
+
+.book-author-bookinfo{
+    top:310px;
+    position: absolute;
+    left: 650px;
+    font-size: 20px;
+    color: #687983;
+
+}
+
+.dropdown-box-bookinfo{
+    position: absolute;
+    left:185px;
+    top:650px;
+
+}
+
+
+.book-cover-img{
+    position: absolute;
+    top:300px;
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-color: black;
+    left: 150px;
+}
+
+.read-now-button,
+.download-button{
+    width: 180px;
+    position: absolute;
+    text-align:center;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: "Google Sans","sans-serif";
+}
+
+.download-button{
+    left:150px;
+    top:600px;
+}
+.read-now-button{
+    left:350px;
+    top:600px;
+}
+

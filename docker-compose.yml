@@ -73,7 +73,7 @@ services:
       context: ./frontend
     container_name: frontend
     volumes:
-      - images_volume:/app/public/images
+      - images_volume:/app/public/public/images
     depends_on:
       - backend
     ports:

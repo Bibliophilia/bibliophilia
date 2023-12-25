@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  font-family: "Google Sans", serif;
 }
 
 .Upper-Part {
@@ -41,14 +42,13 @@
   display: flex;
   align-items: center;
   margin-top: -17px;
-  font-family: poppins;
+  font-family: "Google Sans", serif;
 }
 
 .CategoryButton {
   padding: 0; 
   background: none !important; 
-  border: none; 
-  font-family: 'Poppins', sans-serif;
+  border: none;
   font-size: 15px;
   font-weight: 700;
   color: #007DD8;
@@ -56,11 +56,11 @@
   transition: color 0.3s ease; 
   margin-top: 2px;
   margin-left: 2.5px;
+  font-family: "Google Sans", serif;
 }
 
 .CategoryButton:hover{
   color:#F05223;
-  background-color: none;
 }
 
 
@@ -71,6 +71,7 @@
   width: 500px;
   height: 68px;
   flex-shrink: 0;
+
 }
 
 .SearchBar {
@@ -82,7 +83,8 @@
   height: 60px;
   border-radius: 40px;
   border: 3px solid #000;
-  overflow: hidden; 
+  overflow: hidden;
+
 }
 
 .SearchBar:hover{
@@ -91,9 +93,8 @@
 }
 
 .text-in-search-bar{
-  margin-top: 15px;
-  margin-left: 15px;
   color: #000;
+
 }
 
 .SearchBar input {
@@ -122,7 +123,7 @@
   height: 40px;
   flex-shrink: 0;
   color: #687983;
-  font-family: 'Futura PT', sans-serif;
+  font-family: "Google Sans","sans-serif";
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
@@ -142,6 +143,7 @@
   margin-top: -8px;
   margin-left: auto;
   margin-right: auto;
+
 }
 
 
@@ -153,7 +155,7 @@
   border-radius: 47px;
   border: 2px solid #FEF102;
   color: #000;
-  font-family: Poppins;
+  font-family: "Google Sans", serif;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
