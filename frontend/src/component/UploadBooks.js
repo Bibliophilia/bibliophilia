@@ -52,10 +52,6 @@ const UploadBooks = () => {
         setError('Incorrect file format for cover photo. Please select a JPG, JPEG, or PNG file.');
         return;
       }
-      setFormData((prevData) => ({
-      ...prevData,
-      'coverPhoto': file,
-    }));
     }
 
     // Check file formats for book files
@@ -71,11 +67,12 @@ const UploadBooks = () => {
           return;
         }
       }
-      setFormData((prevData) => ({
-      ...prevData,
-      'bookFiles': files,
-    }));
     }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [fileType]: files,
+    }));
 
     setError(null);
   };
@@ -87,7 +84,8 @@ const UploadBooks = () => {
       const requestData = new FormData();
 
       // Create a File object for image_file
-      requestData.append('image_file', formData.coverPhoto);
+      const coverPhotoFile = new File([formData.coverPhoto], formData.coverPhoto.name);
+      requestData.append('image_file', coverPhotoFile);
 
       // Append only image_file and files to FormData
       for (let i = 0; i < formData.bookFiles.length; i++) {
