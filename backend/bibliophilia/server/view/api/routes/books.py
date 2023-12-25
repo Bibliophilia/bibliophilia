@@ -34,7 +34,7 @@ def handle_get_book_info(idx: int):
     return dependencies.book_service.read_book(idx=idx)
 
 
-@router.get("/search", response_model=list[BookCard])
+@router.get("/search/", response_model=list[BookCard])
 def handle_search_books(q: str = Query("", title="Query string"), page: int = Query(1, title="Page number")):
     return dependencies.search_service.search(query=q, page=page)
 

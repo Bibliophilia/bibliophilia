@@ -1,3 +1,4 @@
 # Bibliophilia
 
-![logo_bib 2](https://github.com/Bibliophilia/bibliophilia/assets/69720999/f6046a52-3eee-4939-a5a8-bab604ba8d25)
+![image](https://github.com/Bibliophilia/bibliophilia/assets/69720999/bdf89b04-9c16-4c7d-b534-fa2abdea00d5)
+

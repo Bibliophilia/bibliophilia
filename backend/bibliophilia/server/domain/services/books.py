@@ -29,10 +29,12 @@ class BookService:
     def read_book(self, idx: int) -> Optional[BookInfo]:
         book = self.repository.read_book(idx)
         formats = self.repository.get_book_formats(idx)
-        return BookInfo(title=book.title,
-                        author=book.author,
-                        image_url=book.image_url,
-                        formats=[book_format.value for book_format in formats])
+        if book:
+            return BookInfo(title=book.title,
+                            author=book.author,
+                            image_url=book.image_url,
+                            formats=[book_format.value for book_format in formats])
+        return None
 
     def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         return self.repository.read_bookfile(idx=idx, file_format=file_format)
