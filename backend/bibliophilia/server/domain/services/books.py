@@ -31,6 +31,7 @@ class BookService:
             return BookInfo(title=book.title,
                             author=book.author,
                             image_url=book.image_url,
+                            description=book.description,
                             formats=[book_format.value for book_format in formats])
         return None
 
