@@ -44,7 +44,7 @@ class BookRepositoryImpl(BookRepository):
 
         for file in book.files:
             filename = file.filename
-            file_extension = filename.split('.')[1]
+            file_extension = filename.split('.')[-1]
             logging.info(f"File name: {filename}")
             logging.info(f"File format: {file_extension}")
             if not FileFormat.get_by_name(file_extension):

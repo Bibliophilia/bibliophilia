@@ -18,10 +18,11 @@ class BookService:
         # TODO: токенизация
         book.tokens = []
         book = self.repository.create_book(book)
-        logging.info(f"book created: {book.idx}")
         if book:
+            logging.info(f"book created: {book.idx}")
             return book, status.HTTP_201_CREATED
         else:
+            logging.info(f"book not created")
             return None, status.HTTP_409_CONFLICT
 
     def read_book(self, idx: int) -> Optional[BookInfo]:
