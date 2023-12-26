@@ -11,7 +11,7 @@ class BookCreate(ExtendedBookBase):
     tokens: list[str] = []
 
 
-class BookSearch(BookBase):
+class BookSearch(ExtendedBookBase):
     tokens: list[str]
 
 
