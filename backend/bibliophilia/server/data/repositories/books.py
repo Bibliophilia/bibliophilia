@@ -101,3 +101,6 @@ class SearchRepositoryImpl(SearchRepository):
 
     def base_search(self, query: str) -> [int]:
         return self.search_storage.base_search(query=query)
+
+    def semantic_search(self, tokens: list[float]):
+        return self.search_storage.semantic_search(tokens=tokens)

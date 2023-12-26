@@ -1,1 +1,1 @@
-from .parser import BookParser
+from .parser import Parser

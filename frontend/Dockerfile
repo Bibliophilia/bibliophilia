@@ -7,9 +7,6 @@ WORKDIR /app/public
 # Копируем файлы package.json и package-lock.json
 COPY package*.json ./
 
-
-RUN npm config set registry https://registry.npmjs.org/
-
 # Устанавливаем зависимости
 RUN npm install
 

@@ -9,7 +9,7 @@ from bibliophilia.server.domain.models.input.books import BookCreate
 from bibliophilia.server.domain.models.output.books import BookInfo
 from bibliophilia.server.domain.models.schemas.books import Book, BookFile
 
-from backend.bibliophilia.server.utils.parser import Parser
+from bibliophilia.server.utils.parser import Parser
 
 
 class BookService:
@@ -18,7 +18,8 @@ class BookService:
 
     def create(self, book: BookCreate) -> (Optional[int], status):
         # TODO: скорее всего сделать токенизацию асинхронной, т.к. долго выполняется
-        book.tokens = Parser().book_to_tokens(book)
+        #book.tokens = Parser().book_to_tokens(book)
+        #book.tokens = []
         book = self.repository.create_book(book)
         logging.info(f"book created: {book.idx}")
         if book:
@@ -47,30 +48,15 @@ class SearchService:
 
     def search(self, query: str, page: int) -> list[Book]:
         # Какой то слооожный поиск
-        ids = self.search_repository.base_search(query)
+
+        ids = []
+        base_search_ids = self.search_repository.base_search(query)
+        ids.extend(base_search_ids)
+
+        tokens = Parser().text_to_tokens(query)
+        semantic_search_ids = self.search_repository.semantic_search(tokens)
+        ids.extend(semantic_search_ids)
+
         page_ids = ids[settings.BOOKS_IN_PAGE * (page - 1)::settings.BOOKS_IN_PAGE * page + 1]
         books = self.book_repository.read_books(page_ids)
-
-        # semantic search
-        books_sem = []
-        if len(books) < settings.BOOKS_IN_PAGE:
-            ids = self.search_repository.semantic_search(query)
-            # TODO: исправить индексы
-            page_ids = ids[::settings.BOOKS_IN_PAGE - len(books)]
-            books_sem, request_tokens = self.book_repository.read_books(page_ids)
-
-            #здесь мы ищем книги, у которых больше всего совпадений с query
-            books_priority = []
-            for book in books_sem:
-                tokens = book.tokens
-                priority = 0
-                for request_token in request_tokens:
-                    for i, token in enumerate(tokens):
-                        if token == request_token:
-                            priority += i
-                            break
-                books_priority.append((book, priority))
-
-            books_sem = books_priority.sort(key=lambda x: x[1])[0]
-
-        return books + books_sem
+        return books
