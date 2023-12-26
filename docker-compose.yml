@@ -18,6 +18,8 @@ services:
   elasticsearch:
     image: elasticsearch:${STACK_VERSION}
     container_name: elasticsearch
+    volumes:
+      - es_volume:/usr/share/elasticsearch/data
     ports:
       - "${ES_PORT}:9200"
     environment:
@@ -84,6 +86,7 @@ networks:
   bibliopilia_network:
 
 volumes:
+  es_volume:
   db_volume:
   images_volume:
   files_volume:
