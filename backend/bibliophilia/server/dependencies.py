@@ -12,8 +12,18 @@ from bibliophilia.server.domain.services.books import BookService, SearchService
 
 engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@postgres:5432/bibliophiliadb", echo=True)
 es = Elasticsearch('http://elasticsearch:9200')
-es.indices.create(index="books", ignore=400)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+index_mapping = {
+    "mappings": {
+        "properties": {
+            "tokens": {
+                "type": "dense_vector",
+                "dims": 96  # Укажите количество измерений (размерность) вектора
+            }
+        }
+    }
+}
+es.indices.create(index="books", ignore=400, body=index_mapping)
 
 Base = declarative_base()
 

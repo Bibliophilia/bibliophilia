@@ -18,8 +18,7 @@ class BookService:
 
     def create(self, book: BookCreate) -> (Optional[int], status):
         # TODO: скорее всего сделать токенизацию асинхронной, т.к. долго выполняется
-        #book.tokens = Parser().book_to_tokens(book)
-        #book.tokens = []
+        book.tokens = Parser().book_to_tokens(book)
         book = self.repository.create_book(book)
         if book:
             logging.info(f"book created: {book.idx}")
@@ -50,15 +49,21 @@ class SearchService:
 
     def search(self, query: str, page: int) -> list[Book]:
         # Какой то слооожный поиск
-
+        logging.info("Base Search started")
         ids = []
         base_search_ids = self.search_repository.base_search(query)
         ids.extend(base_search_ids)
-
+        logging.info(f"Base Search finished:{ids}")
+        logging.info("Semantic Search started")
         tokens = Parser().text_to_tokens(query)
         semantic_search_ids = self.search_repository.semantic_search(tokens)
         ids.extend(semantic_search_ids)
-
-        page_ids = ids[settings.BOOKS_IN_PAGE * (page - 1)::settings.BOOKS_IN_PAGE * page + 1]
+        logging.info(f"Semantic Search finished:{ids}")
+        page_ids = []
+        for item in ids:
+            if item not in page_ids:
+                page_ids.append(item)
+        page_ids = page_ids[(settings.BOOKS_IN_PAGE * (page - 1)): (settings.BOOKS_IN_PAGE * page)]
+        logging.info(f"Final books:{page_ids}")
         books = self.book_repository.read_books(page_ids)
         return books

@@ -77,5 +77,5 @@ class SearchStorage(ABC):
         pass
 
     @abstractmethod
-    def semantic_search(self, query: str) -> [int]:
+    def semantic_search(self, tokens: list[float]) -> [int]:
         pass
