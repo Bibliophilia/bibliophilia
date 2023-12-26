@@ -19,6 +19,7 @@
     height: 120px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 
+
 }
 
 .SP-page-title{
@@ -27,7 +28,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 160%;
-    font-family: "adobe-caslon-pro", serif;
+    font-family: "Google Sans","sans-serif";
     text-align: left;
     margin-left: 50px;
     padding: 20px;
@@ -58,9 +59,10 @@
 
 
 .search-result-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+    width: 120px;
+    align-content: center;
+    height: 150px;
+
 
 }
 

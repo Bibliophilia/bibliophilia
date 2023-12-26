@@ -5,38 +5,51 @@
 }
 
 .book-title-bookinfo{
-    top:250px;
+    top:150px;
     position: absolute;
     left: 650px;
-    font-size: 40px;
+    font-size: 42px;
 
 }
 
 .book-author-bookinfo{
-    top:310px;
+    top:210px;
     position: absolute;
-    left: 650px;
+    left: 656px;
     font-size: 20px;
     color: #687983;
 
 }
 
+.book-description-bookinfo{
+    position: absolute;
+    left: 656px;
+    top:250px;
+    font-size: 18px;
+    max-width: 400px;
+    text-align: left;
+}
+
+
 .dropdown-box-bookinfo{
     position: absolute;
-    left:185px;
+    left:272px;
     top:650px;
+    font-family: "Google Sans","sans-serif";
+    
 
 }
 
 
 .book-cover-img{
     position: absolute;
-    top:300px;
-    width: 400px;
+    top:180px;
+    width: 280px;
     height: 400px;
     object-fit: cover;
+    border-radius: 10px;
     border-color: black;
-    left: 150px;
+    left: 290px;
 }
 
 .read-now-button,
@@ -47,14 +60,26 @@
     font-size: 15px;
     font-weight: bold;
     font-family: "Google Sans","sans-serif";
+
 }
 
 .download-button{
-    left:150px;
+    left:240px;
     top:600px;
+    color: white;
+    background-color: black;
 }
 .read-now-button{
-    left:350px;
+    left:440px;
     top:600px;
+    color: white;
+    background-color: black;
+}
+
+.download-button:hover,
+.read-now-button:hover{
+    background-color: #939498;
+    color: black;
+
 }
 

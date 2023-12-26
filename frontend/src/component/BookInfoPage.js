@@ -75,7 +75,7 @@ const BookInfoPage = () => {
                     <img className="book-cover-img" src={bookInfo.image_url} alt={bookInfo.title}/>
                     </div>
 
-                    <button className="read-now-button" onClick={handleReadOnline}>Read It Now</button>
+                    <button className="read-now-button" onClick={handleReadOnline}>Read Now</button>
 
                     <div>
                         <button className="download-button" onClick={handleDownload}>Download</button>

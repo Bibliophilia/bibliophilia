@@ -52,10 +52,6 @@ const UploadBooks = () => {
         setError('Incorrect file format for cover photo. Please select a JPG, JPEG, or PNG file.');
         return;
       }
-      setFormData((prevData) => ({
-      ...prevData,
-      'coverPhoto': file,
-    }));
     }
 
     // Check file formats for book files
@@ -71,11 +67,12 @@ const UploadBooks = () => {
           return;
         }
       }
-      setFormData((prevData) => ({
-      ...prevData,
-      'bookFiles': files,
-    }));
     }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [fileType]: files,
+    }));
 
     setError(null);
   };
@@ -87,7 +84,8 @@ const UploadBooks = () => {
       const requestData = new FormData();
 
       // Create a File object for image_file
-      requestData.append('image_file', formData.coverPhoto);
+      const coverPhotoFile = new File([formData.coverPhoto], formData.coverPhoto.name);
+      requestData.append('image_file', coverPhotoFile);
 
       // Append only image_file and files to FormData
       for (let i = 0; i < formData.bookFiles.length; i++) {
@@ -139,11 +137,29 @@ const UploadBooks = () => {
     }
   }, [success]);
 
+  const handleCoverPhotoPreview = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({
+          ...prevData,
+          coverPhotoURL: reader.result,
+        }));
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Function to navigate to the home page
   const navigateToHome = () => {
     // Replace the path with the route to your home page
     navigate('/');
   };
+
+
 
   return (
       <div className="upload-books-page">
@@ -151,7 +167,7 @@ const UploadBooks = () => {
           <h1 className="page-title">Bibliophilia</h1>
         </div>
 
-        <h2 className="Header-upload-book">Upload your Books!</h2>
+        <h2 className="Header-upload-book">Share your Books with the world!</h2>
 
         <div className="Upload-book-container">
           {success && <div className="success-message">Book uploaded successfully!</div>}
@@ -210,7 +226,10 @@ const UploadBooks = () => {
                       id="coverPhotoInput"
                       type="file"
                       accept=".jpg, .jpeg, .png"
-                      onChange={(e) => handleFileChange(e, 'coverPhoto')}
+                      onChange={(e) => {
+                        handleFileChange(e, 'coverPhoto');
+                        handleCoverPhotoPreview(e); // Add this line to update cover photo preview
+                      }}
                   />
                 </label>
 

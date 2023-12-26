@@ -18,7 +18,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 160%;
-    font-family: "adobe-caslon-pro", serif;
+    font-family: "Google Sans","sans-serif";
     text-align: left;
     margin-left: 50px;
     padding: 20px;
@@ -116,9 +116,9 @@ form {
     font-style: normal;
     font-weight: 600;
     line-height: 160%;
-    bottom: 221px;
+    top: 462px;
     left:480px;
-    font-family: "Google Sans";
+    font-family: "Google Sans","sans-serif";
 
 }
   
@@ -128,4 +128,13 @@ form {
     color: white;
     
   }
+
+.cover-preview {
+    height: 300px;
+    width: 220px;
+    position: absolute;
+    left: 200px;
+    border-radius: 8px;
+
+}
   
