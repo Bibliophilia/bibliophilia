@@ -68,7 +68,9 @@ const BookInfoPage = () => {
                     <div>
                     <p className="book-author-bookinfo">{bookInfo.author}</p>
                     </div>
-
+                    <div>
+                    <p className="book-description-bookinfo">{bookInfo.description}</p>
+                    </div>
                     <div>
                     <img className="book-cover-img" src={bookInfo.image_url} alt={bookInfo.title}/>
                     </div>

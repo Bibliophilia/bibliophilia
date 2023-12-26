@@ -1,4 +1,4 @@
-from bibliophilia.server.domain.models.basic.books import BookBase, FileFormat
+from bibliophilia.server.domain.models.basic.books import BookBase, FileFormat, ExtendedBookBase
 
 
 class BookCard(BookBase):
@@ -7,6 +7,6 @@ class BookCard(BookBase):
     author: str
     image_url: str
 
-class BookInfo(BookBase):
+class BookInfo(ExtendedBookBase):
     image_url: str
     formats: list[str] = []

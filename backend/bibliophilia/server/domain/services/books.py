@@ -21,10 +21,11 @@ class BookService:
         #book.tokens = Parser().book_to_tokens(book)
         #book.tokens = []
         book = self.repository.create_book(book)
-        logging.info(f"book created: {book.idx}")
         if book:
+            logging.info(f"book created: {book.idx}")
             return book, status.HTTP_201_CREATED
         else:
+            logging.info(f"book not created")
             return None, status.HTTP_409_CONFLICT
 
     def read_book(self, idx: int) -> Optional[BookInfo]:
@@ -34,6 +35,7 @@ class BookService:
             return BookInfo(title=book.title,
                             author=book.author,
                             image_url=book.image_url,
+                            description=book.description,
                             formats=[book_format.value for book_format in formats])
         return None
 

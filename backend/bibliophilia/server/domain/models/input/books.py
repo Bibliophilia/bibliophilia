@@ -13,7 +13,7 @@ class BookCreate(ExtendedBookBase):
     tokens: list[float] = []
 
 
-class BookSearch(BookBase):
+class BookSearch(ExtendedBookBase):
     tokens: list[float]
 
 
