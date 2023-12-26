@@ -27,7 +27,13 @@ class BookRepository(ABC):
     @abstractmethod
     def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         pass
+
+
 class SearchRepository(ABC):
     @abstractmethod
     def base_search(self, query: str) -> [int]:
+        pass
+
+    @abstractmethod
+    def semantic_search(self, tokens: list[float]):
         pass

@@ -11,7 +11,7 @@ from bibliophilia.server.domain.models.schemas.books import Book, BookFile
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Q, Search
-
+from sqlalchemy import func
 
 class FSBookStorageImpl(FSBookStorage):
 
@@ -127,7 +127,15 @@ class DBBookStorageImpl(DBBookStorage):
 
     def read_books(self, idxs: list[int]) -> list[Book]:
         with Session(self.engine) as session:
-            return session.query(Book).filter(Book.idx.in_(idxs)).all()
+            books: list[Book] = session.query(Book).filter(Book.idx.in_(idxs)).all()
+            books_by_indexes = {str(book.idx): book for book in books}
+            result_books = [None] * len(idxs)
+            logging.info(idxs)
+            logging.info(books_by_indexes)
+            for i, idx in enumerate(idxs):
+                result_books[i] = books_by_indexes[str(idx)]
+            logging.info(result_books)
+            return result_books
 
 
 class ESBookStorageImpl(SearchBookStorage, SearchStorage):
@@ -135,10 +143,17 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         self.es = elasticsearch
 
     def index(self, book_idx: int, es_book: BookSearch) -> bool:
-        response = self.es.index(index=Book.__tablename__,
-                                 id=str(book_idx),
-                                 document=es_book.dict())
-        logging.info(f"ES indexing status: {response.meta.status}")
+        response = self.es.index(
+            index=Book.__tablename__,
+            id=str(book_idx),
+            body={
+                "title": es_book.title,
+                "author": es_book.author,
+                "description": es_book.description,
+                "tokens": es_book.tokens
+            },
+        )
+        logging.info(f"ES indexing status: {response['result']}")
         return True
 
     def base_search(self, query: str) -> [int]:
@@ -149,4 +164,21 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         ])
         search = Search(using=self.es, index=Book.__tablename__).query(query)
         response = search.execute()
+        return [hit.meta.id for hit in response]
+
+    def semantic_search(self, tokens: list[float]) -> [int]:
+        script_query = {
+                "script_score": {
+                    "query": {"match_all": {}},
+                    "script": {
+                        "source": "cosineSimilarity(params.queryVector, 'tokens') + 1.0",
+                        "params": {
+                            "queryVector": tokens
+                        }
+                    }
+                }
+            }
+        s = Search(using=self.es, index='books').query(script_query)
+        response = s.execute()
+        # Extracting IDs from Elasticsearch response
         return [hit.meta.id for hit in response]
