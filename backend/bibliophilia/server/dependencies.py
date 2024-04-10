@@ -16,9 +16,18 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 index_mapping = {
     "mappings": {
         "properties": {
+            "title": {
+                "type": "text"
+            },
+            "author": {
+                "type": "text"
+            },
+            "description": {
+                "type": "text"
+            },
             "tokens": {
                 "type": "dense_vector",
-                "dims": 96  # Укажите количество измерений (размерность) вектора
+                "dims": 96
             }
         }
     }
