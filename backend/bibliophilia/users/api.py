@@ -1,18 +1,20 @@
+from typing import Optional
+
 from fastapi import APIRouter, Query
 
 router = APIRouter()
 
 
-@router.post("/auth")
+@router.post("/auth", response_model=bool)
 def handle_authorize():
-    pass
+    return True
 
 
-@router.post("/review")
+@router.post("/review", response_model=bool)
 def handle_review_book():
-    pass
+    return True
 
 
-@router.get("/reviews/")
+@router.get("/reviews/", response_model=list[str])
 def handle_get_book_reviews(idx: int = Query("", title="Book index"), page: int = Query(1, title="Page number")):
-    pass
+    return ["Some review will be here"]
