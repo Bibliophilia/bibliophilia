@@ -1,10 +1,9 @@
 from typing import Optional
 
-import numpy
 from fastapi import UploadFile
 
-from bibliophilia.server import settings
-from bibliophilia.server.domain.models.basic.books import ExtendedBookBase, BookBase, BookFileBase, FileFormat
+import bibliophilia.books.settings as settings
+from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
 
 
 class BookCreate(ExtendedBookBase):

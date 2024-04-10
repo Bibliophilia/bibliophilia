@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from bibliophilia.server.view.api.routes.api import bibliophilia_app
+from bibliophilia.api import bibliophilia_app
 from fastapi.middleware.cors import CORSMiddleware
 
 

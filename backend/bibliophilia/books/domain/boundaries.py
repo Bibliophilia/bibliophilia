@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate
-from bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from bibliophilia.books.domain.models.basic import FileFormat
+from bibliophilia.books.domain.models.input import BookCreate
+from bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepository(ABC):

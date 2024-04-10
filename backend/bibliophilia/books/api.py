@@ -3,12 +3,12 @@ import logging
 from fastapi import APIRouter, Query
 from fastapi import Response
 
-from bibliophilia.server import settings
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate
-from bibliophilia.server.domain.models.output.books import BookInfo, BookCard
+import bibliophilia.books.settings as settings
+from bibliophilia.books.domain.models.basic import FileFormat
+from bibliophilia.books.domain.models.input import BookCreate
+from bibliophilia.books.domain.models.output import BookInfo, BookCard
 
-import bibliophilia.server.dependencies as dependencies
+import bibliophilia.books.dependencies as dependencies
 from typing import Optional
 from fastapi import UploadFile
 from starlette.responses import FileResponse

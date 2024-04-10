@@ -1,13 +1,13 @@
 import logging
 from typing import Optional
 
-from bibliophilia.server.data.storages.interfaces.books import FSBookStorage, SearchBookStorage, DBBookStorage, \
+from bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, \
     SearchStorage
-from bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
+from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from bibliophilia.books.domain.models.basic import FileFormat
+from bibliophilia.books.domain.models.input import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
     ImageFileSave
-from bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepositoryImpl(BookRepository):
@@ -94,6 +94,7 @@ class BookRepositoryImpl(BookRepository):
 
     def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         return self.db_storage.read_bookfile(idx=idx, file_format=file_format)
+
 
 class SearchRepositoryImpl(SearchRepository):
     def __init__(self, search_storage: SearchStorage):
