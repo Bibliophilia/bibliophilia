@@ -7,6 +7,7 @@ from bibliophilia.core.dependencies import get_session, engine
 from bibliophilia.core.models import BPModel
 
 import bibliophilia.books.api as books_api
+import bibliophilia.users.api as users_api
 
 
 @asynccontextmanager
@@ -19,6 +20,10 @@ bibliophilia_app = FastAPI(title="Bibliophilia API", version="1.0.0", lifespan=l
 bibliophilia_app.include_router(books_api.router,
                                 prefix="/books",
                                 tags=["books"],
+                                dependencies=[Depends(get_session)])
+bibliophilia_app.include_router(users_api.router,
+                                prefix="/users",
+                                tags=["users"],
                                 dependencies=[Depends(get_session)])
 
 
