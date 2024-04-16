@@ -1,4 +1,4 @@
-from bibliophilia.server.domain.models.basic.books import BookBase, FileFormat
+from bibliophilia.books.domain.models.basic import BookBase, ExtendedBookBase
 
 
 class BookCard(BookBase):

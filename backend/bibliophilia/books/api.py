@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Query
 from fastapi import Response
 

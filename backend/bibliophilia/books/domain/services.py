@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 
 from fastapi import status
-from bibliophilia.books.settings as settings
+from bibliophilia.books import settings
 from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate

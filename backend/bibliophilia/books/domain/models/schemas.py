@@ -1,7 +1,7 @@
 from sqlmodel import Field, Relationship
 
 from bibliophilia.books.domain.models.basic import ExtendedBookBase, FileFormat, BookFileBase
-from bibliophilia.server import settings
+from bibliophilia.books import settings
 
 
 class Book(ExtendedBookBase, table=True):
