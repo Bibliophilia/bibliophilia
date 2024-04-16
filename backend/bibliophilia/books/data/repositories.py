@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from backend.bibliophilia.server.data.storages.interfaces.books import FSBookStorage, SearchBookStorage, DBBookStorage, \
+from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, \
     SearchStorage
 from backend.bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
 from backend.bibliophilia.server.domain.models.basic.books import FileFormat

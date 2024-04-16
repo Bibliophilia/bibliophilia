@@ -1,10 +1,10 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
-from backend.bibliophilia.server.domain.models.basic.books import FileFormat
-from backend.bibliophilia.server.domain.models.input.books import BookCreate, BookFileCreate, BookSearch, \
+from backend.bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, \
     BookFileSave, ImageFileSave
-from backend.bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class FSBookStorage(ABC):

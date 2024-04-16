@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from dotenv import load_dotenv
 
+from backend.bibliophilia.config import MIDDLEWARE_SECRET_KEY
+
 load_dotenv()
 
 
@@ -21,7 +23,7 @@ load_dotenv()
 
 bibliophilia_app = FastAPI(title="Bibliophilia API", version="1.0.0")  #lifespan=lifespan
 
-bibliophilia_app.add_middleware(SessionMiddleware, secret_key=os.environ.get("MIDDLEWARE_SECRET_KEY"))
+bibliophilia_app.add_middleware(SessionMiddleware, secret_key=MIDDLEWARE_SECRET_KEY)
 
 
 bibliophilia_app.add_middleware(
