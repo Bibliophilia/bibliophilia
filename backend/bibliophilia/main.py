@@ -31,9 +31,8 @@ oauth.register(
 """
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432"],
+    allow_origins=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432", "http://frontend:3000"],
     allow_credentials=True,
-    allow_methods=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432"],
-    allow_headers=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432"],
+    allow_methods=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432", "http://frontend:3000"],
+    allow_headers=["http://localhost:3000", "http://elasticsearch:9200", "http://postgres:5432", "http://frontend:3000"],
 )
-"""

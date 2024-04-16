@@ -15,12 +15,20 @@ psycopg2-binary = "^2.9.9"
 elasticsearch = "^8.11.0"
 elasticsearch-dsl = "^8.11.0"
 python-multipart = "^0.0.6"
+spacy = "^3.7.2"
+python-docx = "^1.1.0"
+pypdf2 = "^3.0.1"
+ebooklib = "^0.18"
+beautifulsoup4 = "^4.12.2"
 
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
 mypy = "^1.7.1"
 pytest = "^7.4.3"
+
+[tool.poetry.scripts]
+"backend" = "uvicorn bibliophilia.main:bibliophilia_app --host 0.0.0.0"
 
 [build-system]
 requires = ["poetry-core"]

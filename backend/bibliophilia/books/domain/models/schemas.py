@@ -1,4 +1,4 @@
-from sqlmodel import Field, Relationship, Session
+from sqlmodel import Field, Relationship
 
 from backend.bibliophilia.server.domain.models.basic.books import ExtendedBookBase, FileFormat, BookFileBase
 from backend.bibliophilia.server import settings

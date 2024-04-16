@@ -184,6 +184,8 @@ frontend/node_modules
 frontend/.pnp
 frontend/.pnp.js
 
+
+frontend/public/images
 # testing
 frontend/coverage
 

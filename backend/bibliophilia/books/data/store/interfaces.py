@@ -28,6 +28,7 @@ class FSBookStorage(ABC):
     def delete_bookimage(self, book_idx: int) -> bool:
         pass
 
+
 class DBBookStorage(ABC):
     @abstractmethod
     def create_book(self, book: BookCreate) -> Optional[Book]:
@@ -65,6 +66,7 @@ class DBBookStorage(ABC):
     def read_books(self, idxs: list[int]) -> list[Book]:
         pass
 
+
 class SearchBookStorage(ABC):
     @abstractmethod
     def index(self, book_idx: int, es_book: BookSearch) -> bool:
@@ -74,4 +76,8 @@ class SearchBookStorage(ABC):
 class SearchStorage(ABC):
     @abstractmethod
     def base_search(self, query: str) -> [int]:
+        pass
+
+    @abstractmethod
+    def semantic_search(self, tokens: list[float]) -> [int]:
         pass

@@ -44,7 +44,7 @@ class BookRepositoryImpl(BookRepository):
 
         for file in book.files:
             filename = file.filename
-            file_extension = filename.split('.')[1]
+            file_extension = filename.split('.')[-1]
             logging.info(f"File name: {filename}")
             logging.info(f"File format: {file_extension}")
             if not FileFormat.get_by_name(file_extension):
@@ -95,9 +95,13 @@ class BookRepositoryImpl(BookRepository):
     def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         return self.db_storage.read_bookfile(idx=idx, file_format=file_format)
 
+
 class SearchRepositoryImpl(SearchRepository):
     def __init__(self, search_storage: SearchStorage):
         self.search_storage = search_storage
 
     def base_search(self, query: str) -> [int]:
         return self.search_storage.base_search(query=query)
+
+    def semantic_search(self, tokens: list[float]):
+        return self.search_storage.semantic_search(tokens=tokens)

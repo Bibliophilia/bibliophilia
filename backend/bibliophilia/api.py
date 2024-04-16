@@ -58,8 +58,15 @@ oauth.register(
 bibliophilia_app.include_router(auth.router,
                                 prefix="/"
                                 tags=["auth"],
+bibliophilia_app = FastAPI(title="Bibliophilia API", version="1.0.0", lifespan=lifespan)
+bibliophilia_app.include_router(books_api.router,
+                                prefix="/books",
+                                tags=["books"],
                                 dependencies=[Depends(get_session)])
-'''
+bibliophilia_app.include_router(users_api.router,
+                                prefix="/users",
+                                tags=["users"],
+                                dependencies=[Depends(get_session)])
 
 
 @bibliophilia_app.get("/health")

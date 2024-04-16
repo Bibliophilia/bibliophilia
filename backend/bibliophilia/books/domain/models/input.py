@@ -1,4 +1,5 @@
 from typing import Optional
+
 from fastapi import UploadFile
 
 from backend.bibliophilia.server import settings
@@ -8,11 +9,11 @@ from backend.bibliophilia.server.domain.models.basic.books import ExtendedBookBa
 class BookCreate(ExtendedBookBase):
     image: Optional[UploadFile]
     files: list[UploadFile]
-    tokens: list[str] = []
+    tokens: list[float] = []
 
 
-class BookSearch(BookBase):
-    tokens: list[str]
+class BookSearch(ExtendedBookBase):
+    tokens: list[float]
 
 
 class BookFileCreate(BookFileBase):

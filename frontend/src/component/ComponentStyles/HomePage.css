@@ -25,12 +25,11 @@
   font-style: normal;
   font-weight: 700;
   line-height: 160%; 
-  font-family: "adobe-caslon-pro",serif;
+  font-family: "Google Sans","sans-serif"
 }
 
 .subtitle {
   color: white;
-  font-family: 'Futura PT', sans-serif;
   font-size: 20px;
   font-weight: 500;
   margin-top: -10px;

@@ -8,11 +8,15 @@ class BookBase(BPModel):
     title: str
     author: str
 
+
 class ExtendedBookBase(BookBase):
     description: str
 
+
 class BookFileBase(BPModel):
     book_idx: int
+
+
 class FileFormat(Enum):
     PDF = "pdf"
     TXT = "txt"

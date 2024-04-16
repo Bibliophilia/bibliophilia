@@ -7,6 +7,7 @@ class BookCard(BookBase):
     author: str
     image_url: str
 
-class BookInfo(BookBase):
+
+class BookInfo(ExtendedBookBase):
     image_url: str
     formats: list[str] = []

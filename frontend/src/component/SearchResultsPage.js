@@ -21,7 +21,13 @@ const SearchResultsPage = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                setSearchResults(data);
+                console.log('API response:', data);
+
+                if (Array.isArray(data) && data.length > 0 && data[0].image_url) {
+                    setSearchResults(data);
+                } else {
+                    setError('Oops! No search results found, Try again!', data);
+                }
             } catch (error) {
                 console.error('Error fetching search results:', error);
                 setError('Error fetching search results. Please try again later.');
@@ -61,7 +67,10 @@ const SearchResultsPage = () => {
                                 className="search-result-image"
                                 src={result.image_url}
                                 alt={result.title}
-                                onError={() => console.error('Error loading image:', result.image_url)}
+                                onError={(e) => {
+                                    console.error(`Error loading image for ${result.title}:`, e);
+                                    e.target.onerror = null; // Remove the event listener to prevent an infinite loop
+                                }}
                             />
                             <div className="search-result-info">
                                 <h3 className="search-result-title">{result.title}</h3>
