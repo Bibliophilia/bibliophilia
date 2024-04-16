@@ -1,10 +1,10 @@
 import logging
 
-import bibliophilia.books.settings as settings
-from bibliophilia.books.data.repositories import BookRepositoryImpl, SearchRepositoryImpl
-from bibliophilia.books.data.store.storages import DBBookStorageImpl, FSBookStorageImpl, ESBookStorageImpl
-from bibliophilia.books.domain.services import BookService, SearchService
-from bibliophilia.core.dependencies import es, engine
+from backend.bibliophilia.books.settings as settings
+from backend.bibliophilia.books.data.repositories import BookRepositoryImpl, SearchRepositoryImpl
+from backend.bibliophilia.books.data.store.storages import DBBookStorageImpl, FSBookStorageImpl, ESBookStorageImpl
+from backend.bibliophilia.books.domain.services import BookService, SearchService
+from backend.bibliophilia.core.dependencies import es, engine
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
