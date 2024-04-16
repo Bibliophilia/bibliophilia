@@ -2,7 +2,7 @@ import os
 
 from fastapi import FastAPI
 
-from backend.bibliophilia.api import bibliophilia_app
+from bibliophilia.api import bibliophilia_app
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 

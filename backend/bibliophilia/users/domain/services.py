@@ -1,10 +1,10 @@
 from typing import Optional
 
-from backend.bibliophilia.users.domain.boundaries import UserRepository
-from backend.bibliophilia.users.domain.models.input import UserCreate
+from bibliophilia.users.domain.boundaries import UserRepository
+from bibliophilia.users.domain.models.input import UserCreate
 from fastapi import status
 
-from backend.bibliophilia.users.domain.models.schemas import User
+from bibliophilia.users.domain.models.schemas import User
 
 
 class UserService:

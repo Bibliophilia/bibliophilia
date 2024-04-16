@@ -7,9 +7,9 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse
 from dotenv import load_dotenv
 
-from backend.bibliophilia.config import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID
-import backend.bibliophilia.users.dependencies as dependencies
-from backend.bibliophilia.users.domain.models.input import UserCreate
+from bibliophilia.config import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID
+import bibliophilia.users.dependencies as dependencies
+from bibliophilia.users.domain.models.input import UserCreate
 
 load_dotenv()
 

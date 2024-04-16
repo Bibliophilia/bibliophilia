@@ -5,8 +5,8 @@ import logging
 import numpy
 from fastapi import UploadFile
 
-from backend.bibliophilia.books.domain.models.input import BookCreate
-from backend.bibliophilia.books.domain.models.basic import FileFormat
+from bibliophilia.books.domain.models.input import BookCreate
+from bibliophilia.books.domain.models.basic import FileFormat
 import spacy
 from docx import Document
 import PyPDF2

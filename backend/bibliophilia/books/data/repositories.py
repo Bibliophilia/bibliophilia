@@ -1,13 +1,13 @@
 import logging
 from typing import Optional
 
-from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, \
+from bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, \
     SearchStorage
-from backend.bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
-from backend.bibliophilia.server.domain.models.basic.books import FileFormat
-from backend.bibliophilia.server.domain.models.input.books import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
+from bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
+from bibliophilia.server.domain.models.basic.books import FileFormat
+from bibliophilia.server.domain.models.input.books import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
     ImageFileSave
-from backend.bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from bibliophilia.server.domain.models.schemas.books import Book, BookFile
 
 
 class BookRepositoryImpl(BookRepository):

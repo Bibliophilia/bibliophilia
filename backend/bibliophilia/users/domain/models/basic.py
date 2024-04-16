@@ -1,4 +1,4 @@
-from backend.bibliophilia.core.models import BPModel
+from bibliophilia.core.models import BPModel
 
 
 class UserBase(BPModel):
