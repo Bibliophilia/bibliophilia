@@ -2,12 +2,12 @@ import logging
 import os
 from typing import Optional
 
-from bibliophilia.server.data.storages.interfaces.books import DBBookStorage, SearchStorage, \
+from backend.bibliophilia.server.data.storages.interfaces.books import DBBookStorage, SearchStorage, \
     SearchBookStorage, FSBookStorage
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate, BookFileCreate, BookSearch, \
+from backend.bibliophilia.server.domain.models.basic.books import FileFormat
+from backend.bibliophilia.server.domain.models.input.books import BookCreate, BookFileCreate, BookSearch, \
     BookFileSave, ImageFileSave
-from bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from backend.bibliophilia.server.domain.models.schemas.books import Book, BookFile
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Q, Search

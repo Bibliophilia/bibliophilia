@@ -2,12 +2,12 @@ import logging
 from typing import Optional
 
 from fastapi import status
-from bibliophilia.server import settings
-from bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate
-from bibliophilia.server.domain.models.output.books import BookInfo
-from bibliophilia.server.domain.models.schemas.books import Book, BookFile
+from backend.bibliophilia.server import settings
+from backend.bibliophilia.server.domain.boundaries.books import BookRepository, SearchRepository
+from backend.bibliophilia.server.domain.models.basic.books import FileFormat
+from backend.bibliophilia.server.domain.models.input.books import BookCreate
+from backend.bibliophilia.server.domain.models.output.books import BookInfo
+from backend.bibliophilia.server.domain.models.schemas.books import Book, BookFile
 
 
 class BookService:

@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from bibliophilia.server.domain.models import BPModel
+from backend.bibliophilia.server.domain.models import BPModel
 
 
 class BookBase(BPModel):

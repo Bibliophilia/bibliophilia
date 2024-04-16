@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Query
 from fastapi import Response
 
-from bibliophilia.server import settings
-from bibliophilia.server.domain.models.basic.books import FileFormat
-from bibliophilia.server.domain.models.input.books import BookCreate
-from bibliophilia.server.domain.models.output.books import BookInfo, BookCard
+from backend.bibliophilia.server import settings
+from backend.bibliophilia.server.domain.models.basic.books import FileFormat
+from backend.bibliophilia.server.domain.models.input.books import BookCreate
+from backend.bibliophilia.server.domain.models.output.books import BookInfo, BookCard
 
 import bibliophilia.server.dependencies as dependencies
 from typing import Optional

@@ -5,10 +5,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from bibliophilia.server import settings
-from bibliophilia.server.data.repositories.books import BookRepository, BookRepositoryImpl, SearchRepositoryImpl
-from bibliophilia.server.data.storages.books import DBBookStorageImpl, FSBookStorageImpl, ESBookStorageImpl
-from bibliophilia.server.domain.services.books import BookService, SearchService
+from backend.bibliophilia.server import settings
+from backend.bibliophilia.server.data.repositories.books import BookRepository, BookRepositoryImpl, SearchRepositoryImpl
+from backend.bibliophilia.server.data.storages.books import DBBookStorageImpl, FSBookStorageImpl, ESBookStorageImpl
+from backend.bibliophilia.server.domain.services.books import BookService, SearchService
 
 engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@postgres:5432/bibliophiliadb", echo=True)
 es = Elasticsearch('http://elasticsearch:9200')
@@ -18,6 +18,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 
 def get_session():
     session = SessionLocal()
