@@ -1,25 +1,29 @@
 from typing import Optional
 
-from bibliophilia.users.data.store.interfaces import DBUserStorage, ReviewStorage
+from bibliophilia.users.data.store.interfaces import UserStorage, ReviewStorage
 from bibliophilia.users.domain.models.input import UserCreate, ReviewCreate
 from bibliophilia.users.domain.models.schemas import User, Review
 from sqlmodel import Session, select
 
 
-class DBUserStorageImpl(DBUserStorage):
+class DBUserStorageImpl(UserStorage):
     def __init__(self, engine):
         self.engine = engine
 
     def create_user(self, user: UserCreate) -> Optional[User]:
         with Session(self.engine) as session:
-            user = session.exec(select(User).where(User.email == user.email)).one_or_none()
-            if user:
-                return None
+            db_user = session.exec(select(User).where(User.email == user.email)).one_or_none()
+            if db_user:
+                return db_user
             db_user = User.from_orm(user)
             session.add(db_user)
             session.commit()
             session.refresh(db_user)
             return db_user
+
+    def get_users(self, users_idxs: list[str]) -> list[User]:
+        with Session(self.engine) as session:
+            return session.query(User).filter(User.email.in_(users_idxs)).all()
 
 
 class ReviewStorageImpl(ReviewStorage):

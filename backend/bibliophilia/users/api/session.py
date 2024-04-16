@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from authlib.integrations.starlette_client import OAuth, OAuthError
@@ -24,7 +25,7 @@ oauth.register(
     client_secret=GOOGLE_CLIENT_SECRET,
     client_kwargs={
         'scope': 'email openid profile',
-        'redirect_url': 'http://localhost:8000/auth'
+        'redirect_url': 'http://localhost:8000/users/session/auth'
     }
 )
 
@@ -39,9 +40,12 @@ async def login(request: Request):
 async def auth(request: Request):
     try:
         access_token = await oauth.google.authorize_access_token(request)
-    except OAuthError:
-        return "Error"
+    except OAuthError as e:
+        return str(e)
     user = access_token.get('userinfo')
+    print(f"username: {user.get('name')}")
+    print(f"user email: {user.get('email')}")
+    print(f"user: {dict(user)}")
     if user:
         request.session['user'] = dict(user)
     dependencies.user_service.create(
@@ -50,20 +54,20 @@ async def auth(request: Request):
             name=user.get('name')
         )
     )
-    return RedirectResponse(url='/get-user')
+    return RedirectResponse(url='/users/session/get-user')
 
 
 @router.get('/logout')
 async def logout(request: Request):
     request.session.pop('user')
     request.session.clear()
-    return RedirectResponse(url='/auth')
+    return RedirectResponse(url='/users/session/login')
 
 
 @router.get('/get-user')
 async def get_user(request: Request):
     user = request.session.get('user')
     if user is None:
-        return RedirectResponse(url='/login')
+        return RedirectResponse(url='/users/session/login')
     user_data = json.dumps(user, ensure_ascii=False)
     return {'user': user_data}

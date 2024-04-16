@@ -5,9 +5,13 @@ from bibliophilia.users.domain.models.input import UserCreate, ReviewCreate
 from bibliophilia.users.domain.models.schemas import User, Review
 
 
-class DBUserStorage(ABC):
+class UserStorage(ABC):
     @abstractmethod
     def create_user(self, user: UserCreate) -> Optional[User]:
+        pass
+
+    @abstractmethod
+    def get_users(self, users_idxs: list[str]) -> list[User]:
         pass
 
 

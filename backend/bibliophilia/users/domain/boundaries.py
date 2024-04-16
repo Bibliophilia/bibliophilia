@@ -11,6 +11,10 @@ class UserRepository(ABC):
     def create_user(self, user: UserCreate) -> Optional[User]:
         pass
 
+    @abstractmethod
+    def get_users(self, users_idxs: list[str]) -> list[User]:
+        pass
+
 
 class ReviewRepository(ABC):
 

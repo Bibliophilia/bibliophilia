@@ -9,6 +9,7 @@ class Book(ExtendedBookBase, table=True):
     idx: int = Field(None, primary_key=True, sa_column_kwargs={"autoincrement": True})
 
     files: list["BookFile"] = Relationship(back_populates="book")
+    reviews: list["Review"] = Relationship(back_populates="book")
 
     @property
     def image_url(self) -> str:

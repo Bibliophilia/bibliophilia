@@ -7,6 +7,9 @@ class UserBase(BPModel):
 
 
 class ReviewBase(BPModel):
-    book_idx: int
     rating: int
     review: str
+
+
+class ExtendedReviewBase(ReviewBase):
+    book_idx: int
