@@ -127,13 +127,8 @@ class DBBookStorageImpl(DBBookStorage):
         with Session(self.engine) as session:
             books: list[Book] = session.query(Book).filter(Book.idx.in_(idxs)).all()
             books_by_indexes = {str(book.idx): book for book in books}
-            result_books = [None] * len(idxs)
-            logging.info(idxs)
-            logging.info(books_by_indexes)
-            for i, idx in enumerate(idxs):
-                result_books[i] = books_by_indexes[str(idx)]
-            logging.info(result_books)
-            return result_books
+            sorted_books = [books_by_indexes[str(idx)] for idx in idxs]
+            return sorted_books
 
 
 class ESBookStorageImpl(SearchBookStorage, SearchStorage):

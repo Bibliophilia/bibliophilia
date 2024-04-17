@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from bibliophilia.core.dependencies import get_session
 
 import bibliophilia.users.api.session as session_api
-import bibliophilia.users.api.interaction as interaction_api
+import bibliophilia.users.api.review as interaction_api
 
 router = APIRouter()
 
@@ -12,6 +12,6 @@ router.include_router(session_api.router,
                       dependencies=[Depends(get_session)])
 
 router.include_router(interaction_api.router,
-                      prefix="/interaction",
-                      tags=["interaction"],
+                      prefix="/review",
+                      tags=["review"],
                       dependencies=[Depends(get_session)])

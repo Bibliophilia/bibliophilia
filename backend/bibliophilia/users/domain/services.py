@@ -44,3 +44,10 @@ class ReviewService:
                                    review=review.review,
                                    username=user_map[review.user_idx]) for review in reviews]
         return review_cards[(settings.REVIEWS_IN_PAGE * (page - 1)): (settings.REVIEWS_IN_PAGE * page)]
+
+    def read_rating(self, book_idx: int) -> float:
+        reviews = self.review_repository.read_reviews(book_idx)
+        if len(reviews) == 0:
+            return 0
+        rating_array = [review.rating for review in reviews]
+        return sum(rating_array) / len(rating_array)
