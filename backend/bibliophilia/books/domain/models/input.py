@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import UploadFile
 
-import bibliophilia.books.settings as settings
+from bibliophilia.books import settings
 from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
 
 

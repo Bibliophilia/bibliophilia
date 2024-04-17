@@ -1,7 +1,10 @@
+import os
+
 from fastapi import FastAPI
 
 from bibliophilia.api import bibliophilia_app
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 
 def get_application() -> FastAPI:
@@ -9,6 +12,10 @@ def get_application() -> FastAPI:
 
 
 app = get_application()
+
+
+app.add_middleware(SessionMiddleware, secret_key=os.environ.get("MIDDLEWARE_SECRET_KEY"))
+
 
 app.add_middleware(
     CORSMiddleware,

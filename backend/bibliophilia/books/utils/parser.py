@@ -54,14 +54,14 @@ class Parser:
         return text.decode('utf-8')
 
     # TODO: read DOCX file
-#    def _file_DOC_to_text(self, book_file: UploadFile):
-#        path = book_file.file_path
-#        doc = Document(path)
-#        text = ""
-#        for paragraph in doc.paragraphs:
-#            text += paragraph.text
-#
-#        return text
+    #    def _file_DOC_to_text(self, book_file: UploadFile):
+    #        path = book_file.file_path
+    #        doc = Document(path)
+    #        text = ""
+    #        for paragraph in doc.paragraphs:
+    #            text += paragraph.text
+    #
+    #        return text
 
     def _file_PDF_to_text(self, book_file: UploadFile) -> str:
         text_bytes = asyncio.run(book_file.read())

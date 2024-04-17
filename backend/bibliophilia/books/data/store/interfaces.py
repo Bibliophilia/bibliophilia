@@ -2,8 +2,7 @@ from abc import abstractmethod, ABC
 from typing import Optional
 
 from bibliophilia.books.domain.models.basic import FileFormat
-from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, \
-    BookFileSave, ImageFileSave
+from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
 from bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
