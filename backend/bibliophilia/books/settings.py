@@ -8,3 +8,4 @@ MEDIA_TYPES = {"pdf": "application/pdf",
                "txt": "text/plain",
                "epub": "application/epub+zip",
                "doc": "application/msword"}
+MAX_HINTS = 5

@@ -4,12 +4,13 @@ from fastapi import APIRouter, Query
 from fastapi import Response
 
 import bibliophilia.books.settings as settings
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate
 from bibliophilia.books.domain.models.output import BookInfo, BookCard
 
 import bibliophilia.books.dependencies as dependencies
-from typing import Optional
+from typing import Optional, Set
 from fastapi import UploadFile
 from starlette.responses import FileResponse
 
@@ -40,10 +41,24 @@ def handle_get_book_info(idx: int):
 
 
 @router.get("/search/", response_model=list[BookCard])
-def handle_search_books(q: str = Query("", title="Query string"), page: int = Query(1, title="Page number")):
-    books = dependencies.search_service.search(query=q, page=page)
+def handle_search_books(q: str = Query("", title="Query string"),
+                        page: int = Query(1, title="Page number")):
+    books = dependencies.search_service.search(query=q, facets=[], page=page)
     logging.info(f"Books Founded: {len(books)}\n{books}")
     return books
+
+
+@router.get("/search/facets", response_model=Set[Facet])
+def handle_get_facets():
+    return dependencies.search_service.read_facets()
+
+
+@router.get("/search/hints", response_model=list[str])
+def handle_get_hints(q: str = Query("", title="Query"), facet: Facet = Query(None, title="Facet type")):
+    if facet in dependencies.search_service.read_facets() and facet.hints():
+        return dependencies.search_service.read_hints(q, facet)
+    else:
+        return []
 
 
 @router.get("/download/")
