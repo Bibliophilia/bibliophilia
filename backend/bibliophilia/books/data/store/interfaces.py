@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
 from bibliophilia.books.domain.models.schemas import Book, BookFile
@@ -68,7 +69,7 @@ class DBBookStorage(ABC):
 
 class SearchBookStorage(ABC):
     @abstractmethod
-    def index(self, book_idx: int, es_book: BookSearch) -> bool:
+    def index_book(self, book_idx: int, es_book: BookSearch) -> bool:
         pass
 
 
@@ -79,4 +80,8 @@ class SearchStorage(ABC):
 
     @abstractmethod
     def semantic_search(self, tokens: list[float]) -> [int]:
+        pass
+
+    @abstractmethod
+    def read_hints(self, query: str, facet: Facet):
         pass

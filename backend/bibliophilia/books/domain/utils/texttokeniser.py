@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 from collections import Counter
 
 
-class Parser:
+class TextTokeniser:
 
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")

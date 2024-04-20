@@ -4,12 +4,13 @@ from typing import Optional
 from fastapi import status
 from bibliophilia.books import settings
 from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate
 from bibliophilia.books.domain.models.output import BookInfo
 from bibliophilia.books.domain.models.schemas import Book, BookFile
 
-from bibliophilia.books.utils.parser import Parser
+from bibliophilia.books.domain.utils.texttokeniser import TextTokeniser
 
 
 class BookService:
@@ -18,7 +19,7 @@ class BookService:
 
     def create(self, book: BookCreate) -> (Optional[int], status):
         # TODO: скорее всего сделать токенизацию асинхронной, т.к. долго выполняется
-        book.tokens = Parser().book_to_tokens(book)
+        book.tokens = TextTokeniser().book_to_tokens(book)
         book = self.repository.create_book(book)
         if book:
             logging.info(f"book created: {book.idx}")
@@ -47,7 +48,8 @@ class SearchService:
         self.search_repository = search_repository
         self.book_repository = book_repository
 
-    def search(self, query: str, page: int) -> list[Book]:
+    def search(self, query: str, facets: list[{str: str}], page: int) -> list[Book]:
+        # TODO: facets
         # Какой то слооожный поиск
         logging.info("Base Search started")
         ids = []
@@ -55,7 +57,7 @@ class SearchService:
         ids.extend(base_search_ids)
         logging.info(f"Base Search finished:{ids}")
         logging.info("Semantic Search started")
-        tokens = Parser().text_to_tokens(query)
+        tokens = TextTokeniser().text_to_tokens(query)
         semantic_search_ids = self.search_repository.semantic_search(tokens)
         ids.extend(semantic_search_ids)
         logging.info(f"Semantic Search finished:{ids}")
@@ -67,3 +69,9 @@ class SearchService:
         logging.info(f"Final books:{page_ids}")
         books = self.book_repository.read_books(page_ids)
         return books
+
+    def read_facets(self) -> set[Facet]:
+        return set(Facet)
+
+    def read_hints(self, query: str, facet: str) -> list[str]:
+        return self.search_repository.read_hints(query, Facet(facet))[:settings.MAX_HINTS]

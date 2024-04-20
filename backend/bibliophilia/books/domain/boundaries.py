@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate
 from bibliophilia.books.domain.models.schemas import Book, BookFile
@@ -36,4 +37,8 @@ class SearchRepository(ABC):
 
     @abstractmethod
     def semantic_search(self, tokens: list[float]):
+        pass
+
+    @abstractmethod
+    def read_hints(self, query: str, facet: Facet) -> list[str]:
         pass
