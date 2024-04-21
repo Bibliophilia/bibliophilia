@@ -12,10 +12,14 @@ book_mapping = {
     "mappings": {
         "properties": {
             "title": {
-                "type": "text"
+                "type": "text",
             },
-            "author": {
-                "type": "text"
+            "authors": {
+                "type": "text",
+                "value": {
+                    "type": "keyword",
+                    "copy_to": "authors"
+                }
             },
             "description": {
                 "type": "text"
@@ -24,6 +28,7 @@ book_mapping = {
                 "type": "dense_vector",
                 "dims": 96
             }
+
         }
     }
 }

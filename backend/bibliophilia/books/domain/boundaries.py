@@ -32,11 +32,11 @@ class BookRepository(ABC):
 
 class SearchRepository(ABC):
     @abstractmethod
-    def base_search(self, query: str) -> [int]:
+    def base_search(self, query: str, filter=None) -> [int]:
         pass
 
     @abstractmethod
-    def semantic_search(self, tokens: list[float]):
+    def semantic_search(self, tokens: list[float], filter=None):
         pass
 
     @abstractmethod

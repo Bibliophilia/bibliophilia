@@ -9,7 +9,7 @@ from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, B
 from bibliophilia.books.domain.models.schemas import Book, BookFile
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Q, Search
+from elasticsearch_dsl import Search
 
 
 class FSBookStorageImpl(FSBookStorage):
@@ -161,7 +161,7 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
             id=str(book_idx),
             body={
                 "title": es_book.title,
-                "author": [es_book.author],
+                "authors": [{"value": author} for author in [es_book.author]],
                 "description": es_book.description,
                 "tokens": es_book.tokens
             },
@@ -169,17 +169,23 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         logging.info(f"ES indexing status: {response['result']}")
         return True
 
-    def base_search(self, query: str) -> [int]:
-        query = Q('bool', should=[
-            Q('match', title=query),
-            Q('match', author=query),
-            Q('match', description=query)
-        ])
+    def base_search(self, query: str, filter=None) -> [int]:
+        query = {
+            "bool": {
+                "should": [
+                    {"match": {"title": query}},
+                    {"match": {"authors": query}},
+                    {"match": {"description": query}},
+                ]
+            }
+        }
+        if filter:
+            query = {"bool": {"should": [query], "filter": filter}}
         search = Search(using=self.es, index=Book.__tablename__).query(query)
         response = search.execute()
         return [hit.meta.id for hit in response]
 
-    def semantic_search(self, tokens: list[float]) -> [int]:
+    def semantic_search(self, tokens: list[float], filter=None) -> [int]:
         script_query = {
             "script_score": {
                 "query": {"match_all": {}},
@@ -191,7 +197,7 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
                 }
             }
         }
-        s = Search(using=self.es, index='books').query(script_query)
+        s = Search(using=self.es, index=Book.__tablename__).query(script_query)
         response = s.execute()
         return [hit.meta.id for hit in response]
 

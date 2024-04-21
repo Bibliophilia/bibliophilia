@@ -43,7 +43,7 @@ def handle_get_book_info(idx: int):
 @router.get("/search/", response_model=list[BookCard])
 def handle_search_books(q: str = Query("", title="Query string"),
                         page: int = Query(1, title="Page number")):
-    books = dependencies.search_service.search(query=q, facets=[], page=page)
+    books = dependencies.search_service.search(query=q, page=page)
     logging.info(f"Books Founded: {len(books)}\n{books}")
     return books
 

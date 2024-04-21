@@ -100,11 +100,11 @@ class SearchRepositoryImpl(SearchRepository):
     def __init__(self, search_storage: SearchStorage):
         self.search_storage = search_storage
 
-    def base_search(self, query: str) -> [int]:
-        return self.search_storage.base_search(query=query)
+    def base_search(self, query: str, filter=None) -> [int]:
+        return self.search_storage.base_search(query=query, filter=filter)
 
-    def semantic_search(self, tokens: list[float]):
-        return self.search_storage.semantic_search(tokens=tokens)
+    def semantic_search(self, tokens: list[float], filter=None):
+        return self.search_storage.semantic_search(tokens=tokens, filter=filter)
 
     def read_hints(self, query: str, facet: Facet) -> list[str]:
         return self.search_storage.read_hints(query=query, facet=facet)

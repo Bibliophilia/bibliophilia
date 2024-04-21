@@ -75,11 +75,11 @@ class SearchBookStorage(ABC):
 
 class SearchStorage(ABC):
     @abstractmethod
-    def base_search(self, query: str) -> [int]:
+    def base_search(self, query: str, filter=None) -> [int]:
         pass
 
     @abstractmethod
-    def semantic_search(self, tokens: list[float]) -> [int]:
+    def semantic_search(self, tokens: list[float], filter=None) -> [int]:
         pass
 
     @abstractmethod
