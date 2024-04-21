@@ -9,6 +9,7 @@ from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate
 from bibliophilia.books.domain.models.output import BookInfo
 from bibliophilia.books.domain.models.schemas import Book, BookFile
+from bibliophilia.books.domain.utils.parse import parse_facets
 
 from bibliophilia.books.domain.utils.texttokeniser import TextTokeniser
 
@@ -48,19 +49,23 @@ class SearchService:
         self.search_repository = search_repository
         self.book_repository = book_repository
 
-    def search(self, query: str, facets: list[{str: str}], page: int) -> list[Book]:
+    def search(self, query: str, page: int) -> list[Book]:
+        query, filter = parse_facets(query)
+        print(f"Parsed query: {query}")
         # TODO: facets
         # Какой то слооожный поиск
         logging.info("Base Search started")
         ids = []
-        base_search_ids = self.search_repository.base_search(query)
+        base_search_ids = self.search_repository.base_search(query, filter=filter)
         ids.extend(base_search_ids)
         logging.info(f"Base Search finished:{ids}")
+
         logging.info("Semantic Search started")
-        tokens = TextTokeniser().text_to_tokens(query)
-        semantic_search_ids = self.search_repository.semantic_search(tokens)
-        ids.extend(semantic_search_ids)
+        #tokens = TextTokeniser().text_to_tokens(query)
+        #semantic_search_ids = self.search_repository.semantic_search(tokens, filter=filter)
+        #ids.extend(semantic_search_ids)
         logging.info(f"Semantic Search finished:{ids}")
+
         page_ids = []
         for item in ids:
             if item not in page_ids:
