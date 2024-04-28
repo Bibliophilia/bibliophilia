@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ComponentStyles/CategoryWindow.css';
+import '../ComponentStyles/CategoryWindow.css';
 
 const CategoryWindow = ({ onClose, onSearch }) => {
   const [authors, setAuthors] = useState(['Author1', 'Author2', 'Author3']);

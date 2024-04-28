@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './ComponentStyles/SearchResult.css';
+import '../ComponentStyles/SearchResult.css';
 
 const SearchResultsPage = () => {
     const location = useLocation();
