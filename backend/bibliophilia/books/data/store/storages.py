@@ -3,12 +3,13 @@ import os
 from typing import Optional
 
 from bibliophilia.books.data.store.interfaces import DBBookStorage, SearchStorage, SearchBookStorage, FSBookStorage
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
 from bibliophilia.books.domain.models.schemas import Book, BookFile
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Q, Search
+from elasticsearch_dsl import Search
 
 
 class FSBookStorageImpl(FSBookStorage):
@@ -132,16 +133,35 @@ class DBBookStorageImpl(DBBookStorage):
 
 
 class ESBookStorageImpl(SearchBookStorage, SearchStorage):
+
     def __init__(self, elasticsearch: Elasticsearch):
         self.es = elasticsearch
 
-    def index(self, book_idx: int, es_book: BookSearch) -> bool:
+    def index_facet(self, value: str, facet: Facet) -> bool:
+        response = self.es.search(index=facet, body={
+            "query": {
+                "term": {
+                    "name.keyword": value
+                }
+            }
+        })
+        hits = response["hits"]["hits"]
+        if hits:
+            print(f"Facet: \"{value}\" already exists")
+            return False
+        facet_data = {"value": value}
+        self.es.index(index=facet, body=facet_data)
+        print(f"Facet: \"{value}\" successfully added to the index")
+        return True
+
+    def index_book(self, book_idx: int, es_book: BookSearch) -> bool:
+        self.index_facet(es_book.author, Facet.author)
         response = self.es.index(
             index=Book.__tablename__,
             id=str(book_idx),
             body={
                 "title": es_book.title,
-                "author": es_book.author,
+                "authors": [{"value": author} for author in [es_book.author]],
                 "description": es_book.description,
                 "tokens": es_book.tokens
             },
@@ -149,17 +169,23 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         logging.info(f"ES indexing status: {response['result']}")
         return True
 
-    def base_search(self, query: str) -> [int]:
-        query = Q('bool', should=[
-            Q('match', title=query),
-            Q('match', author=query),
-            Q('match', description=query)
-        ])
+    def base_search(self, query: str, filter=None) -> [int]:
+        query = {
+            "bool": {
+                "should": [
+                    {"match": {"title": query}},
+                    {"match": {"authors": query}},
+                    {"match": {"description": query}},
+                ]
+            }
+        }
+        if filter:
+            query = {"bool": {"should": [query], "filter": filter}}
         search = Search(using=self.es, index=Book.__tablename__).query(query)
         response = search.execute()
         return [hit.meta.id for hit in response]
 
-    def semantic_search(self, tokens: list[float]) -> [int]:
+    def semantic_search(self, tokens: list[float], filter=None) -> [int]:
         script_query = {
             "script_score": {
                 "query": {"match_all": {}},
@@ -171,7 +197,20 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
                 }
             }
         }
-        s = Search(using=self.es, index='books').query(script_query)
+        s = Search(using=self.es, index=Book.__tablename__).query(script_query)
         response = s.execute()
-        # Extracting IDs from Elasticsearch response
         return [hit.meta.id for hit in response]
+
+    def read_hints(self, query: str, facet: Facet) -> list[str]:
+        es_query = {
+            "bool": {
+                "should": {
+                    "prefix": {
+                        "value": f"{query}"
+                    }
+                }
+            }
+        }
+        search = Search(using=self.es, index=facet).query(es_query)
+        response = search.execute()
+        return [hit["value"] for hit in response.hits]

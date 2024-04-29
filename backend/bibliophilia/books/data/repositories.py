@@ -3,6 +3,7 @@ from typing import Optional
 
 from bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
 from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from bibliophilia.books.domain.entity.facet import Facet
 from bibliophilia.books.domain.models.basic import FileFormat
 from bibliophilia.books.domain.models.input import BookCreate, BookSearch, BookFileCreate, BookFileSave, ImageFileSave
 from bibliophilia.books.domain.models.schemas import Book, BookFile
@@ -25,10 +26,10 @@ class BookRepositoryImpl(BookRepository):
             logging.info("Error while creating book at DBBookStorage")
             self._rollback_book(db_book, db_bookfiles)
             return None
-        is_indexed = self.search_storage.index(db_book.idx, BookSearch(title=book.title,
-                                                                       author=book.author,
-                                                                       description=book.description,
-                                                                       tokens=book.tokens))
+        is_indexed = self.search_storage.index_book(db_book.idx, BookSearch(title=book.title,
+                                                                            author=book.author,
+                                                                            description=book.description,
+                                                                            tokens=book.tokens))
         if not is_indexed:
             logging.info("Error while indexing book at SearchStorage")
             self._rollback_book(db_book, db_bookfiles)
@@ -95,11 +96,15 @@ class BookRepositoryImpl(BookRepository):
 
 
 class SearchRepositoryImpl(SearchRepository):
+
     def __init__(self, search_storage: SearchStorage):
         self.search_storage = search_storage
 
-    def base_search(self, query: str) -> [int]:
-        return self.search_storage.base_search(query=query)
+    def base_search(self, query: str, filter=None) -> [int]:
+        return self.search_storage.base_search(query=query, filter=filter)
 
-    def semantic_search(self, tokens: list[float]):
-        return self.search_storage.semantic_search(tokens=tokens)
+    def semantic_search(self, tokens: list[float], filter=None):
+        return self.search_storage.semantic_search(tokens=tokens, filter=filter)
+
+    def read_hints(self, query: str, facet: Facet) -> list[str]:
+        return self.search_storage.read_hints(query=query, facet=facet)
