@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Query
 from fastapi import Response
 
-from bibliophilia.users import dependencies
-from bibliophilia.users.domain.models.input import ReviewCreate
-from bibliophilia.users.domain.models.output import ReviewCard
+from backend.bibliophilia.users import dependencies
+from backend.bibliophilia.users.domain.models.input import ReviewCreate
+from backend.bibliophilia.users.domain.models.output import ReviewCard
 
 router = APIRouter()
 

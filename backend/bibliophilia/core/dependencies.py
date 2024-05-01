@@ -2,8 +2,8 @@ from elasticsearch import Elasticsearch
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@postgres:5432/bibliophiliadb", echo=True)
-es = Elasticsearch('http://elasticsearch:9200')
+engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@localhost:5432/bibliophiliadb", echo=True)
+es = Elasticsearch('http://localhost:9200')
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 index_mapping = {

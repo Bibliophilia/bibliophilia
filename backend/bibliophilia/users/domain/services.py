@@ -1,13 +1,13 @@
 import logging
 from typing import Optional
 
-from bibliophilia.users import settings
-from bibliophilia.users.domain.boundaries import UserRepository, ReviewRepository
-from bibliophilia.users.domain.models.input import UserCreate, ReviewCreate
-from fastapi import status
+from backend.bibliophilia.users import settings
+from backend.bibliophilia.users.domain.boundaries import UserRepository, ReviewRepository, GroupRepository
+from backend.bibliophilia.users.domain.models.input import UserCreate, ReviewCreate, GroupCreate
+from fastapi import status, HTTPException
 
-from bibliophilia.users.domain.models.output import ReviewCard
-from bibliophilia.users.domain.models.schemas import User, Review
+from backend.bibliophilia.users.domain.models.output import ReviewCard
+from backend.bibliophilia.users.domain.models.schemas import User, Review, Group
 
 
 class UserService:
@@ -51,3 +51,22 @@ class ReviewService:
             return 0
         rating_array = [review.rating for review in reviews]
         return sum(rating_array) / len(rating_array)
+
+
+class GroupService:
+
+    def __init__(self, group_repository: GroupRepository):
+        self.group_repository = group_repository
+
+    def create(self, group: GroupCreate) -> Optional[Group]:
+        return self.group_repository.create(group)
+
+    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[Group]:
+        return self.group_repository.edit(old_group_name, group)
+
+    def delete(self, group_name: str, user_idx: int):
+        self.group_repository.delete(group_name, user_idx)
+
+    def get_all_by_user_idx(self, user_idx: int) -> list[Group]:
+        return self.group_repository.get_all_by_user_idx(user_idx)
+

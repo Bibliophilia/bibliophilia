@@ -2,8 +2,8 @@ from typing import Optional
 
 from fastapi import UploadFile
 
-from bibliophilia.books import settings
-from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
 
 
 class BookCreate(ExtendedBookBase):

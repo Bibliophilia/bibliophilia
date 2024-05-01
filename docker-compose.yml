@@ -51,36 +51,36 @@ services:
     networks:
       - bibliopilia_network
 
-  backend:
-    build:
-      context: backend
-    container_name: backend
-    volumes:
-      - images_volume:/app/public/images
-      - files_volume:/app/private/files
-    depends_on:
-      - postgres
-      - elasticsearch
-    environment:
-      - ELASTICSEARCH_HOST=elasticsearch
-      - ELASTICSEARCH_PORT=9200
-    ports:
-      - "8000:8000"
-    networks:
-      - bibliopilia_network
+#  backend:
+#    build:
+#      context: backend
+#    container_name: backend
+#    volumes:
+#      - images_volume:/app/public/images
+#      - files_volume:/app/private/files
+#    depends_on:
+#      - postgres
+#      - elasticsearch
+#    environment:
+#      - ELASTICSEARCH_HOST=elasticsearch
+#      - ELASTICSEARCH_PORT=9200
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - bibliopilia_network
 
-  frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    volumes:
-      - images_volume:/app/public/public/images
-    depends_on:
-      - backend
-    ports:
-      - "3000:3000"
-    networks:
-      - bibliopilia_network
+#  frontend:
+#    build:
+#      context: ./frontend
+#    container_name: frontend
+#    volumes:
+#      - images_volume:/app/public/public/images
+#    depends_on:
+#      - backend
+#    ports:
+#      - "3000:3000"
+#    networks:
+#      - bibliopilia_network
 
 networks:
   bibliopilia_network:

@@ -4,16 +4,16 @@ from typing import AsyncIterator
 
 from fastapi import FastAPI, Depends
 
-from bibliophilia.core.dependencies import get_session
+from backend.bibliophilia.core.dependencies import get_session
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
-from bibliophilia.config import MIDDLEWARE_SECRET_KEY
-from bibliophilia.core.dependencies import engine
-from bibliophilia.core.models import BPModel
+from backend.bibliophilia.config import MIDDLEWARE_SECRET_KEY
+from backend.bibliophilia.core.dependencies import engine
+from backend.bibliophilia.core.models import BPModel
 
-import bibliophilia.books.api as books_api
-import bibliophilia.users.api as users_api
+import backend.bibliophilia.books.api as books_api
+import backend.bibliophilia.users.api as users_api
 
 
 @asynccontextmanager
