@@ -3,16 +3,26 @@ from typing import Optional
 from fastapi import UploadFile
 
 from bibliophilia.books import settings
-from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
+from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat, GenreBase, AuthorBase, \
+    OverExtendedBookBase
 
 
-class BookCreate(ExtendedBookBase):
-    image: Optional[UploadFile]
-    files: list[UploadFile]
+class BookCreateInfo(ExtendedBookBase):
+    author: list[str]
+    genre: list[str]
+
+
+class BookCreate(BookCreateInfo):
+    image: Optional[UploadFile] = None
+    files: list[UploadFile] = []
     tokens: list[float] = []
 
 
-class BookSearch(ExtendedBookBase):
+class BookUpdate(BookCreate):
+    pass
+
+
+class BookSearch(OverExtendedBookBase):
     tokens: list[float]
 
 
@@ -39,3 +49,11 @@ class ImageFileSave(BookFileBase):
     @property
     def image_path(self) -> str:
         return f"{settings.IMAGES_PATH}/{self.book_idx}.{settings.IMAGE_EXTENSION}"
+
+
+class GenreCreate(GenreBase):
+    name: str
+
+
+class AuthorCreate(AuthorBase):
+    name: str

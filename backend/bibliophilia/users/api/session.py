@@ -48,7 +48,7 @@ async def auth(request: Request):
     print(f"user: {dict(user)}")
     if user:
         request.session['user'] = dict(user)
-    dependencies.user_service.create(
+    dependencies.user_service.create_book(
         UserCreate(
             email=user.get('email'),
             name=user.get('name')

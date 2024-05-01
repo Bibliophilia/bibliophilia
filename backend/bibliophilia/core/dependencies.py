@@ -7,20 +7,37 @@ from bibliophilia.books.domain.entity.facet import Facet
 engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@postgres:5432/bibliophiliadb", echo=True)
 es = Elasticsearch('http://elasticsearch:9200')
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+text_keyword_mapping = {
+    "value": {
+        "type": "nested",
+        "fields": {
+            "key": {
+                "type": "keyword",
+                "ignore_above": 256
+            },
+            "text": {
+                "type": "text",
+                "analyzer": "standard"
+            }
+        }
+    }
+}
 book_mapping = {
     "mappings": {
         "properties": {
             "title": {
                 "type": "text",
             },
-            "authors": {
-                "type": "text",
-                "value": {
-                    "type": "keyword",
-                    "copy_to": "authors"
-                }
+            "author": {
+                "type": "nested",
+                "properties": text_keyword_mapping
             },
+            "genre": {
+                "type": "nested",
+                "properties": text_keyword_mapping
+            },
+            "year": "short",
+            "publisher": "text",
             "description": {
                 "type": "text"
             },
@@ -33,6 +50,7 @@ book_mapping = {
     }
 }
 es.indices.create(index="books", ignore=400, body=book_mapping)
+Base = declarative_base()
 for facet in Facet:
     mapping = {
         "mappings": {
