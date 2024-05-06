@@ -11,5 +11,5 @@ class ReviewCard(ReviewBase):
     username: str
 
 
-class GroupInfo(GroupBase):
+class GroupInfo(ExtendedGroupBase):
     pass

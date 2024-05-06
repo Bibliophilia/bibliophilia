@@ -80,7 +80,7 @@ class GroupStorageImpl(GroupStorage):
             db_group = session.exec(select(Group)
                                     .where(Group.group_name == group.group_name)
                                     .where(Group.creator_idx == group.creator_idx)
-                                    ).one_or_none()
+                                    ).unique().one_or_none()
             if db_group:
                 return None
 
@@ -106,7 +106,7 @@ class GroupStorageImpl(GroupStorage):
             db_group = session.exec(select(Group)
                                     .where(Group.group_name == group.group_name)
                                     .where(Group.creator_idx == group.creator_idx)
-                                    ).one_or_none()
+                                    ).unique().one_or_none()
 
             users = []
             for group_user in group.users:
@@ -127,7 +127,7 @@ class GroupStorageImpl(GroupStorage):
             db_group = session.exec(select(Group)
                                     .where(Group.group_name == old_group_name)
                                     .where(Group.creator_idx == group.creator_idx)
-                                    ).one_or_none()
+                                    ).unique().one_or_none()
 
             if db_group is None:
                 return None
@@ -143,12 +143,14 @@ class GroupStorageImpl(GroupStorage):
             db_group = session.exec(select(Group)
                                     .where(Group.group_name == group_name)
                                     .where(Group.creator_idx == user_idx)
-                                    ).one_or_none()
+                                    ).unique().one_or_none()
+            if db_group is None:
+                raise Exception(f"Group with name {group_name} not found!")
 
             session.delete(db_group)
             session.commit()
 
     def get_all_by_user_idx(self, user_idx: int) -> list[Group]:
         with Session(self.engine) as session:
-            return session.exec(select(Group).where(Group.creator_idx == user_idx)).all()
+            return session.exec(select(Group).where(Group.creator_idx == user_idx)).unique().all()
 
