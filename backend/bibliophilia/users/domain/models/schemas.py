@@ -1,4 +1,4 @@
-from backend.bibliophilia.books.domain.models.schemas import Book
+from backend.bibliophilia.books.domain.models.schemas import Book, UserBookCredentials
 from backend.bibliophilia.users.domain.models.basic import UserBase, ExtendedReviewBase, ExtendedGroupBase
 from sqlmodel import Field, Relationship
 
@@ -18,6 +18,7 @@ class User(UserBase, table=True):
     email: str = Field(None, unique=True)
     reviews: list["Review"] = Relationship(back_populates="user")
     groups: list["Group"] = Relationship(back_populates="users", link_model=UserGroupLink)
+    books: list["Book"] = Relationship(back_populates="users", link_model=UserBookCredentials)
 
 
 class Review(ExtendedReviewBase, table=True):
