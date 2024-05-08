@@ -11,7 +11,7 @@ import image8 from '../ComponentStyles/Img/Authors-Slide/Rabindranath_Tagore_in_
 import image9 from '../ComponentStyles/Img/Authors-Slide/ts-eliot-fame-frustration-and-love 1.png';
 import image10 from '../ComponentStyles/Img/Authors-Slide/Vasily_Perov_-_Портрет_Ф.М 1.png';
 import google_log from '../ComponentStyles/Img/google logo/google logo 3.png';
-import registerWithGoogle from "../Component-APIs/googleAuthAPI";
+import {registerWithGoogle} from "../Component-APIs/googleAuthAPI";
 
 
 const images = [
