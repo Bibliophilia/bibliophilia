@@ -5,24 +5,30 @@ from sqlmodel import Field, Relationship
 from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, FileFormat, BookFileBase
 from backend.bibliophilia.books import settings
 from backend.bibliophilia.core.models import BPModel
-from backend.bibliophilia.users.domain.models.schemas import User
+from backend.bibliophilia.users.domain.models.schemas import User, UserGroupLink, Group
 
 
-class PublicCredentials(Enum):
-    SEE = auto()
-    SEE_READ = auto()
-    SEE_DOWNLOAD = auto()
-    SEE_READ_DOWNLOAD = auto()
-    NONE = auto()
+class CredentialsEnum(Enum):
+    SEE = "1"
+    SEE_READ = "2"
+    SEE_READ_DOWNLOAD = "3"
+    NONE = "4"
+
+
+class GroupBookCredentials(BPModel, table=True):
+    #group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    group_idx: int = Field(None, foreign_key="group.idx", primary_key=True)
+    #user_group_idx: int = Field(None, foreign_key="user_group.idx", primary_key=True)
+    book_idx: int = Field(None, foreign_key="books.idx", primary_key=True)
+    credentials: CredentialsEnum
 
 
 class UserBookCredentials(BPModel, table=True):
-    group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    #group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
     user_idx: int = Field(None, foreign_key="users.idx", primary_key=True)
+    #user_group_idx: int = Field(None, foreign_key="user_group.idx", primary_key=True)
     book_idx: int = Field(None, foreign_key="books.idx", primary_key=True)
-    see: bool
-    read: bool
-    download: bool
+    credentials: CredentialsEnum
 
 
 class Book(ExtendedBookBase, table=True):
@@ -32,8 +38,10 @@ class Book(ExtendedBookBase, table=True):
     files: list["BookFile"] = Relationship(back_populates="book")
     reviews: list["Review"] = Relationship(back_populates="book")
 
-    public: PublicCredentials
+    public: Credentials
     users: list["User"] = Relationship(back_populates="books", link_model=UserBookCredentials)
+    groups: list["Group"] = Relationship(back_populates="books", link_model=GroupBookCredentials)
+    #user_group: list["UserGroupLink"] = Relationship(back_populates="books", link_model=UserBookCredentials)
 
     @property
     def image_url(self) -> str:

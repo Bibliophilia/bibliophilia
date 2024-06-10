@@ -1,4 +1,4 @@
-from backend.bibliophilia.books.domain.models.schemas import Book, UserBookCredentials
+from backend.bibliophilia.books.domain.models.schemas import Book, UserBookCredentials, GroupBookCredentials
 from backend.bibliophilia.users.domain.models.basic import UserBase, ExtendedReviewBase, ExtendedGroupBase
 from sqlmodel import Field, Relationship
 
@@ -8,8 +8,11 @@ from backend.bibliophilia.core.models import BPModel
 
 
 class UserGroupLink(BPModel, table=True):
+    #__tablename__ = "user_group"
+    #idx: int = Field(None, primary_key=True, sa_column_kwargs={"autoincrement": True})
     user_idx: int = Field(None, foreign_key="users.idx", primary_key=True)
     group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    #books: list["Book"] = Relationship(back_populates="user_group", link_model=UserBookCredentials)
 
 
 class User(UserBase, table=True):
@@ -35,3 +38,4 @@ class Group(GroupBase, table=True):
     group_name: str = Field(None)
     creator_idx: int = Field(foreign_key="users.idx")
     users: list["User"] = Relationship(back_populates="groups", link_model=UserGroupLink, sa_relationship_kwargs={"lazy":"joined"})
+    books: list["Book"] = Relationship(back_populates="groups", link_model=GroupBookCredentials)

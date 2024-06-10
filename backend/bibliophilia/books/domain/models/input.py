@@ -4,6 +4,7 @@ from fastapi import UploadFile
 
 from backend.bibliophilia.books import settings
 from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
+from backend.bibliophilia.core.models import BPModel
 
 
 class BookCreate(ExtendedBookBase):
@@ -39,3 +40,15 @@ class ImageFileSave(BookFileBase):
     @property
     def image_path(self) -> str:
         return f"{settings.IMAGES_PATH}/{self.book_idx}.{settings.IMAGE_EXTENSION}"
+
+
+class Credentials(BPModel):
+    users_see: list[str]
+    users_see_read: list[str]
+    users_see_read_download: list[str]
+    group_see: list[str]
+    group_see_read: list[str]
+    group_see_read_download: list[str]
+    is_see_all: bool
+    is_see_read_all: bool
+    is_see_read_download_all: bool
