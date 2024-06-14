@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CategoryWindow from './CategoryWindow';
-import './ComponentStyles/HomePage.css';
-import searchIcon from './ComponentStyles/Img/Search_Icon.png';
+import CategoryWindow from '../component/CategoryWindow';
+import '../component/ComponentStyles/HomePage.css';
+import searchIcon from '../component/ComponentStyles/Img/Search_Icon.png';
 import SearchResultsPage from "./SearchResultsPage";
+import Search from "../component/Search";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -41,18 +42,7 @@ const HomePage = () => {
             </div>
 
             {/* Search Bar Component */}
-            <div className='Search'>
-                <div className='SearchBar'>
-                    <div className="SearchIconContainer" onClick={handleSearchClick}>
-                        <img
-                            className="SearchIcon"
-                            src={searchIcon}
-                            alt="Search"
-                        />
-                    </div>
-                    <input className='' type="text" placeholder="Search for books, articles, documents..." value={searchTerm} onChange={handleInputChange} />
-                </div>
-            </div>
+            <Search onSearch={handleSearchClick} />
 
             <div className='CategorySection'>
                 {/* Category Button */}

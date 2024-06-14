@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './Style/App.css';
-import HomePage from './component/HomePage';
+import HomePage from './page/HomePage';
 import CategoryWindow from './component/CategoryWindow';
 import UploadBooks from './component/UploadBooks';
-import SearchResultsPage from './component/SearchResultsPage';
-import BookInfoPage from "./component/BookInfoPage";
+import SearchResultsPage from './page/SearchResultsPage';
+import BookInfoPage from "./page/BookInfoPage";
 
 function App() {
   return (
