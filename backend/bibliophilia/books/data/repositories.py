@@ -4,7 +4,8 @@ from typing import Optional
 from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
 from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
 from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate, BookSearch, BookFileCreate, BookFileSave, ImageFileSave
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
+    ImageFileSave, Credentials
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
@@ -58,14 +59,17 @@ class BookRepositoryImpl(BookRepository):
                 return None
             db_bookfiles.append(db_bookfile)
             logging.info(f"Saving to FS")
-            is_saved = self.fs_storage.save_bookfile(BookFileSave(book_idx=db_book.idx,
-                                                                  file=file))
-            logging.info(f"fookfile is_saved:{is_saved}")
-            if not is_saved:
-                logging.info("Error while saving book file at FSBookStorage")
-                self._rollback_book(db_book, db_bookfiles)
-                return None
+            #is_saved = self.fs_storage.save_bookfile(BookFileSave(book_idx=db_book.idx,
+            #                                                      file=file))
+            #logging.info(f"fookfile is_saved:{is_saved}")
+            #if not is_saved:
+            #    logging.info("Error while saving book file at FSBookStorage")
+            #    self._rollback_book(db_book, db_bookfiles)
+            #    return None
         return db_book
+
+    def add_rights(self, credentials: Credentials, book_idx: int, user_idx: int):
+        self.db_storage.create_book_credentials(user_idx=user_idx, book_idx=book_idx, credentials=credentials)
 
     def _rollback_book(self, db_book: Book, db_bookfiles: [BookFile]):
         logging.info("Book saving rollback")

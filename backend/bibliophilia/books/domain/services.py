@@ -5,7 +5,7 @@ from fastapi import status
 from backend.bibliophilia.books import settings
 from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
 from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate
+from backend.bibliophilia.books.domain.models.input import BookCreate, Credentials
 from backend.bibliophilia.books.domain.models.output import BookInfo
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
@@ -26,6 +26,9 @@ class BookService:
         else:
             logging.info(f"book not created")
             return None, status.HTTP_409_CONFLICT
+
+    def add_rights(self, book_idx: int, credentials: Credentials, user_idx: int):
+        self.repository.add_rights(credentials, book_idx, user_idx)
 
     def read_book(self, idx: int) -> Optional[BookInfo]:
         book = self.repository.read_book(idx)

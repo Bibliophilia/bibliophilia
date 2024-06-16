@@ -2,7 +2,8 @@ from abc import abstractmethod, ABC
 from typing import Optional
 
 from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, \
+    ImageFileSave, Credentials
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
@@ -31,6 +32,10 @@ class FSBookStorage(ABC):
 class DBBookStorage(ABC):
     @abstractmethod
     def create_book(self, book: BookCreate) -> Optional[Book]:
+        pass
+
+    @abstractmethod
+    def create_book_credentials(self, user_idx, book_idx: int, credentials: Credentials):
         pass
 
     @abstractmethod

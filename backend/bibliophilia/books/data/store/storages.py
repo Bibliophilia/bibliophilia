@@ -4,11 +4,16 @@ from typing import Optional
 
 from backend.bibliophilia.books.data.store.interfaces import DBBookStorage, SearchStorage, SearchBookStorage, FSBookStorage
 from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
-from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, \
+    ImageFileSave, Credentials
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile, UserBookCredentials, CredentialsEnum, \
+    GroupBookCredentials
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Q, Search
+
+from backend.bibliophilia.core.models import BPModel
+from backend.bibliophilia.users.domain.models.schemas import User, Group
 
 
 class FSBookStorageImpl(FSBookStorage):
@@ -71,11 +76,82 @@ class DBBookStorageImpl(DBBookStorage):
 
     def create_book(self, book: BookCreate) -> Optional[Book]:
         with Session(self.engine) as session:
-            db_book = Book.from_orm(book)
+            #db_book = Book.from_orm(book)
+            db_book = Book(title=book.title, author=book.author, description=book.description, public=book.public)
             session.add(db_book)
             session.commit()
             session.refresh(db_book)
             return db_book
+
+    def create_book_credentials(self, user_idx: int, book_idx: int, credentials: Credentials):
+        with Session(self.engine) as session:
+            for username in credentials.users_see:
+                user = session.exec(select(User).where(User.email == username)).one_or_none()
+                if user is None:
+                    raise Exception(f"No such user \"{username}\"")
+                user_book_credentials = UserBookCredentials(user_idx=user.idx, book_idx=book_idx,
+                                                            credentials=CredentialsEnum.SEE)
+                session.add(user_book_credentials)
+                #session.commit()
+
+            for username in credentials.users_see_read:
+                user = session.exec(select(User).where(User.name == username)).one_or_none()
+                if user is None:
+                    raise Exception(f"No such user \"{username}\"")
+                user_book_credentials = UserBookCredentials(user_idx=user.idx, book_idx=book_idx,
+                                                            credentials=CredentialsEnum.SEE_READ)
+                session.add(user_book_credentials)
+                #session.commit()
+
+            for username in credentials.users_see_read_download:
+                user = session.exec(select(User).where(User.name == username)).one_or_none()
+                if user is None:
+                    raise Exception(f"No such user \"{username}\"")
+                user_book_credentials = UserBookCredentials(user_idx=user.idx, book_idx=book_idx,
+                                                            credentials=CredentialsEnum.SEE_READ_DOWNLOAD)
+                session.add(user_book_credentials)
+                #session.commit()
+
+            for group_name in credentials.group_see:
+                group = session.exec(select(Group).where(Group.group_name == group_name).where(Group.creator_idx == user_idx)).one_or_none()
+                if group is None:
+                    raise Exception(f"No such group \"{group_name}\"")
+                group_book_credentials = GroupBookCredentials(group_idx=group.idx, book_idx=book_idx,
+                                                              credentials=CredentialsEnum.SEE)
+                session.add(group_book_credentials)
+                #session.commit()
+
+            for group_name in credentials.group_see_read:
+                group = session.exec(select(Group).where(Group.group_name == group_name).where(Group.creator_idx == user_idx)).one_or_none()
+                if group is None:
+                    raise Exception(f"No such group \"{group_name}\"")
+                group_book_credentials = GroupBookCredentials(group_idx=group.idx, book_idx=book_idx,
+                                                              credentials=CredentialsEnum.SEE_READ)
+                session.add(group_book_credentials)
+                #session.commit()
+
+            for group_name in credentials.group_see_read_download:
+                group = session.exec(select(Group).where(Group.group_name == group_name).where(Group.creator_idx == user_idx)).one_or_none()
+                if group is None:
+                    raise Exception(f"No such group \"{group_name}\"")
+                group_book_credentials = GroupBookCredentials(group_idx=group.idx, book_idx=book_idx,
+                                                              credentials=CredentialsEnum.SEE_READ_DOWNLOAD)
+                session.add(group_book_credentials)
+                #session.commit()
+
+            book = session.exec(select(Book).where(Book.idx == book_idx)).one_or_none()
+            if credentials.is_see_all == False and credentials.is_see_read_all == False and credentials.is_see_read_download_all == False:
+                book.public = CredentialsEnum.NONE
+            elif credentials.is_see_read_download_all == True:
+                book.public = CredentialsEnum.SEE_READ_DOWNLOAD
+            elif credentials.is_see_read_all == True:
+                book.public = CredentialsEnum.SEE_READ
+            elif credentials.is_see_all == True:
+                book.public = CredentialsEnum.SEE
+
+            session.add(book)
+            session.commit()
+            session.refresh(book)
 
     def read_book(self, idx: int = None) -> Optional[Book]:
         with Session(self.engine) as session:

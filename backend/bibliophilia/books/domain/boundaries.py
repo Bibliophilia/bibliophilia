@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from typing import Optional
 
 from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate
+from backend.bibliophilia.books.domain.models.input import BookCreate, Credentials
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
@@ -10,6 +10,10 @@ class BookRepository(ABC):
 
     @abstractmethod
     def create_book(self, book: BookCreate) -> Optional[Book]:
+        pass
+
+    @abstractmethod
+    def add_rights(self, credentials: Credentials, book_idx: int, user_idx: int):
         pass
 
     @abstractmethod

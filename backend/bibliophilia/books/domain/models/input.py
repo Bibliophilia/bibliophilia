@@ -4,13 +4,15 @@ from fastapi import UploadFile
 
 from backend.bibliophilia.books import settings
 from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
+from backend.bibliophilia.books.domain.models.schemas import CredentialsEnum
 from backend.bibliophilia.core.models import BPModel
 
 
 class BookCreate(ExtendedBookBase):
-    image: Optional[UploadFile]
+    image: Optional[UploadFile] = None
     files: list[UploadFile]
     tokens: list[float] = []
+    public: CredentialsEnum = CredentialsEnum.NONE
 
 
 class BookSearch(ExtendedBookBase):
