@@ -3,23 +3,18 @@ import logging
 from fastapi import APIRouter, Query
 from fastapi import Response
 
-import bibliophilia.books.settings as settings
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat
-from bibliophilia.books.domain.models.input import BookCreate, BookCreateInfo, ImageFileSave, BookFileSave
-from bibliophilia.books.domain.models.output import BookInfo, BookCard
+import backend.bibliophilia.books.settings as settings
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookCreateInfo, ImageFileSave, BookFileSave
+from backend.bibliophilia.books.domain.models.output import BookInfo, BookCard
 
-import bibliophilia.books.dependencies as dependencies
+import backend.bibliophilia.books.dependencies as dependencies
 from typing import Optional, Set, AnyStr
 from fastapi import UploadFile
 from starlette.responses import FileResponse
 
-from backend.bibliophilia.books.domain.models.schemas import UserBookCredentials, CredentialsEnum, GroupBookCredentials, \
-    Book
-from backend.bibliophilia.core.dependencies import engine
-from sqlmodel import Session, select
-
-from backend.bibliophilia.users.domain.models.schemas import UserGroupLink, User, Group
+from backend.bibliophilia.books.domain.models.input import Rights
 
 router = APIRouter()
 
@@ -49,8 +44,15 @@ def handle_upload_file(book_idx: str,
 
 
 @router.post("/add-rights")
-def handle_add_rights(book_idx: int, user_idx: int, credentials: Credentials):
-    dependencies.book_service.add_rights(book_idx=book_idx, credentials=credentials, user_idx=user_idx)
+def handle_add_rights(book_idx: int, user_idx: int, rights: Rights):
+    ### проверка, что user - publisher через request
+    dependencies.book_service.add_rights(book_idx=book_idx, rights=rights, user_idx=user_idx)
+
+
+@router.delete("/delete-rights")
+def handle_delete_rights(book_idx: int):
+    ### проверка, что user - publisher через request
+    dependencies.book_service.delete_rights(book_idx)
 
 
 @router.get("/{idx}", response_model=Optional[BookInfo])

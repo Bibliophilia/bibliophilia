@@ -1,6 +1,6 @@
 import re
 
-from bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.entity.facet import Facet
 
 
 def parse_facets(query: str) -> (str, dict):

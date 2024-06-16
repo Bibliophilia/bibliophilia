@@ -3,12 +3,12 @@ from typing import Optional
 
 from backend.bibliophilia.books.domain.models.basic import FileFormat
 from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, \
-    ImageFileSave, Credentials
+    ImageFileSave, Rights
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat, FacetBase
-from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
-from bibliophilia.books.domain.models.schemas import Book, BookFile, Author, Genre
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat, FacetBase
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile, Author, Genre
 
 
 class FSBookStorage(ABC):
@@ -39,7 +39,11 @@ class DBBookStorage(ABC):
         pass
 
     @abstractmethod
-    def create_book_credentials(self, user_idx, book_idx: int, credentials: Credentials):
+    def create_book_rights(self, user_idx, book_idx: int, rights: Rights):
+        pass
+
+    @abstractmethod
+    def delete_book_rights(self, book_idx: int):
         pass
 
     @abstractmethod
