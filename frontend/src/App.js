@@ -3,11 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './Style/App.css';
 import HomePage from './component/Page-Component/HomePage';
 import CategoryWindow from './component/Page-Component/CategoryWindow';
-import UploadBooks from './component/Books-Component/UploadBooks';
 import SearchResultsPage from './component/Page-Component/SearchResultsPage';
-import BookInfoPage from "./component/Books-Component/BookInfoPage";
+import BookInfoPage from "./component/Page-Component/BookInfoPage";
+import UploadBooks from "./component/Books-Component/UploadBooks";
 import UserProfile from "./component/User-Component/UserProfile";
-
 
 function App() {
   return (

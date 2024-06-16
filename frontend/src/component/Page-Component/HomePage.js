@@ -2,9 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryWindow from './CategoryWindow';
 import '../ComponentStyles/HomePage.css';
-import searchIcon from '../ComponentStyles/Img/Search_Icon.png';
+import Search from "../Search";
 import LoginPopup from "../User-Component/UserAuth";
-
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -72,18 +71,7 @@ const HomePage = () => {
             </div>
 
             {/* Search Bar Component */}
-            <div className='Search'>
-                <div className='SearchBar'>
-                    <div className="SearchIconContainer" onClick={handleSearchClick}>
-                        <img
-                            className="SearchIcon"
-                            src={searchIcon}
-                            alt="Search"
-                        />
-                    </div>
-                    <input className='' type="text" placeholder="Search for books, articles, documents..." value={searchTerm} onChange={handleInputChange} />
-                </div>
-            </div>
+            <Search onSearch={handleSearchClick} />
 
             <div className='CategorySection'>
                 {/* Category Button */}
