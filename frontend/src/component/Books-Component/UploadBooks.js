@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
-import './ComponentStyles/UploadBook.css';
+import '../ComponentStyles/UploadBook.css';
 
 const UploadBooks = () => {
   const navigate = useNavigate(); // Change from useHistory to useNavigate

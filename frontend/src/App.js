@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './Style/App.css';
 import HomePage from './component/Page-Component/HomePage';
 import CategoryWindow from './component/Page-Component/CategoryWindow';
-import UploadBooks from './component/UploadBooks';
 import SearchResultsPage from './component/Page-Component/SearchResultsPage';
 import BookInfoPage from "./component/Page-Component/BookInfoPage";
+import UploadBooks from "./component/Books-Component/UploadBooks";
+import UserProfile from "./component/User-Component/UserProfile";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<UserProfile />} />   // testing if user profile is working or not
           <Route path="/category" element={<CategoryWindow />} />
           <Route path="/upload-books" element={<UploadBooks />} />
           <Route path="/search-results" element={<SearchResultsPage />} />
