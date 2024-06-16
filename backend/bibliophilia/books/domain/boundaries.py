@@ -1,9 +1,10 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
-from backend.bibliophilia.books.domain.models.basic import FileFormat
-from backend.bibliophilia.books.domain.models.input import BookCreate, Credentials
-from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+from bibliophilia.books.domain.entity.facet import Facet
+from bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
+from bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave
+from bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepository(ABC):
@@ -32,12 +33,32 @@ class BookRepository(ABC):
     def read_bookfile(self, idx: int, file_format: FileFormat) -> Optional[BookFile]:
         pass
 
-
-class SearchRepository(ABC):
     @abstractmethod
-    def base_search(self, query: str) -> [int]:
+    def create_image(self, image: ImageFileSave) -> str:
         pass
 
     @abstractmethod
-    def semantic_search(self, tokens: list[float]):
+    def create_bookfile(self, bookfile: BookFileSave) -> Optional[BookFile]:
+        pass
+
+    @abstractmethod
+    def is_tokenized(self, idx: int) -> bool:
+        pass
+
+    @abstractmethod
+    def update_book(self, book: BookCreate) -> bool:
+        pass
+
+
+class SearchRepository(ABC):
+    @abstractmethod
+    def base_search(self, query: str, filter=None) -> [int]:
+        pass
+
+    @abstractmethod
+    def semantic_search(self, tokens: list[float], filter=None):
+        pass
+
+    @abstractmethod
+    def read_hints(self, query: str, facet: Facet) -> list[str]:
         pass

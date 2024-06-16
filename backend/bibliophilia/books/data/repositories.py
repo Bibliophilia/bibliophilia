@@ -1,6 +1,14 @@
 import logging
 from typing import Optional
 
+from bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
+from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from bibliophilia.books.domain.entity.facet import Facet
+from bibliophilia.books.domain.models.basic import FileFormat, FacetBase
+from bibliophilia.books.domain.models.input import (BookCreate, BookSearch, BookFileCreate, BookFileSave,
+                                                    ImageFileSave,
+                                                    GenreCreate, AuthorCreate)
+from bibliophilia.books.domain.models.schemas import Book, BookFile
 from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
 from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
 from backend.bibliophilia.books.domain.models.basic import FileFormat
@@ -10,6 +18,7 @@ from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepositoryImpl(BookRepository):
+
     def __init__(self,
                  db_storage: DBBookStorage,
                  fs_storage: FSBookStorage,
@@ -20,58 +29,82 @@ class BookRepositoryImpl(BookRepository):
 
     def create_book(self, book: BookCreate) -> Optional[Book]:
         logging.info("create_book() starting")
-        db_bookfiles = []
+        db_facets = []
         db_book = self.db_storage.create_book(book)
         if not db_book:
             logging.info("Error while creating book at DBBookStorage")
-            self._rollback_book(db_book, db_bookfiles)
-            return None
-        is_indexed = self.search_storage.index(db_book.idx, BookSearch(title=book.title,
-                                                                       author=book.author,
-                                                                       description=book.description,
-                                                                       tokens=book.tokens))
-        if not is_indexed:
-            logging.info("Error while indexing book at SearchStorage")
-            self._rollback_book(db_book, db_bookfiles)
-            return None
-        is_saved = self.fs_storage.save_bookimage(ImageFileSave(book_idx=db_book.idx,
-                                                                image=book.image))
-        if not is_saved:
-            logging.info("Error while saving book image at FSBookStorage")
-            self._rollback_book(db_book, db_bookfiles)
+            self._rollback_book(db_book, db_facets)
             return None
 
-        for file in book.files:
-            filename = file.filename
-            file_extension = filename.split('.')[-1]
-            logging.info(f"File name: {filename}")
-            logging.info(f"File format: {file_extension}")
-            if not FileFormat.get_by_name(file_extension):
-                logging.info("Invalid book file format")
-                self._rollback_book(db_book, db_bookfiles)
+        is_indexed = self.search_storage.index_book(db_book.idx, BookSearch(title=book.title,
+                                                                            year=book.year,
+                                                                            publisher=book.publisher,
+                                                                            description=book.description,
+                                                                            author=book.author,
+                                                                            genre=book.genre,
+                                                                            tokens=book.tokens))
+        if not is_indexed:
+            logging.info("Error while indexing book at SearchStorage")
+            self._rollback_book(db_book, db_facets)
+            return None
+
+        for author in book.author:
+            db_author = self.db_storage.create_facet(value=AuthorCreate(book_idx=db_book.idx,
+                                                                        name=author),
+                                                     facet=Facet.author)
+            db_facets.append(db_author)
+            is_indexed = self.search_storage.index_facet(author, Facet.author)
+            if not db_author or not is_indexed:
+                logging.info("Error while creating author at DBBookStorage or indexing at SearchStorage")
+                self._rollback_book(db_book, db_facets)
                 return None
-            logging.info(f"Saving to DB")
-            db_bookfile = self.db_storage.create_bookfile(BookFileCreate(book_idx=db_book.idx,
-                                                                         format=FileFormat.get_by_name(file_extension)))
-            if not db_bookfile:
-                logging.info("Error while saving book file at DBBookStorage")
-                self._rollback_book(db_book, db_bookfiles)
+
+        for genre in book.genre:
+            db_genre = self.db_storage.create_facet(value=GenreCreate(book_idx=db_book.idx,
+                                                                      name=genre),
+                                                    facet=Facet.genre)
+            db_facets.append(db_genre)
+            is_indexed = self.search_storage.index_facet(genre, Facet.genre)
+            if not db_genre or not is_indexed:
+                logging.info("Error while creating author at DBBookStorage or indexing at SearchStorage")
+                self._rollback_book(db_book, db_facets)
                 return None
-            db_bookfiles.append(db_bookfile)
-            logging.info(f"Saving to FS")
-            #is_saved = self.fs_storage.save_bookfile(BookFileSave(book_idx=db_book.idx,
-            #                                                      file=file))
-            #logging.info(f"fookfile is_saved:{is_saved}")
-            #if not is_saved:
-            #    logging.info("Error while saving book file at FSBookStorage")
-            #    self._rollback_book(db_book, db_bookfiles)
-            #    return None
         return db_book
+
+    def create_image(self, image: ImageFileSave) -> str:
+        url = self.fs_storage.save_bookimage(image)
+        if not url:
+            logging.info("Error while saving book image at FSBookStorage")
+        return url
+
+    def create_bookfile(self, bookfile: BookFileSave) -> Optional[BookFile]:
+        filename = bookfile.file.filename
+        file_extension = filename.split('.')[-1]
+        logging.info(f"File name: {filename}")
+        logging.info(f"File format: {file_extension}")
+        if not FileFormat.get_by_name(file_extension):
+            logging.info("Invalid book file format")
+            return None
+        logging.info(f"Saving to DB")
+        db_bookfile = self.db_storage.create_bookfile(BookFileCreate(book_idx=bookfile.book_idx,
+                                                                     format=FileFormat.get_by_name(file_extension)))
+        if not db_bookfile:
+            logging.info("Error while saving book file at DBBookStorage")
+            return None
+        logging.info(f"Saving to FS")
+        is_saved = self.fs_storage.save_bookfile(BookFileSave(book_idx=bookfile.book_idx,
+                                                              file=bookfile.file))
+        logging.info(f"fookfile is_saved:{is_saved}")
+        if not is_saved:
+            logging.info("Error while saving book file at FSBookStorage")
+            self._rollback_bookfile(db_bookfile)
+            return None
+        return db_bookfile
 
     def add_rights(self, credentials: Credentials, book_idx: int, user_idx: int):
         self.db_storage.create_book_credentials(user_idx=user_idx, book_idx=book_idx, credentials=credentials)
 
-    def _rollback_book(self, db_book: Book, db_bookfiles: [BookFile]):
+    def _rollback_book(self, db_book: Book, db_facets: [FacetBase]):
         logging.info("Book saving rollback")
         is_deleted = self.fs_storage.delete_bookimage(db_book.idx)
         if not is_deleted:
@@ -79,11 +112,27 @@ class BookRepositoryImpl(BookRepository):
         is_removed = self.db_storage.remove_book(db_book)
         if not is_removed:
             raise Exception("Couldn't delete book")
-        for prev_db_bookfile in db_bookfiles:
-            is_removed = self.db_storage.remove_bookfile(prev_db_bookfile)
-            is_deleted = self.fs_storage.delete_bookfile(prev_db_bookfile)
+        is_deleted = self.search_storage.delete_indexed_book(db_book.idx)
+        if not is_deleted:
+            raise Exception("Couldn't delete book index")
+        for db_facet in db_facets:
+            is_removed = self.db_storage.remove_facet(db_facet)
             if not is_removed or not is_deleted:
-                raise Exception("Couldn't delete bookfile")
+                raise Exception("Couldn't delete facet")
+
+    def _rollback_bookfile(self, db_bookfile: BookFile):
+        is_removed = self.db_storage.remove_bookfile(db_bookfile)
+        is_deleted = self.fs_storage.delete_bookfile(db_bookfile)
+        if not is_removed or not is_deleted:
+            raise Exception("Couldn't delete bookfile")
+
+    def is_tokenized(self, idx: int) -> bool:
+        # TODO
+        pass
+
+    def update_book(self, book: BookCreate) -> bool:
+        # TODO
+        pass
 
     def read_book(self, idx: int) -> Book:
         return self.db_storage.read_book(idx)
@@ -99,11 +148,15 @@ class BookRepositoryImpl(BookRepository):
 
 
 class SearchRepositoryImpl(SearchRepository):
+
     def __init__(self, search_storage: SearchStorage):
         self.search_storage = search_storage
 
-    def base_search(self, query: str) -> [int]:
-        return self.search_storage.base_search(query=query)
+    def base_search(self, query: str, filter=None) -> [int]:
+        return self.search_storage.base_search(query=query, filter=filter)
 
-    def semantic_search(self, tokens: list[float]):
-        return self.search_storage.semantic_search(tokens=tokens)
+    def semantic_search(self, tokens: list[float], filter=None):
+        return self.search_storage.semantic_search(tokens=tokens, filter=filter)
+
+    def read_hints(self, query: str, facet: Facet) -> list[str]:
+        return self.search_storage.read_hints(query=query, facet=facet)

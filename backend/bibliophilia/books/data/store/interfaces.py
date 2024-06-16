@@ -5,6 +5,10 @@ from backend.bibliophilia.books.domain.models.basic import FileFormat
 from backend.bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, \
     ImageFileSave, Credentials
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+from bibliophilia.books.domain.entity.facet import Facet
+from bibliophilia.books.domain.models.basic import FileFormat, FacetBase
+from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
+from bibliophilia.books.domain.models.schemas import Book, BookFile, Author, Genre
 
 
 class FSBookStorage(ABC):
@@ -70,18 +74,42 @@ class DBBookStorage(ABC):
     def read_books(self, idxs: list[int]) -> list[Book]:
         pass
 
+    @abstractmethod
+    def create_facet(self, value: FacetBase, facet: Facet) -> Optional[Author | Genre]:
+        pass
+
+    @abstractmethod
+    def remove_facet(self, facet: FacetBase) -> bool:
+        pass
+
 
 class SearchBookStorage(ABC):
     @abstractmethod
-    def index(self, book_idx: int, es_book: BookSearch) -> bool:
+    def index_book(self, book_idx: int, es_book: BookSearch) -> bool:
+        pass
+
+    @abstractmethod
+    def delete_indexed_book(self, book_idx: int):
+        pass
+
+    @abstractmethod
+    def index_facet(self, value: str, facet: Facet) -> bool:
+        pass
+
+    @abstractmethod
+    def delete_indexed_facet(self, value: str, facet: Facet) -> bool:
         pass
 
 
 class SearchStorage(ABC):
     @abstractmethod
-    def base_search(self, query: str) -> [int]:
+    def base_search(self, query: str, filter=None) -> [int]:
         pass
 
     @abstractmethod
-    def semantic_search(self, tokens: list[float]) -> [int]:
+    def semantic_search(self, tokens: list[float], filter=None) -> [int]:
+        pass
+
+    @abstractmethod
+    def read_hints(self, query: str, facet: Facet):
         pass

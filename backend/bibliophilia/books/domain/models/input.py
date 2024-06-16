@@ -2,20 +2,32 @@ from typing import Optional
 
 from fastapi import UploadFile
 
+from bibliophilia.books import settings
+from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat, GenreBase, AuthorBase, \
+    OverExtendedBookBase
+
 from backend.bibliophilia.books import settings
 from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
 from backend.bibliophilia.books.domain.models.schemas import CredentialsEnum
 from backend.bibliophilia.core.models import BPModel
 
+class BookCreateInfo(ExtendedBookBase):
+    author: list[str]
+    genre: list[str]
 
-class BookCreate(ExtendedBookBase):
+
+class BookCreate(BookCreateInfo):
     image: Optional[UploadFile] = None
-    files: list[UploadFile]
+    files: list[UploadFile] = []
     tokens: list[float] = []
     public: CredentialsEnum = CredentialsEnum.NONE
 
 
-class BookSearch(ExtendedBookBase):
+class BookUpdate(BookCreate):
+    pass
+
+
+class BookSearch(OverExtendedBookBase):
     tokens: list[float]
 
 
@@ -54,3 +66,12 @@ class Credentials(BPModel):
     is_see_all: bool
     is_see_read_all: bool
     is_see_read_download_all: bool
+
+
+class GenreCreate(GenreBase):
+    name: str
+
+
+class AuthorCreate(AuthorBase):
+    name: str
+
