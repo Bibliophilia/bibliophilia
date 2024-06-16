@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../component/ComponentStyles/SearchResult.css';
-import { SearchApi } from "utils/api/SearchApi";
+import '../ComponentStyles/SearchResult.css';
+import { SearchApi } from "component/Component-APIs/SearchApi";
 
 const SearchResultsPage = () => {
     const location = useLocation();

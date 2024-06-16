@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../component/ComponentStyles/BookInfoPage.css'
+import '../ComponentStyles/BookInfoPage.css'
 
 const BookInfoPage = () => {
     const location = useLocation();

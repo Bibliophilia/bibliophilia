@@ -1,5 +1,5 @@
-import {HttpApi} from "utils/api/HttpApi";
-import { SERVER_URL } from 'utils/constants';
+import {HttpApi} from "component/Component-APIs/HttpApi";
+import { SERVER_URL } from 'component/Utils/constants';
 
 export class SearchApi extends HttpApi{
   constructor() {

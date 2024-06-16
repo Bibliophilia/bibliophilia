@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './Style/App.css';
-import HomePage from './page/HomePage';
-import CategoryWindow from './component/CategoryWindow';
+import HomePage from './component/Page-Component/HomePage';
+import CategoryWindow from './component/Page-Component/CategoryWindow';
 import UploadBooks from './component/UploadBooks';
-import SearchResultsPage from './page/SearchResultsPage';
-import BookInfoPage from "./page/BookInfoPage";
+import SearchResultsPage from './component/Page-Component/SearchResultsPage';
+import BookInfoPage from "./component/Page-Component/BookInfoPage";
 
 function App() {
   return (

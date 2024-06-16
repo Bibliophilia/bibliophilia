@@ -1,4 +1,4 @@
-import {DEFAULT_ERROR} from 'utils/constants';
+import {DEFAULT_ERROR} from 'component/Utils/constants';
 
 export class HttpApi {
   constructor(baseUrl) {

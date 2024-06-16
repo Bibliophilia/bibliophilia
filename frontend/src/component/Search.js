@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import searchIcon from '../component/ComponentStyles/Img/Search_Icon.png';
-import {SearchApi} from "../utils/api/SearchApi";
+import {SearchApi} from "./Component-APIs/SearchApi";
 
 const Search = ({ onSearch }) => {
   const searchApi = new SearchApi();

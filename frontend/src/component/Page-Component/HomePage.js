@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CategoryWindow from '../component/CategoryWindow';
-import '../component/ComponentStyles/HomePage.css';
-import searchIcon from '../component/ComponentStyles/Img/Search_Icon.png';
+import CategoryWindow from './CategoryWindow';
+import '../ComponentStyles/HomePage.css';
+import searchIcon from '../ComponentStyles/Img/Search_Icon.png';
 import SearchResultsPage from "./SearchResultsPage";
-import Search from "../component/Search";
+import Search from "../Search";
 
 const HomePage = () => {
     const navigate = useNavigate();
