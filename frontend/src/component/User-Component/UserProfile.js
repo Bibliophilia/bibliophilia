@@ -1,24 +1,44 @@
-{/*
-import { getUserProfile, registerWithGoogle } from '../Component-APIs/googleAuthAPI'; // Importing the functions from the API file
 
-const handleGoogleLogin = async () => {
-    try {
-        // Perform Google Auth
-        // This could involve triggering the Google login process and obtaining the response
-        // Once you have the response, call registerWithGoogle
-        const googleResponse = await googleLogin(); // Example: This is a placeholder for your actual Google login function
-        const userData = await registerWithGoogle(googleResponse);
+import { getUserProfile } from '../Component-APIs/googleAuthAPI';
+import React, { useEffect, useState } from 'react';
+import '../User-Component/Style/UserProfile.css'
 
-        // After successful registration, fetch and display user profile
-        const userProfile = await getUserProfile();
-        console.log('User Profile:', userProfile);
-        // Here you can display the user profile in your UI
-    } catch (error) {
-        console.error('Error handling Google login:', error.message);
-        // Handle error
+const UserProfile = () => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const userData = await getUserProfile();
+                setUser(userData);
+                setLoading(false);
+            } catch (error) {
+                console.error('Failed to fetch user profile:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
+
+    if (!user) {
+        return <div>Error loading user profile.</div>;
+    }
+
+    return (
+        <div className="UserProfile">
+            <div className="profile-container">
+                <img src={user.picture || '/path/to/default/profile.png'} alt="User Profile" className="profile-pic" />
+                <h1>{user.name}</h1>
+                <p>Email: {user.email}</p>
+            </div>
+        </div>
+    );
 };
 
-// Call the function to handle Google login when needed
-handleGoogleLogin();
-*/}
+export default UserProfile;

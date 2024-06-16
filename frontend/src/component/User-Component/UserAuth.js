@@ -27,6 +27,7 @@ const images = [
     image10
 ];
 
+
 const LoginPopup = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -61,7 +62,6 @@ const LoginPopup = () => {
 
 
                 <img className="google-logo" src={google_log} alt="Google Logo"/>
-
             </div>
 
 
@@ -89,9 +89,12 @@ const LoginPopup = () => {
                     />
                 ))}
             </div>
+
+
         </div>
     );
 };
 
 
 export default LoginPopup;
+
