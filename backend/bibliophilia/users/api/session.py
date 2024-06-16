@@ -54,7 +54,7 @@ async def auth(request: Request):
             name=user.get('name')
         )
     )
-    return RedirectResponse(url='/users/session/get-user')
+    return RedirectResponse(url='http://localhost:3000/')
 
 
 @router.get('/logout')
