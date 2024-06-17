@@ -1,15 +1,16 @@
 import logging
 import os
-from typing import Optional
+from typing import Optional, Any
 
 from bibliophilia.books.data.store.interfaces import DBBookStorage, SearchStorage, SearchBookStorage, FSBookStorage
 from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat
+from bibliophilia.books.domain.models.basic import FileFormat, FacetBase
 from bibliophilia.books.domain.models.input import BookCreate, BookFileCreate, BookSearch, BookFileSave, ImageFileSave
-from bibliophilia.books.domain.models.schemas import Book, BookFile
+from bibliophilia.books.domain.models.schemas import Book, BookFile, Author, Genre
 from sqlmodel import select, Session
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+from sqlalchemy.orm import contains_eager
 
 
 class FSBookStorageImpl(FSBookStorage):
@@ -67,6 +68,7 @@ class FSBookStorageImpl(FSBookStorage):
 
 
 class DBBookStorageImpl(DBBookStorage):
+
     def __init__(self, engine):
         self.engine = engine
 
@@ -80,7 +82,11 @@ class DBBookStorageImpl(DBBookStorage):
 
     def read_book(self, idx: int = None) -> Optional[Book]:
         with Session(self.engine) as session:
-            return session.exec(select(Book).where(Book.idx == idx)).one_or_none()
+            select_book = (
+                select(Book)
+                .options(contains_eager(Book.author), contains_eager(Book.genre))
+                .where(Book.idx == idx))
+            return session.exec(select_book).unique().one_or_none()
 
     def get_book_formats(self, idx: int) -> set[FileFormat]:
         with Session(self.engine) as session:
@@ -126,16 +132,61 @@ class DBBookStorageImpl(DBBookStorage):
 
     def read_books(self, idxs: list[int]) -> list[Book]:
         with Session(self.engine) as session:
-            books: list[Book] = session.query(Book).filter(Book.idx.in_(idxs)).all()
+            books: list[Book] = (session.
+                                 query(Book)
+                                 .options(contains_eager(Book.author), contains_eager(Book.genre))
+                                 .filter(Book.idx.in_(idxs)).all())
             books_by_indexes = {str(book.idx): book for book in books}
             sorted_books = [books_by_indexes[str(idx)] for idx in idxs]
             return sorted_books
+
+    def create_facet(self, value: FacetBase, facet: Facet) -> Optional[Author | Genre]:
+        with Session(self.engine) as session:
+            db_facet = None
+            match facet:
+                case Facet.author:
+                    db_facet = Author.from_orm(value)
+                case Facet.genre:
+                    db_facet = Genre.from_orm(value)
+            logging.info("BookFile from orm")
+            session.add(db_facet)
+            logging.info("Added")
+            session.commit()
+            logging.info("Commited")
+            session.refresh(db_facet)
+            logging.info("Refreshed")
+            return db_facet
+
+    def remove_facet(self, facet: FacetBase) -> bool:
+        with Session(self.engine) as session:
+            session.delete(facet)
+            session.commit()
+            return True
 
 
 class ESBookStorageImpl(SearchBookStorage, SearchStorage):
 
     def __init__(self, elasticsearch: Elasticsearch):
         self.es = elasticsearch
+
+    def index_book(self, book_idx: int, es_book: BookSearch) -> bool:
+        book_data = {
+            "title": es_book.title,
+            "author": [{"value": {"key": author, "text": author}} for i, author in enumerate(es_book.author)],
+            "genre": [{"value": {"key": genre, "text": genre}} for i, genre in enumerate(es_book.genre)],
+            "year": es_book.year,
+            "publisher": es_book.publisher,
+            "description": es_book.description,
+            "tokens": es_book.tokens
+        }
+        self.es.index(index=Book.__tablename__, id=str(book_idx), body=book_data, )
+        logging.info(f"Book: \"{book_idx}\" successfully added to the index")
+        return True
+
+    def delete_indexed_book(self, book_idx: int):
+        response = self.es.delete(index=Book.__tablename__, id=str(book_idx))
+        logging.info(f"ES indexing status: {response['result']}")
+        return True
 
     def index_facet(self, value: str, facet: Facet) -> bool:
         response = self.es.search(index=facet, body={
@@ -147,26 +198,17 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         })
         hits = response["hits"]["hits"]
         if hits:
-            print(f"Facet: \"{value}\" already exists")
+            logging.info(f"Facet: \"{value}\" already exists")
             return False
         facet_data = {"value": value}
         self.es.index(index=facet, body=facet_data)
-        print(f"Facet: \"{value}\" successfully added to the index")
+        logging.info(f"Facet: \"{value}\" successfully added to the index")
         return True
 
-    def index_book(self, book_idx: int, es_book: BookSearch) -> bool:
-        self.index_facet(es_book.author, Facet.author)
-        response = self.es.index(
-            index=Book.__tablename__,
-            id=str(book_idx),
-            body={
-                "title": es_book.title,
-                "authors": [{"value": author} for author in [es_book.author]],
-                "description": es_book.description,
-                "tokens": es_book.tokens
-            },
-        )
-        logging.info(f"ES indexing status: {response['result']}")
+    def delete_indexed_facet(self, value: str, facet: Facet) -> bool:
+        facet_data = {"value": value}
+        self.es.delete(index=facet, body=facet_data)
+        logging.info(f"Facet: \"{value}\" successfully deleted from es")
         return True
 
     def base_search(self, query: str, filter=None) -> [int]:
@@ -174,7 +216,7 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
             "bool": {
                 "should": [
                     {"match": {"title": query}},
-                    {"match": {"authors": query}},
+                    {"match": {"author": query}},
                     {"match": {"description": query}},
                 ]
             }
