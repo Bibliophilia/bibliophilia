@@ -34,9 +34,9 @@ def handle_upload_image(book_idx: str,
 
 
 @router.post("/file/upload")
-def handle_upload_image(book_idx: str,
-                        file: Optional[UploadFile],
-                        response: Response):
+def handle_upload_file(book_idx: str,
+                       file: Optional[UploadFile],
+                       response: Response):
     response.status_code = dependencies.book_service.create_file(BookFileSave(book_idx=book_idx,
                                                                               file=file))
 
