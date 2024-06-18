@@ -40,11 +40,11 @@ class ReviewStorage(ABC):
 class GroupStorage(ABC):
 
     @abstractmethod
-    def create(self, group: GroupCreate) -> Optional[Group]:
+    def create(self, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         pass
 
     @abstractmethod
-    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[Group]:
+    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         pass
 
     @abstractmethod
@@ -52,5 +52,5 @@ class GroupStorage(ABC):
         pass
 
     @abstractmethod
-    def get_all_by_user_idx(self, user_idx: int) -> list[Group]:
+    def get_all_by_user_idx(self, user_idx: int) -> list[tuple[Group, list[str]]]:
         pass

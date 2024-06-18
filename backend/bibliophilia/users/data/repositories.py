@@ -46,15 +46,15 @@ class GroupRepositoryImpl(GroupRepository):
     def __init__(self, group_storage: GroupStorage):
         self.group_storage = group_storage
 
-    def create(self, group: GroupCreate) -> Optional[Group]:
+    def create(self, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         return self.group_storage.create(group)
 
-    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[Group]:
+    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         return self.group_storage.edit(old_group_name, group)
 
     def delete(self, group_name: str, user_idx: int):
         return self.group_storage.delete(group_name, user_idx)
 
-    def get_all_by_user_idx(self, user_idx: int) -> list[Group]:
+    def get_all_by_user_idx(self, user_idx: int) -> list[tuple[Group, list[str]]]:
         return self.group_storage.get_all_by_user_idx(user_idx)
 

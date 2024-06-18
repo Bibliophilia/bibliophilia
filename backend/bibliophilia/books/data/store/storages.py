@@ -97,7 +97,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if user is None:
                     raise Exception(f"No such user \"{username}\"")
                 user_book_rights = UserBookRights(user_idx=user.idx, book_idx=book_idx,
-                                                            rights=RightsEnum.SEE)
+                                                            rights=RightsEnum.SEARCH)
                 session.add(user_book_rights)
                 #session.commit()
 
@@ -106,7 +106,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if user is None:
                     raise Exception(f"No such user \"{username}\"")
                 user_book_rights = UserBookRights(user_idx=user.idx, book_idx=book_idx,
-                                                            rights=RightsEnum.SEE_READ)
+                                                            rights=RightsEnum.SEARCH_READ)
                 session.add(user_book_rights)
                 #session.commit()
 
@@ -115,7 +115,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if user is None:
                     raise Exception(f"No such user \"{username}\"")
                 user_book_rights = UserBookRights(user_idx=user.idx, book_idx=book_idx,
-                                                            rights=RightsEnum.SEE_READ_DOWNLOAD)
+                                                            rights=RightsEnum.SEARCH_READ_DOWNLOAD)
                 session.add(user_book_rights)
                 #session.commit()
 
@@ -124,7 +124,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if group is None:
                     raise Exception(f"No such group \"{group_name}\"")
                 group_book_rights = GroupBookRights(group_idx=group.idx, book_idx=book_idx,
-                                                              rights=RightsEnum.SEE)
+                                                              rights=RightsEnum.SEARCH)
                 session.add(group_book_rights)
                 #session.commit()
 
@@ -133,7 +133,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if group is None:
                     raise Exception(f"No such group \"{group_name}\"")
                 group_book_rights = GroupBookRights(group_idx=group.idx, book_idx=book_idx,
-                                                              rights=RightsEnum.SEE_READ)
+                                                              rights=RightsEnum.SEARCH_READ)
                 session.add(group_book_rights)
                 #session.commit()
 
@@ -142,7 +142,7 @@ class DBBookStorageImpl(DBBookStorage):
                 if group is None:
                     raise Exception(f"No such group \"{group_name}\"")
                 group_book_rights = GroupBookRights(group_idx=group.idx, book_idx=book_idx,
-                                                              rights=RightsEnum.SEE_READ_DOWNLOAD)
+                                                              rights=RightsEnum.SEARCH_READ_DOWNLOAD)
                 session.add(group_book_rights)
                 #session.commit()
 
@@ -150,11 +150,11 @@ class DBBookStorageImpl(DBBookStorage):
             if rights.is_see_all == False and rights.is_see_read_all == False and rights.is_see_read_download_all == False:
                 book.public = RightsEnum.NONE
             elif rights.is_see_read_download_all == True:
-                book.public = RightsEnum.SEE_READ_DOWNLOAD
+                book.public = RightsEnum.SEARCH_READ_DOWNLOAD
             elif rights.is_see_read_all == True:
-                book.public = RightsEnum.SEE_READ
+                book.public = RightsEnum.SEARCH_READ
             elif rights.is_see_all == True:
-                book.public = RightsEnum.SEE
+                book.public = RightsEnum.SEARCH
 
             session.add(book)
             session.commit()

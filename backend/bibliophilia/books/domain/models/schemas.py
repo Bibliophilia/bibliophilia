@@ -10,10 +10,10 @@ from backend.bibliophilia.core.models import BPModel
 
 
 class RightsEnum(Enum):
-    SEE = "1"
-    SEE_READ = "2"
-    SEE_READ_DOWNLOAD = "3"
-    NONE = "4"
+    SEARCH = "SEARCH"
+    SEARCH_READ = "SEARCH_READ"
+    SEARCH_READ_DOWNLOAD = "SEARCH_READ_DOWNLOAD"
+    NONE = "NONE"
 
 
 class GroupBookRights(BPModel, table=True):

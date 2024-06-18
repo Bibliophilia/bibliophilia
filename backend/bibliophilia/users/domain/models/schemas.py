@@ -37,5 +37,5 @@ class Group(GroupBase, table=True):
     idx: int = Field(None, primary_key=True, sa_column_kwargs={"autoincrement": True})
     group_name: str = Field(None)
     creator_idx: int = Field(foreign_key="users.idx")
-    users: list["User"] = Relationship(back_populates="groups", link_model=UserGroupLink, sa_relationship_kwargs={"lazy":"joined"})
+    users: list["User"] = Relationship(back_populates="groups", link_model=UserGroupLink) #sa_relationship_kwargs={"lazy":"joined"}
     books: list["Book"] = Relationship(back_populates="groups", link_model=GroupBookRights)

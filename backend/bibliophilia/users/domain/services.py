@@ -58,15 +58,15 @@ class GroupService:
     def __init__(self, group_repository: GroupRepository):
         self.group_repository = group_repository
 
-    def create(self, group: GroupCreate) -> Optional[Group]:
+    def create(self, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         return self.group_repository.create(group)
 
-    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[Group]:
+    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
         return self.group_repository.edit(old_group_name, group)
 
     def delete(self, group_name: str, user_idx: int):
         self.group_repository.delete(group_name, user_idx)
 
-    def get_all_by_user_idx(self, user_idx: int) -> list[Group]:
+    def get_all_by_user_idx(self, user_idx: int) -> list[tuple[Group, list[str]]]:
         return self.group_repository.get_all_by_user_idx(user_idx)
 
