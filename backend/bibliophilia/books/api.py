@@ -27,6 +27,7 @@ router = APIRouter()
 def handle_create_book(request: Request,
                        book: BookCreateInfo,
                        response: Response):
+    logging.info(request)
     if request.session.get('user') is None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to upload books")
     book, response.status_code = dependencies.book_service.create_book(BookCreate(**book.dict()))

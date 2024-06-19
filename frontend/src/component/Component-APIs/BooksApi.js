@@ -16,7 +16,8 @@ export class BooksApi extends HttpApi {
     console.log(document.cookie)
     return this.sendRequest(`/data/upload/`, {
       method: 'POST',
-      headers: { 'Content-Type' : 'application/json', 'Set-Cookie': document.cookies},
+      credentials: 'include',
+      headers: { 'Content-Type' : 'application/json'},
       body: JSON.stringify(book)
     });
   }
