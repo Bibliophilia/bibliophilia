@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryWindow from './CategoryWindow';
 import '../ComponentStyles/HomePage.css';
-import Search from "../Search";
+import Search from "../Component/Search";
 import LoginPopup from "../User-Component/UserAuth";
 
 const HomePage = () => {

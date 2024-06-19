@@ -10,34 +10,47 @@ from bibliophilia.books.domain.models.input import BookCreate, BookCreateInfo, I
 from bibliophilia.books.domain.models.output import BookInfo, BookCard
 
 import bibliophilia.books.dependencies as dependencies
-from typing import Optional, Set, AnyStr
+from typing import Optional, Set, AnyStr, List
 from fastapi import UploadFile
 from starlette.responses import FileResponse
+
+from bibliophilia.core.models import BPModel
 
 router = APIRouter()
 
 
-@router.post("/upload", response_model=Optional[int])
-def handle_create_book(book: BookCreateInfo,
-                       response: Response):
-    book, response.status_code = dependencies.book_service.create_book(BookCreate(**book.dict()))
+@router.get("/data/upload", response_model=Optional[int])
+def handle_create_book(response: Response,
+                       title: str = Query("", title="title"),
+                       year: int = Query(0, title="title"),
+                       publisher: str = Query("", title="publisher"),
+                       description: str = Query("", title="description"),
+                       author: List[str] = Query([], title="author"),
+                       genre: List[str] = Query([], title="genre")):
+    book_data = BookCreate(title=title,
+                           year=year,
+                           publisher=publisher,
+                           description=description,
+                           author=author,
+                           genre=genre)
+    book, response.status_code = dependencies.book_service.create_book(book_data)
     logging.info(f"Book created: {book.idx}")
     return book.idx
 
 
 @router.post("/image/upload")
-def handle_upload_image(book_idx: str,
-                        image: Optional[UploadFile],
-                        response: Response):
-    _, response.status_code = dependencies.book_service.create_image(ImageFileSave(book_idx=book_idx,
+def handle_upload_image(image: Optional[UploadFile],
+                        response: Response,
+                        idx: int = Query(-1, title="index")):
+    _, response.status_code = dependencies.book_service.create_image(ImageFileSave(book_idx=idx,
                                                                                    image=image))
 
 
 @router.post("/file/upload")
-def handle_upload_file(book_idx: str,
-                       file: Optional[UploadFile],
-                       response: Response):
-    response.status_code = dependencies.book_service.create_file(BookFileSave(book_idx=book_idx,
+def handle_upload_file(file: Optional[UploadFile],
+                       response: Response,
+                       idx: int = Query(-1, title="index")):
+    response.status_code = dependencies.book_service.create_file(BookFileSave(book_idx=idx,
                                                                               file=file))
 
 

@@ -25,21 +25,22 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 bibliophilia_app = FastAPI(title="Bibliophilia API", version="1.0.0", lifespan=lifespan)
 origins = [
-    "http://localhost:3000",
+    "http://localhost:3000/",
     "http://localhost:3000",
     "http://elasticsearch:9200",
     "http://postgres:5432",
     "http://frontend:3000"
 ]
-
+methods = ["GET", "POST", "PUT", "DELETE"]
+headers = ["content-type", "Authorization", "accept", "Content-Type"]
 bibliophilia_app.add_middleware(SessionMiddleware, secret_key=MIDDLEWARE_SECRET_KEY)
 
 bibliophilia_app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=origins,
-    allow_headers=origins,
+    allow_methods=methods,
+    allow_headers=headers,
 )
 
 bibliophilia_app.include_router(books_api.router,
