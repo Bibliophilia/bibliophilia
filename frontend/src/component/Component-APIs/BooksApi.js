@@ -7,22 +7,24 @@ export class BooksApi extends HttpApi {
   }
 
   upload(book) {
-    const queryParams = `?title=${encodeURIComponent(book.title)}` +
-        `&year=${encodeURIComponent(book.year)}` +
-        `&publisher=${encodeURIComponent(book.publisher)}` +
-        `&description=${encodeURIComponent(book.description)}` +
-        `&author=${encodeURIComponent(book.author)}` +
-        `&genre=${encodeURIComponent(book.genre)}`;
-    return this.sendRequest(`/data/upload${queryParams}`,{}, {
-      method: 'GET',
-      headers: { 'accept': 'application/json' }
+    //const queryParams = `?title=${encodeURIComponent(book.title)}` +
+    //    `&year=${encodeURIComponent(book.year)}` +
+    //    `&publisher=${encodeURIComponent(book.publisher)}` +
+    //    `&description=${encodeURIComponent(book.description)}` +
+    //    `&author=${encodeURIComponent(book.author)}` +
+    //    `&genre=${encodeURIComponent(book.genre)}`;
+    console.log(document.cookie)
+    return this.sendRequest(`/data/upload/`, {
+      method: 'POST',
+      headers: { 'Content-Type' : 'application/json', 'Set-Cookie': document.cookies},
+      body: JSON.stringify(book)
     });
   }
   upload_cover(idx, image) {
     const formData = new FormData();
     formData.append('image', image);
 
-    return this.sendRequest(`/image/upload?idx=${idx}`, {
+    return this.sendRequest(`/image/upload?book_idx=${idx}`, {
       method: 'POST',
       body: formData
     });
@@ -30,7 +32,7 @@ export class BooksApi extends HttpApi {
   upload_file(idx, file) {
     const formData = new FormData();
     formData.append('file', file);
-    return this.sendRequest(`/file/upload?idx=${idx}`, {
+    return this.sendRequest(`/file/upload?book_idx=${idx}`, {
       method: 'POST',
       body: formData
     });

@@ -99,18 +99,26 @@ const UploadBooks = () => {
                 "author": formData.author.split(re),
                 "genre": formData.genre.split(re)
             }
+            //const form = new FormData();
+            //form.append("title", formData.title.toString());
+            //form.append("year", Number(formData.year));
+            //form.append("publisher", "default");
+            //form.append("description", formData.description.toString());
+            //form.append("author", formData.author.split(re));
+            //form.append("genre", formData.genre.split(re));
+
             console.log(book)
             booksApi.upload(book)
                 .then(idx => {
-                    console.log(`Book uploaded. Uploading files...`);
-                    booksApi.upload_cover(idx, formData.coverPhoto)
-                        .then(data => {
-                            console.log("Image uploaded successfully.");
-                        })
-                        .catch(error => {
-                            console.error('An error occurred:', error.toString());
-                            setError('An error occurred while uploading cover.');
-                        });
+                    console.log(`Book ${idx} uploaded. Uploading files...`);
+                    //booksApi.upload_cover(idx, formData.coverPhoto)
+                    //    .then(data => {
+                    //        console.log("Image uploaded successfully.");
+                    //    })
+                    //    .catch(error => {
+                    //        console.error('An error occurred:', error.toString());
+                    //        setError('An error occurred while uploading cover.');
+                    //    });
                     //for (let i = 0; i < formData.bookFiles.length; i++) {
                     //    booksApi.upload_file(idx, formData.bookFiles[i])
                     //        .then(data=>{

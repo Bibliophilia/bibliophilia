@@ -4,26 +4,26 @@ from fastapi import APIRouter, Query, HTTPException, status
 from fastapi import Response
 from starlette.requests import Request
 
-import bibliophilia.books.settings as settings
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat
-from bibliophilia.books.domain.models.input import BookCreate, BookCreateInfo, ImageFileSave, BookFileSave
-from bibliophilia.books.domain.models.output import BookInfo, BookCard
+import backend.bibliophilia.books.settings as settings
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookCreateInfo, ImageFileSave, BookFileSave
+from backend.bibliophilia.books.domain.models.output import BookInfo, BookCard
 
-import bibliophilia.books.dependencies as dependencies
+import backend.bibliophilia.books.dependencies as dependencies
 from typing import Optional, Set, AnyStr, List
 from fastapi import UploadFile
 from starlette.responses import FileResponse, RedirectResponse
 
-from bibliophilia.books.domain.models.input import Rights
-from bibliophilia.books.domain.utils.security import check_book_right, check_is_publisher
+from backend.bibliophilia.books.domain.models.input import Rights
+from backend.bibliophilia.books.domain.utils.security import check_book_right, check_is_publisher
 
-from bibliophilia.core.models import BPModel
+from backend.bibliophilia.core.models import BPModel
 
 router = APIRouter()
 
 
-@router.post("/upload", response_model=Optional[int])
+@router.post("/data/upload", response_model=Optional[int])
 def handle_create_book(request: Request,
                        book: BookCreateInfo,
                        response: Response):
