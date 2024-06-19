@@ -2,15 +2,22 @@ import logging
 from typing import Optional
 
 from fastapi import status
-from bibliophilia.books import settings
-from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
-from bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, BookUpdate
-from bibliophilia.books.domain.models.output import BookInfo, BookCard
-from bibliophilia.books.domain.models.schemas import Book, BookFile
-from bibliophilia.books.domain.utils.parse import parse_facets
-from bibliophilia.books.domain.utils.texttokeniser import TextTokeniser
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
+from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, BookUpdate
+from backend.bibliophilia.books.domain.models.output import BookInfo, BookCard
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+from backend.bibliophilia.books.domain.utils.parse import parse_facets
+from backend.bibliophilia.books.domain.utils.texttokeniser import TextTokeniser
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from backend.bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate, Rights
+from backend.bibliophilia.books.domain.models.output import BookInfo
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+
 
 
 class BookService:
@@ -56,6 +63,12 @@ class BookService:
         else:
             logging.info(f"file not created")
             return None, status.HTTP_409_CONFLICT
+
+    def add_rights(self, book_idx: int, rights: Rights, user_idx: int):
+        self.repository.add_rights(rights, book_idx, user_idx)
+
+    def delete_rights(self, book_idx: int):
+        self.repository.delete_rights(book_idx)
 
     def read_book(self, idx: int) -> Optional[BookInfo]:
         book = self.repository.read_book(idx)

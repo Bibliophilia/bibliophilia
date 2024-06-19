@@ -1,16 +1,24 @@
 from abc import abstractmethod, ABC
 from typing import Optional
 
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
-from bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave
-from bibliophilia.books.domain.models.schemas import Book, BookFile
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
+from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, Rights
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepository(ABC):
 
     @abstractmethod
     def create_book(self, book: BookCreate) -> Optional[Book]:
+        pass
+
+    @abstractmethod
+    def add_rights(self, rights: Rights, book_idx: int, user_idx: int):
+        pass
+
+    @abstractmethod
+    def delete_rights(self, book_idx: int):
         pass
 
     @abstractmethod

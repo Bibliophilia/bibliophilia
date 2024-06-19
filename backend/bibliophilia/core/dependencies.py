@@ -2,10 +2,10 @@ from elasticsearch import Elasticsearch
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-from bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.entity.facet import Facet
 
-engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@postgres:5432/bibliophiliadb", echo=True)
-es = Elasticsearch('http://elasticsearch:9200')
+engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@localhost:5432/bibliophiliadb", echo=True)
+es = Elasticsearch('http://localhost:9200')
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 text_keyword_mapping = {
     "value": {
@@ -26,7 +26,7 @@ book_mapping = {
     "mappings": {
         "properties": {
             "title": {
-                "type": "text",
+                "type": "text"
             },
             "author": {
                 "type": "nested",

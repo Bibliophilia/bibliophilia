@@ -2,9 +2,14 @@ from typing import Optional, List
 
 from fastapi import UploadFile
 
-from bibliophilia.books import settings
-from bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat, GenreBase, AuthorBase, \
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat, GenreBase, AuthorBase, \
     OverExtendedBookBase
+
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, BookFileBase, FileFormat
+from backend.bibliophilia.books.domain.models.schemas import RightsEnum
+from backend.bibliophilia.core.models import BPModel
 
 
 class BookCreateInfo(ExtendedBookBase):
@@ -16,6 +21,7 @@ class BookCreate(BookCreateInfo):
     image: Optional[UploadFile] = None
     files: list[UploadFile] = []
     tokens: list[float] = []
+    public: RightsEnum = RightsEnum.NONE
 
 
 class BookUpdate(BookCreate):
@@ -51,9 +57,22 @@ class ImageFileSave(BookFileBase):
         return f"{settings.IMAGES_PATH}/{self.book_idx}.{settings.IMAGE_EXTENSION}"
 
 
+class Rights(BPModel):
+    users_see: list[str]
+    users_see_read: list[str]
+    users_see_read_download: list[str]
+    group_see: list[str]
+    group_see_read: list[str]
+    group_see_read_download: list[str]
+    is_see_all: bool
+    is_see_read_all: bool
+    is_see_read_download_all: bool
+
+
 class GenreCreate(GenreBase):
     name: str
 
 
 class AuthorCreate(AuthorBase):
     name: str
+

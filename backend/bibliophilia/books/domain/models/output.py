@@ -1,4 +1,5 @@
-from bibliophilia.books.domain.models.basic import BookBase, OverExtendedBookBase
+from backend.bibliophilia.books.domain.models.basic import BookBase, OverExtendedBookBase
+from backend.bibliophilia.books.domain.models.basic import BookBase, ExtendedBookBase
 
 
 class BookCard(BookBase):

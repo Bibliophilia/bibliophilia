@@ -1,9 +1,11 @@
 from typing import Optional
 
-from bibliophilia.users.data.store.interfaces import UserStorage, ReviewStorage
-from bibliophilia.users.domain.boundaries import UserRepository, ReviewRepository
-from bibliophilia.users.domain.models.input import UserCreate, ReviewCreate
-from bibliophilia.users.domain.models.schemas import User, Review
+from backend.bibliophilia.users.data.store.interfaces import UserStorage, ReviewStorage, GroupStorage
+from backend.bibliophilia.users.domain.boundaries import UserRepository, ReviewRepository, GroupRepository
+from backend.bibliophilia.users.domain.models.input import UserCreate, ReviewCreate
+from backend.bibliophilia.users.domain.models.schemas import User, Review, Group
+
+from backend.bibliophilia.users.domain.models.input import GroupCreate
 
 
 class UserRepositoryImpl(UserRepository):
@@ -37,3 +39,22 @@ class ReviewRepositoryImpl(ReviewRepository):
 
     def delete_review(self, review: Review) -> bool:
         return self.storage.delete_review(review)
+
+
+class GroupRepositoryImpl(GroupRepository):
+
+    def __init__(self, group_storage: GroupStorage):
+        self.group_storage = group_storage
+
+    def create(self, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
+        return self.group_storage.create(group)
+
+    def edit(self, old_group_name: str, group: GroupCreate) -> Optional[tuple[Group, list[str]]]:
+        return self.group_storage.edit(old_group_name, group)
+
+    def delete(self, group_name: str, user_idx: int):
+        return self.group_storage.delete(group_name, user_idx)
+
+    def get_all_by_user_idx(self, user_idx: int) -> list[tuple[Group, list[str]]]:
+        return self.group_storage.get_all_by_user_idx(user_idx)
+

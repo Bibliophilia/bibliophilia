@@ -1,7 +1,35 @@
+from enum import Enum, auto
+
 from sqlmodel import Field, Relationship
 
-from bibliophilia.books.domain.models.basic import ExtendedBookBase, FileFormat, BookFileBase, AuthorBase, GenreBase
-from bibliophilia.books import settings
+from backend.bibliophilia.books.domain.models.basic import ExtendedBookBase, FileFormat, BookFileBase, GenreBase, \
+    AuthorBase
+from backend.bibliophilia.books import settings
+from backend.bibliophilia.core.models import BPModel
+#from backend.bibliophilia.users.domain.models.schemas import User, Group
+
+
+class RightsEnum(Enum):
+    SEARCH = "SEARCH"
+    SEARCH_READ = "SEARCH_READ"
+    SEARCH_READ_DOWNLOAD = "SEARCH_READ_DOWNLOAD"
+    NONE = "NONE"
+
+
+class GroupBookRights(BPModel, table=True):
+    #group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    #user_group_idx: int = Field(None, foreign_key="user_group.idx", primary_key=True)
+    book_idx: int = Field(None, foreign_key="books.idx", primary_key=True)
+    rights: RightsEnum
+
+
+class UserBookRights(BPModel, table=True):
+    #group_idx: int = Field(None, foreign_key="groups.idx", primary_key=True)
+    user_idx: int = Field(None, foreign_key="users.idx", primary_key=True)
+    #user_group_idx: int = Field(None, foreign_key="user_group.idx", primary_key=True)
+    book_idx: int = Field(None, foreign_key="books.idx", primary_key=True)
+    rights: RightsEnum
 
 
 class Book(ExtendedBookBase, table=True):
@@ -11,6 +39,11 @@ class Book(ExtendedBookBase, table=True):
     author: list["Author"] = Relationship(back_populates="book")
     files: list["BookFile"] = Relationship(back_populates="book")
     reviews: list["Review"] = Relationship(back_populates="book")
+
+    public: RightsEnum
+    users: list["User"] = Relationship(back_populates="books", link_model=UserBookRights)
+    groups: list["Group"] = Relationship(back_populates="books", link_model=GroupBookRights)
+    #user_group: list["UserGroupLink"] = Relationship(back_populates="books", link_model=UserBookRights)
 
     @property
     def image_url(self) -> str:

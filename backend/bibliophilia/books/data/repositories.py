@@ -1,14 +1,20 @@
 import logging
 from typing import Optional
 
-from bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
-from bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
-from bibliophilia.books.domain.entity.facet import Facet
-from bibliophilia.books.domain.models.basic import FileFormat, FacetBase
-from bibliophilia.books.domain.models.input import (BookCreate, BookSearch, BookFileCreate, BookFileSave,
+from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
+from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from backend.bibliophilia.books.domain.entity.facet import Facet
+from backend.bibliophilia.books.domain.models.basic import FileFormat, FacetBase
+from backend.bibliophilia.books.domain.models.input import (BookCreate, BookSearch, BookFileCreate, BookFileSave,
                                                     ImageFileSave,
                                                     GenreCreate, AuthorCreate)
-from bibliophilia.books.domain.models.schemas import Book, BookFile
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
+from backend.bibliophilia.books.data.store.interfaces import FSBookStorage, SearchBookStorage, DBBookStorage, SearchStorage
+from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
+from backend.bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate, BookSearch, BookFileCreate, BookFileSave, \
+    ImageFileSave, Rights
+from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
 class BookRepositoryImpl(BookRepository):
@@ -94,6 +100,12 @@ class BookRepositoryImpl(BookRepository):
             self._rollback_bookfile(db_bookfile)
             return None
         return db_bookfile
+
+    def add_rights(self, rights: Rights, book_idx: int, user_idx: int):
+        self.db_storage.create_book_rights(user_idx=user_idx, book_idx=book_idx, rights=rights)
+
+    def delete_rights(self, book_idx: int):
+        self.db_storage.delete_book_rights(book_idx)
 
     def _rollback_book(self, db_book: Book, db_facets: [FacetBase]):
         logging.info("Book saving rollback")
