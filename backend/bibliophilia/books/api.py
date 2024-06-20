@@ -1,3 +1,4 @@
+import json
 import logging
 
 from fastapi import APIRouter, Query, HTTPException, status
@@ -11,14 +12,12 @@ from backend.bibliophilia.books.domain.models.input import BookCreate, BookCreat
 from backend.bibliophilia.books.domain.models.output import BookInfo, BookCard
 
 import backend.bibliophilia.books.dependencies as dependencies
-from typing import Optional, Set, AnyStr, List
+from typing import Optional, Set, AnyStr
 from fastapi import UploadFile
 from starlette.responses import FileResponse, RedirectResponse
 
 from backend.bibliophilia.books.domain.models.input import Rights
 from backend.bibliophilia.books.domain.utils.security import check_book_right, check_is_publisher
-
-from backend.bibliophilia.core.models import BPModel
 
 router = APIRouter()
 
