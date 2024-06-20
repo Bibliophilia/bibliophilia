@@ -5,7 +5,7 @@ FROM node:latest
 WORKDIR /app/public
 
 # Копируем файлы package.json и package-lock.json
-COPY package*.json ./
+COPY . .
 
 # Устанавливаем зависимости
 RUN npm install
