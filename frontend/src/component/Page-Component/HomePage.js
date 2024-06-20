@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryWindow from './CategoryWindow';
-import './ComponentStyles/HomePage.css';
-import searchIcon from './ComponentStyles/Img/Search_Icon.png';
-import SearchResultsPage from "./SearchResultsPage";
+import '../ComponentStyles/HomePage.css';
+import Search from "../Search";
+import LoginPopup from "../User-Component/UserAuth";
 
 const HomePage = () => {
     const navigate = useNavigate();
     const [isCategoryWindowOpen, setCategoryWindowOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoginPopupOpen, setLoginPopupOpen] = useState(false);
+    const loginPopupRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (loginPopupRef.current && !loginPopupRef.current.contains(event.target)) {
+                // Click occurred outside the popup, close the popup
+                setLoginPopupOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
 
     const handleCategoryButtonClick = () => {
         setCategoryWindowOpen(true);
@@ -23,12 +40,15 @@ const HomePage = () => {
     };
 
     const handleSearchClick = () => {
-        // Navigate to the search results page with the search term as a query parameter
         navigate(`/search-results?q=${searchTerm}&page=1`);
     };
 
     const handleInputChange = (e) => {
         setSearchTerm(e.target.value);
+    };
+
+    const handleLoginButtonClick = () => {
+        setLoginPopupOpen(true);
     };
 
     return (
@@ -37,22 +57,21 @@ const HomePage = () => {
                 <div className='TitleSection'>
                     <h1 className='Title'>Bibliophilia</h1>
                     <p className='subtitle'>A free online platform for bookworms </p>
+                    <button className='UserAuth-login' onClick={handleLoginButtonClick}>LOGIN</button>
+                    {isLoginPopupOpen && (
+                        <div className="PopupContainer" ref={loginPopupRef}>
+                            <LoginPopup />
+                        </div>
+                    )}
+                    {isLoginPopupOpen && (
+                        <div className="PopupOverlay" />
+                    )}
+
                 </div>
             </div>
 
             {/* Search Bar Component */}
-            <div className='Search'>
-                <div className='SearchBar'>
-                    <div className="SearchIconContainer" onClick={handleSearchClick}>
-                        <img
-                            className="SearchIcon"
-                            src={searchIcon}
-                            alt="Search"
-                        />
-                    </div>
-                    <input className='' type="text" placeholder="Search for books, articles, documents..." value={searchTerm} onChange={handleInputChange} />
-                </div>
-            </div>
+            <Search onSearch={handleSearchClick} />
 
             <div className='CategorySection'>
                 {/* Category Button */}

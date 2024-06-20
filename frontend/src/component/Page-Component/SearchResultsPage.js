@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './ComponentStyles/SearchResult.css';
+import '../ComponentStyles/SearchResult.css';
+import { SearchApi } from "component/Component-APIs/SearchApi";
 
 const SearchResultsPage = () => {
     const location = useLocation();
@@ -13,28 +14,20 @@ const SearchResultsPage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Fetch data from your API using searchTerm
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/books/search/?q=${searchTerm}&page=1`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log('API response:', data);
-
-                if (Array.isArray(data) && data.length > 0 && data[0].image_url) {
-                    setSearchResults(data);
-                } else {
-                    setError('Oops! No search results found, Try again!', data);
-                }
-            } catch (error) {
-                console.error('Error fetching search results:', error);
+        const api = new SearchApi();
+        api.search(searchTerm,1)
+            .then(data => {
+               console.log('API response:', data);
+               if (Array.isArray(data) && data.length > 0 && data[0].image_url) {
+               setSearchResults(data);
+               } else {
+                   setError('Oops! No search results found, Try again!');
+               }
+            })
+            .catch(error => {
+                console.log('Error fetching search results:', error);
                 setError('Error fetching search results. Please try again later.');
-            }
-        };
-
-        fetchData();
+            });
     }, [searchTerm]);
 
     const handleResultItemClick = (idx) => {
@@ -68,7 +61,7 @@ const SearchResultsPage = () => {
                                 src={result.image_url}
                                 alt={result.title}
                                 onError={(e) => {
-                                    console.error(`Error loading image for ${result.title}:`, e);
+                                    console.error(`Error loading image for ${result.title}: ${e}`);
                                     e.target.onerror = null; // Remove the event listener to prevent an infinite loop
                                 }}
                             />
