@@ -29,6 +29,10 @@ class ReviewStorage(ABC):
         pass
 
     @abstractmethod
+    def read_rating(self, book_idx: int) -> Optional[float]:
+        pass
+
+    @abstractmethod
     def update_review(self, review: ReviewCreate) -> Optional[Review]:
         pass
 

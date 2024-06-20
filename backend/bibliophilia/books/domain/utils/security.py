@@ -136,14 +136,10 @@ def check_is_group_right(book_idx: int, user_idx: int, criteria: str) -> bool:
         return False
     
 
-def check_is_creator(email: str, creator_idx: int) -> bool:
-    with Session(engine) as session:
-        user = session.exec(select(User).where(User.email == email)).one_or_none()
-        if user is None:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No user with email \"{email}\"")
-        if user.idx == creator_idx:
-            return True
-        return False
+def check_is_creator(email: str, creator_email: str) -> bool:
+    if email == creator_email:
+        return True
+    return False
 
             
             
