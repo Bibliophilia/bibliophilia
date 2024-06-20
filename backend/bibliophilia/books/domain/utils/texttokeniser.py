@@ -5,8 +5,8 @@ import logging
 import numpy
 from fastapi import UploadFile
 
-from bibliophilia.books.domain.models.input import BookCreate
-from bibliophilia.books.domain.models.basic import FileFormat
+from backend.bibliophilia.books.domain.models.input import BookCreate
+from backend.bibliophilia.books.domain.models.basic import FileFormat
 import spacy
 from docx import Document
 import PyPDF2
@@ -21,11 +21,10 @@ class TextTokeniser:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
 
-    def book_to_tokens(self, book: BookCreate):
+    def book_to_tokens(self, file: UploadFile) -> list[float]:
         book_files = {}
-        for file in book.files:
-            file_format = FileFormat.get_by_name(file.filename.split('.')[-1])
-            book_files[file_format] = file
+        file_format = FileFormat.get_by_name(file.filename.split('.')[-1])
+        book_files[file_format] = file
         if FileFormat.TXT in book_files.keys():
             text = self._file_TXT_to_text(book_files[FileFormat.TXT])
         # elif FileFormat.DOC.value in book.formats:

@@ -1,16 +1,22 @@
 from enum import Enum
 from typing import Optional
 
-from bibliophilia.core.models import BPModel
+from backend.bibliophilia.core.models import BPModel
 
 
 class BookBase(BPModel):
     title: str
-    author: str
 
 
 class ExtendedBookBase(BookBase):
+    year: int
+    publisher: str
     description: str
+
+
+class OverExtendedBookBase(ExtendedBookBase):
+    author: list[str]
+    genre: list[str]
 
 
 class BookFileBase(BPModel):
@@ -29,3 +35,20 @@ class FileFormat(Enum):
             if item.value == name:
                 return item
         return None
+
+
+class FacetBase(BPModel):
+    book_idx: int
+
+
+class GenreBase(FacetBase):
+    book_idx: int
+
+
+class AuthorBase(FacetBase):
+    book_idx: int
+
+
+class TokenizedBook(BPModel):
+    book_idx: int
+    tokens: list[str]

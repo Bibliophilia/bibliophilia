@@ -1,15 +1,21 @@
-from fastapi import APIRouter, Query
-from fastapi import Response
+from fastapi import APIRouter, Query, HTTPException
+from fastapi import Response, status
+from starlette.requests import Request
 
-from bibliophilia.users import dependencies
-from bibliophilia.users.domain.models.input import ReviewCreate
-from bibliophilia.users.domain.models.output import ReviewCard
+from backend.bibliophilia.books.domain.utils.security import check_is_creator
+from backend.bibliophilia.users import dependencies
+from backend.bibliophilia.users.domain.models.input import ReviewCreate
+from backend.bibliophilia.users.domain.models.output import ReviewCard
 
 router = APIRouter()
 
 
 @router.post("/upload", response_model=bool)
-def handle_create_review(review: ReviewCreate, response: Response):
+def handle_create_review(request: Request, review: ReviewCreate, response: Response):
+    if request.session.get('user') is None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to create review")
+    if not check_is_creator(request.session.get('user').get('email'), int(review.user_idx)):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You don't have rights to create review")
     result, response.status_code = dependencies.review_service.create_review(review)
     return result
 

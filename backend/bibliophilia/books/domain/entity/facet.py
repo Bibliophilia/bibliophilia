@@ -12,7 +12,7 @@ class Facet(enum.StrEnum):
                       "rule_type": "terms"}
     year = "year", {"max_occurrences": None,
                     "hints": False,
-                    "matcher": r'\d{4}-?\d{4}',
+                    "matcher": r'\d{4}(?:-\d{4})?',
                     "rule_type": "range"}
 
     def __new__(cls, value, data):
@@ -57,5 +57,5 @@ class Facet(enum.StrEnum):
             return rule.append(occur_value[1:][:-1])
         elif isinstance(rule, dict):
             years = occur_value.split("-")
-            return {"gte": years[0], "lte": years[1 if len(years) == 2 else 0]}
+            return {"gte": int(years[0]), "lte": int(years[1 if len(years) == 2 else 0])}
         raise ValueError(f"Unknown rule type: {rule}")
