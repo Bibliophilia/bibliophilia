@@ -27,55 +27,49 @@ const UploadBooks = () => {
                 [name]: value,
             }));
         };
-
-        const handleFileChange = async (e, fileType) => {
+        const isValidFormat = (file, formats) => {
+            const fileFormat = file.name.split('.').pop().toLowerCase();
+            return formats.includes(fileFormat);
+        }
+        const handleImageChange = async (e) => {
             const files = e.target.files;
-
-            // Check file format and set preview for cover photo
-            if (fileType === 'coverPhoto' && files.length > 0) {
-                const file = files[0];
-                const allowedFormats = ['jpg', 'jpeg', 'png'];
-                const fileFormat = file.name.split('.').pop().toLowerCase();
-
-                if (allowedFormats.includes(fileFormat)) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setFormData((prevData) => ({
-                            ...prevData,
-                            coverPhotoURL: reader.result,
-                        }));
-                    };
-
-                    await new Promise((resolve) => {
-                        reader.readAsDataURL(file);
-                        reader.onloadend = resolve;
-                    });
-                } else {
-                    setError('Incorrect file format for cover photo. Please select a JPG, JPEG, or PNG file.');
+            const allowedFormats = ['jpg'];
+            const file = files[0];
+            if (!isValidFormat(file, allowedFormats)) {
+                setError('Incorrect file format for cover photo. Please select a JPG file.');
+                return;
+            }
+            setFormData((prevData) => ({
+                ...prevData,
+                'coverPhoto': file,
+                }));
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    coverPhotoURL: reader.result,
+                }));
+            };
+            await new Promise((resolve) => {
+                reader.readAsDataURL(file);
+                reader.onloadend = resolve;
+            });
+            setError(null);
+        }
+        const handleFileChange = async (e) => {
+            const files = e.target.files;
+            const allowedFormats = ['txt', 'doc', 'docx', 'pdf', 'epub', 'djvu'];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!isValidFormat(file, allowedFormats)) {
+                    setError('Incorrect file format for book file(s). Please select files with formats: TXT, DOC, DOCX, PDF, EPUB, DJVU.');
                     return;
                 }
             }
-
-            // Check file formats for book files
-            if (fileType === 'bookFiles') {
-                const allowedFormats = ['txt', 'doc', 'docx', 'pdf', 'epub', 'djvu'];
-
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const fileFormat = file.name.split('.').pop().toLowerCase();
-
-                    if (!allowedFormats.includes(fileFormat)) {
-                        setError('Incorrect file format for book file(s). Please select files with formats: TXT, DOC, DOCX, PDF, EPUB, DJVU.');
-                        return;
-                    }
-                }
-            }
-
             setFormData((prevData) => ({
                 ...prevData,
-                [fileType]: files,
-            }));
-
+                'bookFiles': files,
+                }));
             setError(null);
         };
         const clearForm = () => {
@@ -99,37 +93,30 @@ const UploadBooks = () => {
                 "author": formData.author.split(re),
                 "genre": formData.genre.split(re)
             }
-            //const form = new FormData();
-            //form.append("title", formData.title.toString());
-            //form.append("year", Number(formData.year));
-            //form.append("publisher", "default");
-            //form.append("description", formData.description.toString());
-            //form.append("author", formData.author.split(re));
-            //form.append("genre", formData.genre.split(re));
 
             console.log(book)
             booksApi.upload(book)
                 .then(idx => {
                     console.log(`Book ${idx} uploaded. Uploading files...`);
-                    //booksApi.upload_cover(idx, formData.coverPhoto)
-                    //    .then(data => {
-                    //        console.log("Image uploaded successfully.");
-                    //    })
-                    //    .catch(error => {
-                    //        console.error('An error occurred:', error.toString());
-                    //        setError('An error occurred while uploading cover.');
-                    //    });
-                    //for (let i = 0; i < formData.bookFiles.length; i++) {
-                    //    booksApi.upload_file(idx, formData.bookFiles[i])
-                    //        .then(data=>{
-                    //            console.log("Image uploaded successfully.");
-                    //        })
-                    //        .catch(error => {
-                    //            console.error('An error occurred:', error.toString());
-                    //            setError('An error occurred while uploading book.');
-                    //        });
-                    //}
-                    clearForm();
+                    booksApi.upload_cover(idx, formData.coverPhoto)
+                        .then(data => {
+                            console.log("Image uploaded successfully.");
+                        })
+                        .catch(error => {
+                            console.error('An error occurred:', error.toString());
+                            setError('An error occurred while uploading cover.');
+                        });
+                    for (let i = 0; i < formData.bookFiles.length; i++) {
+                        booksApi.upload_file(idx, formData.bookFiles[i])
+                            .then(data=>{
+                                console.log(`File ${formData.bookFiles[i].name} uploaded successfully.`);
+                            })
+                            .catch(error => {
+                                console.error('An error occurred:', error.toString());
+                                setError('An error occurred while uploading book file.');
+                            });
+                    }
+                    //clearForm();
                 })
                 .catch(error => {
                     console.error('An error occurred:', error.toString());
@@ -257,7 +244,7 @@ const UploadBooks = () => {
                                         type="file"
                                         accept=".jpg, .jpeg, .png"
                                         onChange={(e) => {
-                                            handleFileChange(e, 'coverPhoto');
+                                            handleImageChange(e);
                                             handleCoverPhotoPreview(e); // Add this line to update cover photo preview
                                         }}
                                     />
@@ -271,7 +258,7 @@ const UploadBooks = () => {
                                         id="bookFilesInput"
                                         type="file"
                                         accept=".txt, .doc, .docx, .pdf, .epub, .djvu"
-                                        onChange={(e) => handleFileChange(e, 'bookFiles')}
+                                        onChange={(e) => handleFileChange(e)}
                                         multiple
                                     />
                                 </label>
