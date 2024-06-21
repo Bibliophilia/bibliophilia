@@ -36,17 +36,17 @@ class BookRepositoryImpl(BookRepository):
             self._rollback_book(db_book, db_facets)
             return None
 
-        is_indexed = self.search_storage.index_book(db_book.idx, BookSearch(title=book.title,
-                                                                            year=book.year,
-                                                                            publisher=book.publisher,
-                                                                            description=book.description,
-                                                                            author=book.author,
-                                                                            genre=book.genre,
-                                                                            tokens=book.tokens))
-        if not is_indexed:
-            logging.info("Error while indexing book at SearchStorage")
-            self._rollback_book(db_book, db_facets)
-            return None
+        #is_indexed = self.search_storage.index_book(db_book.idx, BookSearch(title=book.title,
+        #                                                                    year=book.year,
+        #                                                                    publisher=book.publisher,
+        #                                                                    description=book.description,
+        #                                                                    author=book.author,
+        #                                                                    genre=book.genre,
+        #                                                                    tokens=book.tokens))
+        #if not is_indexed:
+        #    logging.info("Error while indexing book at SearchStorage")
+        #    self._rollback_book(db_book, db_facets)
+        #    return None
 
         for author in book.author:
             db_author = self.db_storage.create_facet(value=AuthorCreate(book_idx=db_book.idx,
@@ -100,6 +100,14 @@ class BookRepositoryImpl(BookRepository):
             self._rollback_bookfile(db_bookfile)
             return None
         return db_bookfile
+
+    def create_booksearch(self, booksearch: BookSearch, book_idx: int):
+        is_indexed = self.search_storage.index_book(book_idx, booksearch)
+        #if not is_indexed:
+        #    logging.info("Error while indexing book at SearchStorage")
+        #    self._rollback_book(db_book, db_facets)
+        #    return None
+
 
     def add_rights(self, rights: Rights, book_idx: int, user_idx: int):
         self.db_storage.create_book_rights(user_idx=user_idx, book_idx=book_idx, rights=rights)

@@ -173,7 +173,6 @@ class DBBookStorageImpl(DBBookStorage):
             session.add(book)
             session.commit()
 
-
     def read_book(self, idx: int = None) -> Optional[Book]:
         with Session(self.engine) as session:
             select_book = (
