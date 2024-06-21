@@ -35,6 +35,7 @@ class UserBookRights(BPModel, table=True):
 class Book(ExtendedBookBase, table=True):
     __tablename__ = "books"
     idx: int = Field(None, primary_key=True, sa_column_kwargs={"autoincrement": True})
+    publisher: str
     genre: list["Genre"] = Relationship(back_populates="book")
     author: list["Author"] = Relationship(back_populates="book")
     files: list["BookFile"] = Relationship(back_populates="book")

@@ -88,7 +88,6 @@ const UploadBooks = () => {
             const book = {
                 "title": formData.bookTitle.toString(),
                 "year": Number(formData.year),
-                "publisher": "default",
                 "description": formData.description.toString(),
                 "author": formData.author.split(re),
                 "genre": formData.genre.split(re)
