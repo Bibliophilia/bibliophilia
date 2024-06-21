@@ -44,11 +44,11 @@ class BookService:
 
     def create_file(self, bookfile: BookFileSave) -> status:
         is_tokenized = self.repository.is_tokenized(bookfile.book_idx)
-        if not is_tokenized:
-            book = self.repository.read_book(bookfile.book_idx)
-            book.tokens = TextTokeniser().book_to_tokens(bookfile.file)
-            if book:  # TODO
-                is_tokenized = self.repository.update_book(book)
+        #if not is_tokenized:
+        #    book = self.repository.read_book(bookfile.book_idx)
+        #    book.tokens = TextTokeniser().book_to_tokens(bookfile.file)
+        #    if book:  # TODO
+        #        is_tokenized = self.repository.update_book(book)
         bookfile = self.repository.create_bookfile(bookfile)
 
         if bookfile and is_tokenized:
