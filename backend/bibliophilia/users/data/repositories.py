@@ -34,6 +34,9 @@ class ReviewRepositoryImpl(ReviewRepository):
     def read_reviews(self, book_idx: int) -> list[Review]:
         return self.storage.read_reviews(book_idx)
 
+    def read_rating(self, book_idx: int) -> Optional[float]:
+        return self.storage.read_rating(book_idx)
+
     def update_review(self, review: ReviewCreate) -> Optional[Review]:
         return self.storage.update_review(review)
 

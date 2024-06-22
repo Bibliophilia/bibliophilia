@@ -43,7 +43,7 @@ def handle_create_book(request: Request,
 @router.post("/image/upload")
 def handle_upload_image(request: Request,
                         book_idx: str,
-                        image: Optional[UploadFile],
+                        image: UploadFile,
                         response: Response):
     if request.session.get('user') is None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to upload image")
@@ -56,7 +56,7 @@ def handle_upload_image(request: Request,
 @router.post("/file/upload")
 def handle_upload_file(request: Request,
                        book_idx: str,
-                       file: Optional[UploadFile],
+                       file: UploadFile,
                        response: Response):
     if request.session.get('user') is None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to upload file")

@@ -3,7 +3,7 @@ from typing import Optional
 
 from backend.bibliophilia.books.domain.entity.facet import Facet
 from backend.bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
-from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, Rights
+from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, Rights, BookSearch
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 
 
@@ -43,6 +43,10 @@ class BookRepository(ABC):
 
     @abstractmethod
     def create_bookfile(self, bookfile: BookFileSave) -> Optional[BookFile]:
+        pass
+
+    @abstractmethod
+    def create_booksearch(self, booksearch: BookSearch, book_idx: int):
         pass
 
     @abstractmethod

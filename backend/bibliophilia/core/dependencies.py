@@ -8,9 +8,6 @@ engine = create_engine("postgresql+psycopg2://bibliophilia:bibliophilia@localhos
 es = Elasticsearch('http://localhost:9200')
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 text_keyword_mapping = {
-    "value": {
-        "type": "nested",
-        "fields": {
             "key": {
                 "type": "keyword",
                 "ignore_above": 256
@@ -20,8 +17,7 @@ text_keyword_mapping = {
                 "analyzer": "standard"
             }
         }
-    }
-}
+
 book_mapping = {
     "mappings": {
         "properties": {
@@ -30,14 +26,28 @@ book_mapping = {
             },
             "author": {
                 "type": "nested",
-                "properties": text_keyword_mapping
+                "properties": {
+                    "value": {
+                        "type": "object",
+                        "properties": text_keyword_mapping
+                    }
+                }
             },
             "genre": {
                 "type": "nested",
-                "properties": text_keyword_mapping
+                "properties": {
+                    "value": {
+                        "type": "object",
+                        "properties": text_keyword_mapping
+                    }
+                }
             },
-            "year": "short",
-            "publisher": "text",
+            "year": {
+                "type": "short"
+            },
+            "publisher": {
+                "type": "text"
+            },
             "description": {
                 "type": "text"
             },
@@ -49,7 +59,18 @@ book_mapping = {
         }
     }
 }
-es.indices.create(index="books", ignore=400, body=book_mapping)
+
+response = es.indices.create(index="books", ignore=400, body=book_mapping)
+
+if 'acknowledged' in response:
+    if response['acknowledged']:
+        print("Index 'books' created successfully.")
+    else:
+        print("Index 'books' creation failed.")
+else:
+    print("Error:", response)
+
+
 Base = declarative_base()
 for facet in Facet:
     mapping = {

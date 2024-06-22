@@ -40,8 +40,9 @@ class Book(ExtendedBookBase, table=True):
     author: list["Author"] = Relationship(back_populates="book")
     files: list["BookFile"] = Relationship(back_populates="book")
     reviews: list["Review"] = Relationship(back_populates="book")
-
     public: RightsEnum
+    avg_rating: float = Field(None, nullable=True)
+
     users: list["User"] = Relationship(back_populates="books", link_model=UserBookRights)
     groups: list["Group"] = Relationship(back_populates="books", link_model=GroupBookRights)
     #user_group: list["UserGroupLink"] = Relationship(back_populates="books", link_model=UserBookRights)

@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import Depends
 
+from backend.bibliophilia.books.domain.models.schemas import Book
 from backend.bibliophilia.core.dependencies import get_session
 from backend.bibliophilia.users.data.store.interfaces import UserStorage, ReviewStorage, GroupStorage
 from backend.bibliophilia.users.domain.models.input import UserCreate, ReviewCreate, GroupCreate
@@ -35,7 +36,14 @@ class ReviewStorageImpl(ReviewStorage):
 
     def create_review(self, review: ReviewCreate) -> Optional[Review]:
         with Session(self.engine) as session:
+            duplicate_review = session.exec(select(Review).where(Review.book_idx == review.book_idx).where(Review.user_idx == review.user_idx)).one_or_none()
+            if duplicate_review:
+                return None
             db_review = Review.from_orm(review)
+            book = session.exec(select(Book).where(Book.idx == review.book_idx)).first()
+            if book.avg_rating is None:
+                book.avg_rating = review.rating
+                session.add(book)
             session.add(db_review)
             session.commit()
             session.refresh(db_review)
@@ -50,6 +58,13 @@ class ReviewStorageImpl(ReviewStorage):
     def read_reviews(self, book_idx: int) -> list[Review]:
         with Session(self.engine) as session:
             return session.query(Review).filter(Review.book_idx.in_([book_idx])).all()
+
+    def read_rating(self, book_idx: int) -> Optional[float]:
+        with Session(self.engine) as session:
+            book = session.exec(select(Book).where(Book.idx == book_idx)).one_or_none()
+            if book is None:
+                return None
+            return book.avg_rating
 
     def update_review(self, review: ReviewCreate) -> Optional[Review]:
         with Session(self.engine) as session:

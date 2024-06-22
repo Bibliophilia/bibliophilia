@@ -46,11 +46,11 @@ class ReviewService:
         return review_cards[(settings.REVIEWS_IN_PAGE * (page - 1)): (settings.REVIEWS_IN_PAGE * page)]
 
     def read_rating(self, book_idx: int) -> float:
-        reviews = self.review_repository.read_reviews(book_idx)
-        if len(reviews) == 0:
-            return 0
-        rating_array = [review.rating for review in reviews]
-        return sum(rating_array) / len(rating_array)
+        rating = self.review_repository.read_rating(book_idx)
+        if rating is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"No book with idx \"{book_idx}\"")
+        return rating
+
 
 
 class GroupService:

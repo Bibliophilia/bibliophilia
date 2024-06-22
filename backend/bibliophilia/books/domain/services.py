@@ -2,11 +2,10 @@ import logging
 from typing import Optional
 
 from fastapi import status
-from backend.bibliophilia.books import settings
-from backend.bibliophilia.books.domain.boundaries import BookRepository, SearchRepository
 from backend.bibliophilia.books.domain.entity.facet import Facet
 from backend.bibliophilia.books.domain.models.basic import FileFormat, TokenizedBook
-from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, BookUpdate
+from backend.bibliophilia.books.domain.models.input import BookCreate, ImageFileSave, BookFileSave, BookUpdate, \
+    BookSearch
 from backend.bibliophilia.books.domain.models.output import BookInfo, BookCard
 from backend.bibliophilia.books.domain.models.schemas import Book, BookFile
 from backend.bibliophilia.books.domain.utils.parse import parse_facets
@@ -44,25 +43,22 @@ class BookService:
 
     def create_file(self, bookfile: BookFileSave) -> status:
         is_tokenized = self.repository.is_tokenized(bookfile.book_idx)
-        #if not is_tokenized:
-        #    book = self.repository.read_book(bookfile.book_idx)
-        #    book.tokens = TextTokeniser().book_to_tokens(bookfile.file)
-        #    if book:  # TODO
-        #        is_tokenized = self.repository.update_book(book)
-        bookfile = self.repository.create_bookfile(bookfile)
+        if not is_tokenized:
+            book = self.repository.read_book(bookfile.book_idx)
+            tokens = TextTokeniser().book_to_tokens(bookfile.file)
 
-        if bookfile and is_tokenized:
-            logging.info(f"file created: {bookfile.idx}")
-            return bookfile, status.HTTP_201_CREATED
-        elif not bookfile:
-            logging.info(f"file not created")
-            return None, status.HTTP_409_CONFLICT
-        elif not is_tokenized:
-            logging.info(f"file not tokenized")
-            return bookfile, status.HTTP_409_CONFLICT
-        else:
-            logging.info(f"file not created")
-            return None, status.HTTP_409_CONFLICT
+            booksearch = BookSearch(title=book.title,
+                                    year=book.year,
+                                    publisher=book.publisher,
+                                    description=book.description,
+                                    author=[author.name for author in book.author],
+                                    genre=[genre.name for genre in book.genre],
+                                    tokens=tokens)
+            if book:  # TODO
+                is_tokenized = self.repository.update_book(book)
+            self.repository.create_booksearch(booksearch, book.idx)
+        bookfile = self.repository.create_bookfile(bookfile)
+        return status.HTTP_201_CREATED
 
     def add_rights(self, book_idx: int, rights: Rights, user_idx: int):
         self.repository.add_rights(rights, book_idx, user_idx)
@@ -105,9 +101,9 @@ class SearchService:
         logging.info(f"Base Search finished:{ids}")
 
         logging.info("Semantic Search started")
-        #tokens = TextTokeniser().text_to_tokens(query)
-        #semantic_search_ids = self.search_repository.semantic_search(tokens, filter=filter)
-        #ids.extend(semantic_search_ids)
+        tokens = TextTokeniser().text_to_tokens(query)
+        semantic_search_ids = self.search_repository.semantic_search(tokens, filter=filter)
+        ids.extend(semantic_search_ids)
         logging.info(f"Semantic Search finished:{ids}")
 
         page_ids = []
