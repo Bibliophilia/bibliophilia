@@ -39,6 +39,14 @@ class DBBookStorage(ABC):
         pass
 
     @abstractmethod
+    def check_author_exists(self, author: str) -> bool:
+        pass
+
+    @abstractmethod
+    def check_genre_exists(self, genre: str) -> bool:
+        pass
+
+    @abstractmethod
     def create_book_rights(self, user_idx, book_idx: int, rights: Rights):
         pass
 

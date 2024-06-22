@@ -90,6 +90,8 @@ class SearchService:
         self.book_repository = book_repository
 
     def search(self, query: str, page: int) -> list[BookCard]:
+        if query == '':
+            query = '.'
         query, filter = parse_facets(query)
         print(f"Parsed query: {query}")
         # TODO: facets

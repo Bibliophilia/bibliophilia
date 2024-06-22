@@ -53,9 +53,12 @@ class BookRepositoryImpl(BookRepository):
                                                                         name=author),
                                                      facet=Facet.author)
             db_facets.append(db_author)
+            #is_author_exists = self.db_storage.check_author_exists(author)
+            #if is_author_exists:
+            #    continue
             is_indexed = self.search_storage.index_facet(author, Facet.author)
-            if not db_author or not is_indexed:
-                logging.info("Error while creating author at DBBookStorage or indexing at SearchStorage")
+            if not db_author:
+                logging.info("Error while creating author at DBBookStorage")
                 self._rollback_book(db_book, db_facets)
                 return None
 
@@ -64,9 +67,12 @@ class BookRepositoryImpl(BookRepository):
                                                                       name=genre),
                                                     facet=Facet.genre)
             db_facets.append(db_genre)
+            #is_genre_exists = self.db_storage.check_genre_exists(genre)
+            #if is_genre_exists:
+            #    continue
             is_indexed = self.search_storage.index_facet(genre, Facet.genre)
-            if not db_genre or not is_indexed:
-                logging.info("Error while creating author at DBBookStorage or indexing at SearchStorage")
+            if not db_genre:
+                logging.info("Error while creating author at DBBookStorage")
                 self._rollback_book(db_book, db_facets)
                 return None
         return db_book
