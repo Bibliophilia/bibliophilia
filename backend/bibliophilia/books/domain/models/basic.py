@@ -10,7 +10,6 @@ class BookBase(BPModel):
 
 class ExtendedBookBase(BookBase):
     year: int
-    publisher: str
     description: str
 
 

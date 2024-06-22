@@ -29,7 +29,13 @@ def handle_create_book(request: Request,
     logging.info(request)
     if request.session.get('user') is None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to upload books")
-    book, response.status_code = dependencies.book_service.create_book(BookCreate(**book.dict()))
+    publisher = request.session.get('user').get('email')
+    book, response.status_code = dependencies.book_service.create_book(BookCreate(title=book.title,
+                                                                                  year=book.year,
+                                                                                  description=book.description,
+                                                                                  publisher=publisher,
+                                                                                  author=book.author,
+                                                                                  genre=book.genre))
     logging.info(f"Book created: {book.idx}")
     return book.idx
 

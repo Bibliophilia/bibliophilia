@@ -7,14 +7,7 @@ export class BooksApi extends HttpApi {
   }
 
   upload(book) {
-    //const queryParams = `?title=${encodeURIComponent(book.title)}` +
-    //    `&year=${encodeURIComponent(book.year)}` +
-    //    `&publisher=${encodeURIComponent(book.publisher)}` +
-    //    `&description=${encodeURIComponent(book.description)}` +
-    //    `&author=${encodeURIComponent(book.author)}` +
-    //    `&genre=${encodeURIComponent(book.genre)}`;
-    console.log(document.cookie)
-    return this.sendRequest(`/data/upload/`, {
+    return this.sendRequest(`/data/upload`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type' : 'application/json'},
@@ -24,9 +17,9 @@ export class BooksApi extends HttpApi {
   upload_cover(idx, image) {
     const formData = new FormData();
     formData.append('image', image);
-
     return this.sendRequest(`/image/upload?book_idx=${idx}`, {
       method: 'POST',
+      credentials: 'include',
       body: formData
     });
   }
@@ -35,6 +28,7 @@ export class BooksApi extends HttpApi {
     formData.append('file', file);
     return this.sendRequest(`/file/upload?book_idx=${idx}`, {
       method: 'POST',
+      credentials: 'include',
       body: formData
     });
   }

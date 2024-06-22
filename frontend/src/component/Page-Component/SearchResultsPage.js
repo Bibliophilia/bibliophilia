@@ -12,9 +12,9 @@ const SearchResultsPage = () => {
 
     const [searchResults, setSearchResults] = useState([]);
     const [error, setError] = useState(null);
+    const api = new SearchApi();
 
     useEffect(() => {
-        const api = new SearchApi();
         api.search(searchTerm,1)
             .then(data => {
                console.log('API response:', data);

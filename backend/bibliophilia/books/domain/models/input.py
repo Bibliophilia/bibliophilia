@@ -18,6 +18,7 @@ class BookCreateInfo(ExtendedBookBase):
 
 
 class BookCreate(BookCreateInfo):
+    publisher: str
     image: Optional[UploadFile] = None
     files: list[UploadFile] = []
     tokens: list[float] = []
@@ -29,6 +30,7 @@ class BookUpdate(BookCreate):
 
 
 class BookSearch(OverExtendedBookBase):
+    publisher: str
     tokens: list[float]
 
 
