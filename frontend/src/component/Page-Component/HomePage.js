@@ -40,6 +40,7 @@ const HomePage = () => {
     };
 
     const handleSearchClick = () => {
+        console.log(searchTerm.toString())
         navigate(`/search-results?q=${searchTerm}&page=1`);
     };
 
@@ -71,7 +72,7 @@ const HomePage = () => {
             </div>
 
             {/* Search Bar Component */}
-            <Search onSearch={handleSearchClick} />
+            <Search onSearch={handleSearchClick} onInput={handleInputChange} />
 
             <div className='CategorySection'>
                 {/* Category Button */}

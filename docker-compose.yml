@@ -69,18 +69,18 @@ services:
     networks:
       - bibliopilia_network
 
-#  frontend:
-#    build:
-#      context: ./frontend
-#    container_name: frontend
-#    volumes:
-#      - images_volume:/app/public/public/images
-#    depends_on:
-#      - backend
-#    ports:
-#      - "3000:3000"
-#    networks:
-#      - bibliopilia_network
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - images_volume:/app/public/public/images
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - bibliopilia_network
 
 networks:
   bibliopilia_network:

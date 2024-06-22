@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import searchIcon from '../ComponentStyles/Img/Search_Icon.png';
 import {SearchApi} from "../Component-APIs/SearchApi";
 
-const Search = ({ onSearch }) => {
+const Search = ({ onSearch, onInput}) => {
   const searchApi = new SearchApi();
   const [facetTypes, setFacetTypes] = useState([])
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,9 +10,8 @@ const Search = ({ onSearch }) => {
   const [hints, setHints] = useState([]);
 
   useEffect(() => {
+
     searchApi.getFacets().then(data => setFacetTypes(data)).catch(err => console.log(err));
-    return () => {
-    };
   }, []);
   function updateFacet(event, query) {
     const cursorPosition = event.target.selectionStart;
@@ -30,9 +29,10 @@ const Search = ({ onSearch }) => {
     setCurrentFacet(foundFacet);
   }
 
-  const handleInputChange = (event) => {
+  const handleSearchChange = (event) => {
     const query = event.target.value;
     setSearchTerm(query);
+    onInput(event);
     updateFacet(event, query);
     if (currentFacet) {
       setHints([]);
@@ -76,7 +76,7 @@ const Search = ({ onSearch }) => {
           type="text"
           placeholder="Search for books, articles, documents..."
           value={searchTerm}
-          onChange={handleInputChange}
+          onChange={handleSearchChange}
         />
         {hints.length > 0 && (
           <ul className='HintsList'>

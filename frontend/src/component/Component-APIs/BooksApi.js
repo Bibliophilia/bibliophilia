@@ -7,7 +7,7 @@ export class BooksApi extends HttpApi {
   }
 
   upload(book) {
-    return this.sendRequest(`/data/upload/`, {
+    return this.sendRequest(`/data/upload`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type' : 'application/json'},

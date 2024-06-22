@@ -8,6 +8,7 @@ export class SearchApi extends HttpApi{
     search(query, page){
         return this.sendRequest(`/?q=${query}&page=${page}`,{
             method: 'GET',
+            credentials: 'include',
             headers: { 'accept': 'application/json' }
         })
     }
