@@ -1,89 +1,197 @@
-.Book-info-page-container{
-    font-family: "Google Sans","sans-serif";
-    position: absolute;
+.Book-info-page-container {
+    font-family: "Google Sans", "sans-serif";
+    position: relative;
     width: 100%;
+    align-content: center;
+    align-items: center;
+}
+/* Book page container */
+.book-page-wrapper{
+    width: 70%;
+    align-content: center;
+    position: relative;
+    margin: 0 auto;
+}
+/* Book container */
+.book-container{
+    display: grid;
+    padding: 20px 0;
+    grid-template-columns: 30% 70%;
+}
+.book-container *{
+    align-items: stretch;
+    justify-items: stretch;
+    padding: 0 10px;
 }
 
-.book-title-bookinfo{
-    top:160px;
-    position: absolute;
-    left: 650px;
-    font-size: 20px;
-    max-width: 500px;
+/* Book files */
+.book-files-container {
+    width: 300px;
+    height: fit-content;
+    position: relative;
+    display: grid;
+    grid-row: auto;
+}
+.book-files-container * {
+    align-items: stretch;
+    justify-items: stretch;
     text-align: left;
-
+    padding: 10px 20px;
 }
-
-.book-author-bookinfo{
-    top:225px;
-    position: absolute;
-    left: 656px;
-    font-size: 12px;
-    color: #687983;
-    max-width: 400px;
-    text-align: left;
-
+.book-download-container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 20px;
+    padding: 10px 20px 10px 0;
 }
-
-.book-description-bookinfo{
-    position: absolute;
-    left: 656px;
-    top:270px;
-    font-size: 15px;
-    max-width: 400px;
-    text-align: left;
+.book-download-container * {
+    align-items: stretch;
+    justify-items: stretch;
 }
-
-
-.dropdown-box-bookinfo{
-    position: absolute;
-    left:272px;
-    top:650px;
-    font-family: "Google Sans","sans-serif";
-    
-
-}
-
-
-.book-cover-img{
-    position: absolute;
-    top:180px;
-    width: 280px;
-    height: 400px;
+.book-cover-img {
+    width: 300px;
+    height: auto;
+    padding: 0 0 20px 0;
     object-fit: cover;
     border-radius: 10px;
     border-color: black;
-    left: 290px;
+}
+.dropdown-box-bookinfo {
+    font-family: "Google Sans", "sans-serif";
 }
 
 .read-now-button,
-.download-button{
-    width: 180px;
-    position: absolute;
-    text-align:center;
+.download-button {
+    text-align: center;
     font-size: 15px;
     font-weight: bold;
-    font-family: "Google Sans","sans-serif";
+    font-family: "Google Sans", "sans-serif";
 
 }
-
-.download-button{
-    left:240px;
-    top:600px;
+.review-button,
+.download-button,
+.read-now-button {
     color: white;
     background-color: black;
 }
-.read-now-button{
-    left:440px;
-    top:600px;
-    color: white;
-    background-color: black;
-}
-
+.review-button:hover,
+.read-now-button[disabled],
+.download-button[disabled],
 .download-button:hover,
-.read-now-button:hover{
+.read-now-button:hover {
     background-color: #939498;
     color: black;
-
 }
 
+/* Book info container */
+.book-info-container {
+    padding: 0 20px;
+    height: fit-content;
+    position: relative;
+    display: grid;
+    grid-row: auto;
+}
+.book-info-container * {
+    align-items: stretch;
+    justify-items: stretch;
+    text-align: left;
+    margin: 5px;
+}
+
+/* book info fields */
+.book-title-bookinfo {
+    font-size: 28px;
+}
+.book-year-bookinfo{
+    font-size: 20px;
+    color: #687983;
+}
+.book-author-bookinfo {
+    font-weight: bold;
+    font-size: 20px;
+    color: #687983;
+}
+.book-genre-bookinfo{
+    font-size: 20px;
+    color: #687983;
+}
+.book-description-bookinfo {
+    margin: 20px 0;
+    font-size: 24px;
+}
+
+/* Review */
+.book-review-container{
+    background-color: #FFD600;
+    border-radius: 40px 40px 0 0;
+    text-align: center;
+    margin: auto;
+    position: relative;
+    display: grid;
+    grid-row: auto;
+}
+.rating-button-container{
+    display: grid;
+    margin: 20px;
+    grid-template-columns: 80% 20%;
+}
+.review-book-title{
+    font-size: 28px;
+}
+.rating {
+    padding: 10px 20px;
+}
+.review-card{
+    margin: 20px 40px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    text-align: left;
+}
+.review-card * {
+    margin: 0;
+    padding: 20px;
+}
+/* Pepole Reviews */
+.review-field{
+    margin: 20px;
+    text-align: left;
+}
+.username-text{
+    font-size: 24px;
+}
+.card-title{
+    padding: 0;
+    display: grid;
+    grid-template-columns: 80% 20%;
+}
+.card-title * {
+    padding: 10px 20px;
+}
+.description{
+    margin: 0;
+    padding: 0;
+    border-radius: 10px;
+    font-size: 20px;
+}
+.rating-text{
+    text-align: right;
+    font-size: 24px;
+    color: #687983;
+}
+.description,
+.review-text {
+    background-color: #f3f3f3;
+    border: 1px solid #f3f3f3;
+    border-radius: 10px;
+    font-size: 20px;
+}
+.review-button-container{
+    padding: 10px 0;
+    display: grid;
+    grid-template-columns: 80% 20%;
+}
+.review-button{
+    align-self: center;
+    padding: 10px 20px;
+}
