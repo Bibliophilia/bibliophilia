@@ -10,8 +10,13 @@ const Search = ({ onSearch, onInput}) => {
   const [hints, setHints] = useState([]);
 
   useEffect(() => {
-
     searchApi.getFacets().then(data => setFacetTypes(data)).catch(err => console.log(err));
+    document.getElementById("searchTerm").addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode === 13){
+        handleSearch();
+      }
+    });
   }, []);
   function updateFacet(event, query) {
     const cursorPosition = event.target.selectionStart;
@@ -73,6 +78,7 @@ const Search = ({ onSearch, onInput}) => {
         </div>
         <input
           className=''
+          id="searchTerm"
           type="text"
           placeholder="Search for books, articles, documents..."
           value={searchTerm}
