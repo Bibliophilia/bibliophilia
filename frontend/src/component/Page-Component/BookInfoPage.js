@@ -30,7 +30,7 @@ const BookInfoPage = () => {
             booksApi.get(idx)
                 .then(data => {
                     setBookInfo(data);
-                    setIsReadable('pdf' in data.formats);
+                    setIsReadable(data.formats.indexOf("pdf") > -1);
                 })
                 .catch(e => {
                     throw new Error(`HTTP error! ${e.toString()}`);
@@ -169,7 +169,7 @@ const BookInfoPage = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    <textarea className="description" onChange={handleReviewChange}/>
+                                    <textarea className="review" onChange={handleReviewChange}/>
                                     <div className="review-button-container">
                                         <div></div>
                                         <button className="review-button" onClick={handleSubmitReview}> Send</button>

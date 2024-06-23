@@ -14,7 +14,7 @@ const Search = ({ onSearch, onInput}) => {
     document.getElementById("searchTerm").addEventListener("keyup", function(event) {
       event.preventDefault();
       if (event.keyCode === 13){
-        handleSearch();
+        onSearch(searchTerm);
       }
     });
   }, []);

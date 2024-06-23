@@ -168,7 +168,7 @@
 .card-title * {
     padding: 10px 20px;
 }
-.description{
+.review{
     margin: 0;
     padding: 0;
     border-radius: 10px;
@@ -179,7 +179,7 @@
     font-size: 24px;
     color: #687983;
 }
-.description,
+.review,
 .review-text {
     background-color: #f3f3f3;
     border: 1px solid #f3f3f3;
