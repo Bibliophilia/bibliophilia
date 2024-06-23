@@ -90,6 +90,20 @@ class DBBookStorageImpl(DBBookStorage):
             session.refresh(db_book)
             return db_book
 
+    def check_author_exists(self, author: str) -> bool:
+        with Session(self.engine) as session:
+            db_author = session.exec(select(Author).where(Author.name == author)).first()
+            if db_author:
+                return True
+            return False
+
+    def check_genre_exists(self, genre: str) -> bool:
+        with Session(self.engine) as session:
+            db_genre = session.exec(select(Genre).where(Genre.name == genre)).first()
+            if db_genre:
+                return True
+            return False
+
     def create_book_rights(self, user_idx: int, book_idx: int, rights: Rights):
         with Session(self.engine) as session:
             for username in rights.users_see:
@@ -285,11 +299,12 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         response = self.es.search(index=facet, body={
             "query": {
                 "term": {
-                    "name.keyword": value
+                    "value": value
                 }
             }
         })
         hits = response["hits"]["hits"]
+        print(f"hits: {hits}")
         if hits:
             logging.info(f"Facet: \"{value}\" already exists")
             return False
