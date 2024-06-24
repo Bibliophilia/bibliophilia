@@ -14,10 +14,10 @@ Rofikul Masud (Frontend) <br>
 
 Bibliophilia is a user-friendly, open-source digital library application designed to provide free access to a vast collection of books, articles, and documents. It empowers users with:
 
-**Seamless Search:** Leverage semantic search capabilities for efficient discovery of relevant content.<br>
-**Diverse Uploads and Downloads:** Upload and download books, articles, and documents in various formats for convenient access.<br>
-**Granular Access Control:** Control who can access your uploaded content. Grant access to specific users or make public requests for access.<br>
-**Review and Rating System:** Contribute valuable feedback by writing reviews and rating books to guide other users.<br>
+- **Seamless Search:** Leverage semantic search capabilities for efficient discovery of relevant content.<br>
+- **Diverse Uploads and Downloads:** Upload and download books, articles, and documents in various formats for convenient access.<br>
+- **Granular Access Control:** Control who can access your uploaded content. Grant access to specific users or make public requests for access.<br>
+- **Review and Rating System:** Contribute valuable feedback by writing reviews and rating books to guide other users.<br>
 
 
 ## Getting Started
