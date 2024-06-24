@@ -47,13 +47,13 @@ This command will pull the necessary Docker images, create containers for each s
 
 The web app provides a user-friendly interface for interacting with the digital library. Here are some key features:
 
-Search: Utilize the search bar to find books, articles, or documents using keywords or semantic search.
-Browse: Explore the library's collection based on categories or other browsing options (to be implemented).
-Upload Content: Contribute to the library by uploading ebooks, articles, or documents in supported formats.
-Download Content: Download available content for offline reading or reference.
-Access Control: Manage access permissions for your uploaded content. Grant access to specific users or require access requests for others.
-Review and Rating: Share your insights and help others by writing reviews and rating content.
-Note: To unlock certain advanced features (e.g., upload, access control, review/rating), you might need to create an account within the Bibliophilia web app.
+Search: Utilize the search bar to find books, articles, or documents using keywords or semantic search. <br>
+Browse: Explore the library's collection based on categories or other browsing options (to be implemented).<br>
+Upload Content: Contribute to the library by uploading ebooks, articles, or documents in supported formats.<br>
+Download Content: Download available content for offline reading or reference.<br>
+Access Control: Manage access permissions for your uploaded content. Grant access to specific users or require access requests for others.<br>
+Review and Rating: Share your insights and help others by writing reviews and rating content.<br>
+Note: To unlock certain advanced features (e.g., upload, access control, review/rating), you might need to create an account within the Bibliophilia web app.<br>
 
 
 
