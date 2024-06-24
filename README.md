@@ -40,7 +40,10 @@ docker-compose up -d
 ```
 This command will pull the necessary Docker images, create containers for each service (frontend, backend, database, search engine, and data visualization), and run them in the background.
 
-#### Using the Web App
+
+
+<br>
+### Using the Web App
 
 The web app provides a user-friendly interface for interacting with the digital library. Here are some key features:
 
