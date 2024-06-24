@@ -4,7 +4,7 @@
 
 # NSU CS Software Design 2024
 
-**Team:**
+**Team:** <br>
 Vladislav Tatarintsev (Backend) <br>
 Anna Potapova (Backend) <br>
 Rofikul Masud (Frontend) <br>
