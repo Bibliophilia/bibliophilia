@@ -1,17 +1,16 @@
-# Bibliophilia
 ![image](https://github.com/Bibliophilia/bibliophilia/assets/69720999/a612f73e-e4e9-4bfd-abf1-c4c21e06ac7b)
 
 
 
-#### NSU CS Software Design 2024
+# NSU CS Software Design 2024
 
-Team:
-Vladislav Tatarintsev (Backend) 
-Anna Potapova (Backend)
-Rofikul Masud (Frontend)
+**Team:**
+Vladislav Tatarintsev (Backend) <br>
+Anna Potapova (Backend) <br>
+Rofikul Masud (Frontend) <br>
 
 
-#### Description
+### Description
 
 Bibliophilia is a user-friendly, open-source digital library application designed to provide free access to a vast collection of books, articles, and documents. It empowers users with:
 
@@ -24,17 +23,17 @@ Bibliophilia is a user-friendly, open-source digital library application designe
 ## Getting Started
 This guide outlines the steps to set up and use Bibliophilia as a regular user.
 
-Prerequisites:
+**Prerequisites:**
 Docker installed [Install docker in your computer ] (https://docs.docker.com/engine/install/)
 
 
-1. Clone the Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Bibliophilia/bibliophilia.git
 ```
 
 
-2. Run the Application with Docker Compose
+### 2. Run the Application with Docker Compose
 Navigate to the `bibliophilia` directory and execute the following command to start all the required services:
 ```bash
 docker-compose up -d
