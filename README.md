@@ -42,7 +42,7 @@ This command will pull the necessary Docker images, create containers for each s
 
 
 
-<br>
+
 ### Using the Web App
 
 The web app provides a user-friendly interface for interacting with the digital library. Here are some key features:
