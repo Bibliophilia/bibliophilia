@@ -23,9 +23,9 @@ Bibliophilia is a user-friendly, open-source digital library application designe
 ## Getting Started
 This guide outlines the steps to set up and use Bibliophilia as a regular user.
 
-**Prerequisites:**
+### Prerequisites:
 Docker installed [Install docker in your computer ] (https://docs.docker.com/engine/install/)
-
+<br>
 
 ### 1. Clone the Repository
 ```bash
