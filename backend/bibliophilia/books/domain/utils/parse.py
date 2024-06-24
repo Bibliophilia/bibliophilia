@@ -21,9 +21,9 @@ def parse_facets(query: str) -> (str, dict):
                 rules_map[match_mode][fc.rule()][fc.value] = (
                     fc.update_rule(value, rules_map[match_mode][fc.rule()][fc.value]))
     final_query = ' '.join(final_query.split())
-    must = ([{"terms": {arr+".value.key.keyword": rules_map["must"]["terms"][arr]}} for arr in rules_map["must"]["terms"]]
+    must = ([{"terms": {arr+".value.key": rules_map["must"]["terms"][arr]}} for arr in rules_map["must"]["terms"]]
             + [{"range": {dictionary: rules_map["must"]["range"][dictionary]}} for dictionary in rules_map["must"]["range"]])
-    must_not = ([{"terms": {arr+".value.key.keyword": rules_map["must_not"]["terms"][arr]}} for arr in rules_map["must_not"]["terms"]]
+    must_not = ([{"terms": {arr+".value.key": rules_map["must_not"]["terms"][arr]}} for arr in rules_map["must_not"]["terms"]]
                 + [{"range": {dictionary: rules_map["must_not"]["range"][dictionary]}} for dictionary in rules_map["must_not"]["range"]])
     print(must)
     print(must_not)
