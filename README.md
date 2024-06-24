@@ -1,4 +1,4 @@
-![image](https://github.com/Bibliophilia/bibliophilia/assets/69720999/a612f73e-e4e9-4bfd-abf1-c4c21e06ac7b)
+![image](https://github.com/Bibliophilia/bibliophilia/assets/69720999/d6126c16-a232-4a00-a839-b118ecd44ef0)
 
 
 
