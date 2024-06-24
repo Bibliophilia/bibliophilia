@@ -41,7 +41,7 @@ const SearchResultsPage = () => {
 
     return (
         <div className="SearchResult-page">
-            <div className="SP-bar-for-title" onClick={navigateToHome}>
+            <div className="SP-header" onClick={navigateToHome}>
                 <h1 className="SP-page-title">Bibliophilia</h1>
             </div>
 

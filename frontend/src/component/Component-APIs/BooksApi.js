@@ -32,4 +32,10 @@ export class BooksApi extends HttpApi {
       body: formData
     });
   }
+  get(idx){
+    return this.sendRequest(`/${idx}`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+  }
 }

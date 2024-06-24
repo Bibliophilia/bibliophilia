@@ -115,7 +115,7 @@ const UploadBooks = () => {
                                 setError('An error occurred while uploading book file.');
                             });
                     }
-                    //clearForm();
+                    clearForm();
                 })
                 .catch(error => {
                     console.error('An error occurred:', error.toString());
