@@ -20,12 +20,16 @@ const UploadBooks = () => {
         const [formData, setFormData] = useState(initialFormData);
         const [error, setError] = useState(null);
         const [success, setSuccess] = useState(false);
+        const [access, setAccess] = useState("private");
         const handleChange = (e) => {
             const {name, value} = e.target;
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
             }));
+        };
+        const handleChangeAccess = (e) => {
+            setAccess(e.target.value);
         };
         const isValidFormat = (file, formats) => {
             const fileFormat = file.name.split('.').pop().toLowerCase();
@@ -42,7 +46,7 @@ const UploadBooks = () => {
             setFormData((prevData) => ({
                 ...prevData,
                 'coverPhoto': file,
-                }));
+            }));
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData((prevData) => ({
@@ -69,7 +73,7 @@ const UploadBooks = () => {
             setFormData((prevData) => ({
                 ...prevData,
                 'bookFiles': files,
-                }));
+            }));
             setError(null);
         };
         const clearForm = () => {
@@ -107,7 +111,7 @@ const UploadBooks = () => {
                         });
                     for (let i = 0; i < formData.bookFiles.length; i++) {
                         booksApi.upload_file(idx, formData.bookFiles[i])
-                            .then(data=>{
+                            .then(data => {
                                 console.log(`File ${formData.bookFiles[i].name} uploaded successfully.`);
                             })
                             .catch(error => {
@@ -261,6 +265,10 @@ const UploadBooks = () => {
                                         multiple
                                     />
                                 </label>
+                                <select className="rating" onChange={handleChangeAccess} value={access}>
+                                    <option value="private">private</option>
+                                    <option value="public">public</option>
+                                </select>
                             </div>
                         </div>
 

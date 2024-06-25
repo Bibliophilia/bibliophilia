@@ -30,7 +30,7 @@ const BookInfoPage = () => {
             booksApi.get(idx)
                 .then(data => {
                     setBookInfo(data);
-                    setIsReadable('pdf' in data.formats);
+                    setIsReadable(data.formats.indexOf("pdf") > -1);
                 })
                 .catch(e => {
                     throw new Error(`HTTP error! ${e.toString()}`);
@@ -80,8 +80,7 @@ const BookInfoPage = () => {
         const review = {
             "rating": Number(userRating),
             "review": userReview,
-            "book_idx": idx,
-            "user_idx": "default"
+            "book_idx": idx
         }
         reviewApi.post_review(idx, review)
             .then(data => {
@@ -131,7 +130,7 @@ const BookInfoPage = () => {
                         <div className="book-info-container">
                             <div className="card-title">
                                 <h2 className="book-title-bookinfo">{bookInfo.title}</h2>
-                                <p className="rating-text">{'★'.repeat(rating)}</p>
+                                <p className="rating-text">{'★'.repeat(Math.round(rating))}</p>
                             </div>
                             <p className="book-author-bookinfo">{bookInfo.author.join(", ")}</p>
                             <p className="book-year-bookinfo">{bookInfo.year}</p>
@@ -169,7 +168,7 @@ const BookInfoPage = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    <textarea className="description" onChange={handleReviewChange}/>
+                                    <textarea className="review" onChange={handleReviewChange}/>
                                     <div className="review-button-container">
                                         <div></div>
                                         <button className="review-button" onClick={handleSubmitReview}> Send</button>

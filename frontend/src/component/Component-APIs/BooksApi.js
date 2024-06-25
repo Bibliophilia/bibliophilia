@@ -38,4 +38,12 @@ export class BooksApi extends HttpApi {
       credentials: 'include'
     });
   }
+  add_rights(idx, user_idx, rights){
+    return this.sendRequest(`/books/add-rights?book_idx=${idx}$user_idx=${user_idx}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type' : 'application/json'},
+      body: JSON.stringify(rights)
+    });
+  }
 }

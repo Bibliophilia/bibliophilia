@@ -336,7 +336,7 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
         return [hit.meta.id for hit in response]
 
     def semantic_search(self, tokens: list[float], filter=None) -> [int]:
-        script_query = {
+        query = {
             "script_score": {
                 "query": {"match_all": {}},
                 "script": {
@@ -347,7 +347,9 @@ class ESBookStorageImpl(SearchBookStorage, SearchStorage):
                 }
             }
         }
-        s = Search(using=self.es, index=Book.__tablename__).query(script_query)
+        if filter:
+            query = {"bool": {"should": [query], "filter": filter}}
+        s = Search(using=self.es, index=Book.__tablename__).query(query)
         response = s.execute()
         return [hit.meta.id for hit in response]
 
