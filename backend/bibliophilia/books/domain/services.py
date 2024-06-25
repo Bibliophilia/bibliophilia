@@ -51,8 +51,8 @@ class BookService:
                                     year=book.year,
                                     publisher=book.publisher,
                                     description=book.description,
-                                    author=[author.name for author in book.author],
-                                    genre=[genre.name for genre in book.genre],
+                                    author=[author.name for author in book.authors],
+                                    genre=[genre.name for genre in book.genres],
                                     tokens=tokens)
             if book:  # TODO
                 is_tokenized = self.repository.update_book(book)
@@ -101,13 +101,14 @@ class SearchService:
         base_search_ids = self.search_repository.base_search(query, filter=filter)
         ids.extend(base_search_ids)
         logging.info(f"Base Search finished:{ids}")
-
-        logging.info("Semantic Search started")
-        tokens = TextTokeniser().text_to_tokens(query)
-        semantic_search_ids = self.search_repository.semantic_search(tokens, filter=filter)
-        ids.extend(semantic_search_ids)
-        logging.info(f"Semantic Search finished:{ids}")
-
+        if query != "":
+            logging.info("Semantic Search started")
+            tokens = TextTokeniser().text_to_tokens(query)
+            semantic_search_ids = self.search_repository.semantic_search(tokens, filter=filter)
+            for idx in semantic_search_ids:
+                if idx not in ids:
+                    ids.append(idx)
+            logging.info(f"Semantic Search finished:{ids}")
         page_ids = []
         for item in ids:
             if item not in page_ids:

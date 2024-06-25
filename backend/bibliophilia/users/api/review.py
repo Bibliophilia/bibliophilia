@@ -16,17 +16,19 @@ from backend.bibliophilia.books.domain.utils.security import check_is_creator
 from backend.bibliophilia.users import dependencies
 from backend.bibliophilia.users.domain.models.input import ReviewCreate
 from backend.bibliophilia.users.domain.models.output import ReviewCard
-
+from backend.bibliophilia.users.domain.models.basic import ExtendedReviewBase
 
 router = APIRouter()
 
 
 @router.post("/upload", response_model=bool)
-def handle_create_review(request: Request, review: ReviewCreate, response: Response):
-    if request.session.get('user') is None:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Please login to create review")
-    if not check_is_creator(request.session.get('user').get('email'), review.user_idx):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You don't have rights to create review")
+def handle_create_review(request: Request, review_data: ExtendedReviewBase, response: Response):
+    review = ReviewCreate(rating=review_data.rating,
+                          review=review_data.review,
+                          book_idx=review_data.book_idx,
+                          user_idx=request.session.get('user').get('email'))
+    #if not check_is_creator(request.session.get('user').get('email'), request.session.get('user')):
+    #    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You don't have rights to create review")
     result, response.status_code = dependencies.review_service.create_review(review)
     return result
 
